@@ -12,15 +12,16 @@
 
     <body>
 
-        <header>
-        </header>
-
-        <nav>
+        <nav id = "Eleje">
+            <!-- Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
+            ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk.
+            első típusú link-->
             <a class="a" href="./FootballBevezeto.html" >Főoldal</a>
+            <a class="a" href="https://hu.wikipedia.org/wiki/Kylian_Mbapp%C3%A9" >További adatok a játékosról</a>
         </nav>
 
         <div>
-            <h1 id = "Eleje">Kylian Mbappé</h1>
+            <h1>Kylian Mbappé</h1>
             <h2>Tartalom jegyzek:</h2> 
         </div>
             <a href="Mbappe1.jpg">
@@ -28,12 +29,16 @@
             </a>
         <div>
             <p>
+                <!-- második típusú link -->
                 <a class="b" href="#Elsőcikk">Ugrás az első cikkhez </a>
                 <a class="b" href="#Másodikcikk">Ugrás a második cikkhez</a>
                 <a class="b" href="#Harmadikcikk">Ugrás a harmadik cikkhez</a>
                 
             </p> 
-            <article id="Elsőcikk" class="elsoP">
+
+            <!-- Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú paragrafus-t (p). Használjunk
+            csak az illető elemre vonatkozó stílusosztályokat (class). -->
+            <article id="Elsőcikk" class="elsoP">   <!-- első típusú paragrafus-t-->
                 <h2>Ki ő?</h2>
                 <section>
                     <h3>Általános adatok</h3>
@@ -52,11 +57,11 @@
                 </section>
             </article>
 
-            <article id="Másodikcikk" class="masodikP">
-                <h2 class="stilus1">Pályafutása</h2>
+            <article id="Másodikcikk" class="masodikP"> <!-- második típusú paragrafus-t-->
+                <h2 class="stilus1">Pályafutása</h2> <!-- Általános stílusosztály alkalmazva a h2 elemre  -->
                 <section>
                     <h3>Klubokban</h3>
-                    <em class="stilus1">A kezdet!</em>
+                    <em class="stilus1">A kezdet!</em> <!-- Általános stílusosztály alkalmazva az em elemre  -->
                     <p>2013-ban került az AS Monaco akadémiájára. 2015. december 2-án debütált az első csapatban a bajnokságban a Caen elleni 1-1-re végződő mérkőzésen, a 88. percben Fábio Coentrão cseréjeként lépett pályára. Ezzel a pályára lépéssel megdöntötte Thierry Henry 21 éves rekordját, Kylian 16 évesen és 347 naposan debütált. 2016. február 20-án megszerezte első gólját a Troyes ellen, 17 évesen és 62 naposan, amivel ismét Henry rekordját döntötte meg a francia klub történelmében. Márciusban megkötötte élete első profi szerződését a klubbal, ami 3 évre szólt.</p>
                 </section>
 
@@ -67,6 +72,9 @@
 
                 <section>
                     <h3>Paris Saint-Germain</h3>
+
+                    <!-- Definiáljunk egy olyan paragrafus stílust, mely be van keretezve szaggatott vonallal és félig átlátszó. A
+                    szöveg legyen jobbra illetve lefele tolódva a kereten belül (használjuk a padding beállítását). + tranzició -->
                     <p class = "a">2017. augusztus 31-én a Paris Saint Germain egy évre kölcsönvette a Monacótól. A két klub közötti megegyezés értelmében a párizsi klub 2018 nyarán végleg megvásárolja Mbappé játékjogát 145 000 000 euróért, amely összeg a különböző bónuszokkal együtt még 35 000 000 euróval egészül ki, ezzel pedig Mbappé a világ második legdrágább igazolása lesz csapattársa, Neymar után.<br>
                         Szeptember 8-án debütált új csapatában a Metz elleni 5-1-es bajnoki győzelem alkalmával. Négy nappal később első gólját is megszerezte a Bajnokok Ligája csoportkörében a skót Celtic elleni 5-0-s győzelemmel végződő találkozón. A PSG 3-0-s győzelmet aratott a második körben a német Bayern München felett, Mbappé két gólpasszal vette ki részét a sikerből.<br>
                         2017 októberében a France Football jelölte az Aranylabda-esélyesek bő listájára, ezzel pedig 18 évesen és 9 hónaposan Mbappé lett a legfiatalabb labdarúgó, akit a labdarúgás legrangosabb elismerésére jelöltek, Michael Owen rekordját megdöntve. 2018. október 7-én a Paris Saint Germain az Olympique Lyont fogadta hazai pályán és a 61. percben megszerezte a mérkőzésen az első gólját majd 13 perccel később már 4 gólt fűződött a nevéhez.</p>
@@ -121,6 +129,8 @@
                 <section>
                     <h3>Szerzett érmek: </h3>
                     <div>
+                    <!--css fileban implementálva: Adjuk meg (kontextussal megadott szelektort használva) egy div elemben elhelyezkedő ul elemen
+                    belüli li elem stílusát (szövegszín, betű stílus: dőlt). -->
                         <ul>
                             <li>arany - U19-es Európa-bajnokság (Németország, 2016)</li>
                             <li>arany - Világbajnokság (Oroszország, 2018)</li>
@@ -141,8 +151,11 @@
                 </section>
             </article>
 
-            <p>További kedvenc játékosok:</p><br>
+            <!-- Oldjuk meg (táblázat használata nélkül), hogy egymás mellé kerüljön több kép-szöveg páros (a
+            képhez tartozó szöveg a kép jobboldalán helyezkedjen el, és az összetartozó kép illetve szöveg legyen
+            bekeretezve) -->
 
+            <p>További kedvenc játékosok:</p><br>
             <div class="container">
                 <img class="container__image" alt="CristianoRonaldo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Cristiano_Ronaldo_Portugal.jpg/375px-Cristiano_Ronaldo_Portugal.jpg">
                 <div class="container__text">
@@ -167,9 +180,6 @@
                 </div>
             </div>
 
-            <div>
-                <a class="a" href="https://hu.wikipedia.org/wiki/Kylian_Mbapp%C3%A9" >További adatok a játékosról</a>
-            </div>
             <a class="b" href="#Eleje">Ugrás az oldal elejére </a> <br>
 
         </div>

@@ -1,18 +1,19 @@
+/* Adjuk meg a HTML törzsének a háttérszínét, illetve a szöveg színét. */
 body{
     background-color: rgb(5, 100, 129);
     color : rgb(131, 213, 228);
 }
 
-table, th, td {
-    border: 1px solid black;
-}
-
+/* Elemre vonatkozó szelektorok (osztály/ID nélkül) segítségével oldjuk meg, hogy a főcím (h1) és al-
+alcím (h3) színe, háttérszíne, betűtípus-családja legyen egyforma. */
 h1,h3{
     background-color:rgb(54, 182, 165);
     color: rgb(47, 47, 189);
     font-family: "Helvetica Neue",Helvetica;
 }
 
+/* Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú paragrafus-t (p). Használjunk
+csak az illető elemre vonatkozó stílusosztályokat (class). */
 .elsoP{
     font-family: 'Times New Roman';
     color: rgb(22, 197, 168);
@@ -22,6 +23,133 @@ h1,h3{
     font-family: 'Times New Roman';
     color: rgb(58, 125, 226);
     font-size: 17px;
+}
+
+/* Általános stílusosztály (osztály, mely nincs ráhúzva egy elemtípusra) segítségével oldjuk meg, hogy
+különböző HTML elemek stílusa (szín, betűtípus-család, betű vastagsága, szöveg-díszítése) ugyanaz
+legyen. Alkalmazzuk ugyanazt a stílusosztályt az em és h2 elemekre. */
+.stilus1 {
+    color: rgb(15, 15, 90);
+    font-family: "Helvetica Neue",Helvetica;
+    font-weight: 500;
+    text-decoration: overline;
+}
+
+
+/* Adjuk meg (kontextussal megadott szelektort használva) egy div elemben elhelyezkedő ul elemen
+belüli li elem stílusát (szövegszín, betű stílus: dőlt). */
+div > ul > li{
+    color:rgb(38, 59, 90);
+    font-weight: bold;
+}
+
+/* Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
+ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk. */
+/* első típusú link */
+a.a:link {
+  background-color: rgb(255, 255, 255);
+  text-decoration: underline overline;
+}
+a.a:visited {
+  background-color: rgb(64, 143, 218);
+  text-decoration: underline;
+
+}
+a.a:hover {
+  background-color: rgb(16, 180, 180);
+  text-decoration: line-through;
+
+}
+a.a:active {
+  background-color: rgb(39, 156, 137);
+  text-decoration: overline;
+
+} 
+
+/* második típusú link */
+a.b:link {
+    background-color: rgb(171, 228, 220);
+    text-decoration: overline;
+}
+a.b:visited {
+    background-color: rgb(158, 199, 238);
+    text-decoration: underline overline;
+}
+a.b:hover {
+    background-color: rgb(30, 155, 238);
+    text-decoration: underline;
+}
+a.b:active {
+    background-color: rgb(1, 50, 65);
+    text-decoration: line-through;
+} 
+
+/* Definiáljunk egy olyan paragrafus stílust, mely be van keretezve szaggatott vonallal és félig átlátszó. A
+szöveg legyen jobbra illetve lefele tolódva a kereten belül (használjuk a padding beállítását). */
+p.a{
+    border: 5px dashed rgba(0, 0, 0, 0.5);
+    background: transparent;
+    padding-bottom: 50px;
+    padding-left: 80px;
+    transition-duration: 2s;                /* <- itt van megoldva CSS3 átmenetes kérés */
+    transition-timing-function: linear;
+}
+
+/* Oldjuk meg CSS3 átmenetek (transition) használatával, hogy a bekeretezett paragrafus 2 másodperc
+alatt váljon teljesen láthatóvá ha fölé visszük az egeret. Ne egyből változzon ez a tulajdonság, hanem
+graduálisan 2 másodperc alatt. */
+
+p.a:hover{
+    border: 5px dashed rgba(0, 0, 0, 1);
+    background: transparent;
+    padding-bottom: 50px;
+    padding-left: 80px;
+}
+
+/* Definiáljuk a táblázat esetén két különböző cella-stílust (a két stílus pepita -lásd sakktábla- minta
+szerint váltakozzon). Ne használjunk osztályokat, a HTML-be ne kelljen kézzel jelölőket írni a
+cellákhoz. */
+tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd){
+    background: grey;
+}
+  tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd){
+    background: white;
+}
+
+/* Oldjuk meg (táblázat használata nélkül), hogy egymás mellé kerüljön több kép-szöveg páros (a
+képhez tartozó szöveg a kép jobboldalán helyezkedjen el, és az összetartozó kép illetve szöveg legyen
+bekeretezve) */
+.container{
+    border: 3px solid rgb(28, 62, 85);
+    padding: 8px 15px 15px;
+    max-width: 330px;
+    display: inline-block;
+}
+.container__image{
+    width: 100px;
+    height: 150px;
+    margin: 15px 15px 15px 0;
+    float: left;
+}
+.container__text{
+    display:block;
+    color:rgb(154, 204, 216);
+}
+
+
+/* design miatt lettek implementálva */
+
+table, th, td {
+    border: 1px solid black;
+}
+
+.kep{
+    text-decoration: overline;
+    color: transparent;
+}
+
+footer{
+    float: right;
 }
 
 nav > a {
@@ -48,111 +176,3 @@ p > a {
     text-decoration: none;
     width: fit-content;
 }
-
-.stilus1 {
-    color: rgb(15, 15, 90);
-    font-family: "Helvetica Neue",Helvetica;
-    font-weight: 500;
-    text-decoration: overline;
-}
-
-.kep{
-    text-decoration: overline;
-    color: transparent;
-}
-
-div > ul > li{
-    color:rgb(38, 59, 90);
-    font-weight: bold;
-}
-
-a.a:link {
-  background-color: rgb(255, 255, 255);
-  text-decoration: underline overline;
-}
-
-a.a:visited {
-  background-color: rgb(64, 143, 218);
-  text-decoration: underline;
-
-}
-
-a.a:hover {
-  background-color: rgb(16, 180, 180);
-  text-decoration: line-through;
-
-}
-
-a.a:active {
-  background-color: rgb(39, 156, 137);
-  text-decoration: overline;
-
-} 
-
-
-
-a.b:link {
-    background-color: rgb(171, 228, 220);
-    text-decoration: overline;
-}
-  
-a.b:visited {
-    background-color: rgb(158, 199, 238);
-    text-decoration: underline overline;
-}
-
-a.b:hover {
-    background-color: rgb(30, 155, 238);
-    text-decoration: underline;
-}
-
-a.b:active {
-    background-color: rgb(1, 50, 65);
-    text-decoration: line-through;
-} 
-
-p.a{
-    border: 5px dashed rgba(0, 0, 0, 0.5);
-    background: transparent;
-    padding-bottom: 50px;
-    padding-left: 80px;
-    transition-duration: 2s;
-    transition-timing-function: linear;
-}
-
-p.a:hover{
-    border: 5px dashed rgba(0, 0, 0, 1);
-    background: transparent;
-    padding-bottom: 50px;
-    padding-left: 80px;
-}
-
-tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
-    background: grey;
-  }
-  tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
-    background: white;
-  }
-
-
-  .container {
-    border: 3px solid rgb(28, 62, 85);
-    padding: 8px 15px 15px;
-    max-width: 330px;
-    display: inline-block;
-  }
-  .container__image {
-    width: 100px;
-    height: 150px;
-    margin: 15px 15px 15px 0;
-    float: left;
-    
-  }
-  .container__text {
-    display:block;
-    color:rgb(154, 204, 216);
-  }
-
-  footer{
-      float: right;
-  }

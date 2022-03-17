@@ -10,24 +10,28 @@
     </head>
 
     <body>
-    
-        <nav>
+        <nav id = "Eleje">
+                <!-- Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
+                ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk.
+                első típusú link-->
             <a class="a" href="#" >Főoldal</a>    
             <a class="a" href="FootballKedvencCsapat.html">Kedvenc focicsapat</a>
             <a class="a" href="FootballKedvencJatekos.html">Kedvenc játékos</a>
-
+            <a class="a" href="https://www.hirstart.hu/foci.php" > További információk a football világából </a>
         </nav>
 
         <div>
-            <h1 id = "Eleje">Bevezető a foci világába</h1>
+            <h1>Bevezető a foci világába</h1>
             <h2>Tartalom jegyzek:</h2> 
         </div>
-            <a href="soccerBall.png " class = "kep">
-                <img src="soccerBall.png" alt="football labda" width="100" height="100">
-            </a>    
+
+        <a href="soccerBall.png " class = "kep">
+            <img src="soccerBall.png" alt="football labda" width="100" height="100">
+        </a>   
+
         <div>
             <p>
-               
+                <!-- második típusú link -->
                 <a class="b" href="#Elsőcikk">Ugrás az első cikkhez </a>
                 <a class="b" href="#Másodikcikk">Ugrás a második cikkhez</a>
                 <a class="b" href="#Harmadikcikk">Ugrás a harmadik cikkhez</a>
@@ -35,10 +39,15 @@
                 <a class="b" href="#OtodikCikk">Ugrás az ötödik cikkhez</a>
             </p> 
         </div>
-            <article id="Elsőcikk" class = "elsoP">
+        
+        <!-- Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú paragrafus-t (p). Használjunk
+        csak az illető elemre vonatkozó stílusosztályokat (class). -->
+            <article id="Elsőcikk" class = "elsoP">        <!-- első típusú paragrafus-t-->
                 <h2>Mi is az a foci?</h2>
                 <section>
                     <h3>Általános tudnivalók</h3>
+                    <!-- Definiáljunk egy olyan paragrafus stílust, mely be van keretezve szaggatott vonallal és félig átlátszó. A
+                    szöveg legyen jobbra illetve lefele tolódva a kereten belül (használjuk a padding beállítását). + tranzició -->
                     <p class = "a">A labdarúgás labdajáték, amelyet a pályán két, egyenként 11 labdarúgóból álló csapat játszik egymás ellen. A játék célja, hogy a rendelkezésre álló idő alatt a labdát az ellenfél kapujába juttassák, lehetőleg minél többször, és így minél több gólt szerezzenek. <br>
                         A Nemzetközi Labdarúgó-szövetség (FIFA) felmérése szerint a futballt a világ több mint 200 országában 240 milliónál többen játsszák rendszeresen.<br> Hétvégenként nézők milliói követik nyomon kedvenc csapatuk játékát a helyszínen vagy a televízión. A tévékészülékek elterjedése előtt egy-egy nagy mérkőzés közvetítése hatalmas rádióhallgatóságot vonzott.</p>
                 </section>
@@ -48,34 +57,32 @@
                 </section>
             </article>
 
-            <article id="Másodikcikk" class = "masodikP">
+            <article id="Másodikcikk" class = "masodikP">    <!-- második típusú paragrafus-t-->
                 <h2>Szabályok és büntetések</h2>
                 <section>
                     <h3>Mi az a les?</h3>
                     <p>Lesnek minősül, ha a támadó játékos úgy kapja meg csapattársától a labdát, hogy az átadás pillanatában közelebb áll az ellenfél alapvonalához, mint a labda és a védőjátékosok. A képen tehát a szaggatott vonal és a piros kapus között lévő kék pötty a lesen lévő játékos. Az is lesnek számít, ha a támadó játékos nem ér labdához, de zavarja ellenfelét, például a kapust a védekezésben.</p>
                 </section>
-
                 <section>
                     <h3>Bedobás</h3>
                     <p>A bedobás helyét a játékvezető határozza meg. Bedobást az oldalvonalon kívül, vagy azon állva kell elvégezni. A bedobó ember nem játszhatja meg azonnal a játékba került labdát, az ellenfélnek pedig ilyenkor két méterre kell állnia a bedobótól.<br>
                         Bedobásból közvetlenül nem lehet gólt szerezni, de ha bárki beleér a labdába, akkor már a gól érvényes.
                     </p>
                 </section>
-
                 <section>
                     <h3>Kirúgás</h3>
                     <em class="stilus1">Fontos információ</em><p>Kirúgást ítél a játékvezető akkor, ha a labda az alapvonalon hagyja el a pályát, és a támadó játékos ért bele utoljára. A kirúgást a kapuelőtérből bármelyik játékos elvégezheti, és a labdának el kell hagynia a büntetőterületet, mielőtt bárki beleérne.</p>
-            
+                     <!-- Általános stílusosztály alkalmazva az em elemre  -->
                 </section>
-
                 <section>
                     <h3>Szöglet</h3>
                     <p>Szögletet akkor ítél a játékvezető, ha egy védőjátékosról megy ki a labda az alapvonalon. A szögletet a pálya sarkában lévő negyedkörből kell elvégezni.</p>
                 </section>
-
                 <section>
                     <h3>Mikor jár sárga lap egy játékosnak?</h3>
                 <div>
+                    <!--css fileban implementálva: Adjuk meg (kontextussal megadott szelektort használva) egy div elemben elhelyezkedő ul elemen
+                    belüli li elem stílusát (szövegszín, betű stílus: dőlt). -->
                     <ul>
                         <li>ha sportszerűtlen magatartásban vétkes</li>
                         <li>szóval vagy mozdulattal bírálja a játékvezetőt</li>
@@ -106,22 +113,18 @@
                     <p>speciális poszt, feladata, hogy megakadályozza -akár kézzel- hogy a labdát az ellenfél a kapuba juttassa. A 16-os vonalon kívül ugyanazok a szabályok vonatkoznak rá, mint a többi mezőnyjátékosra. <br>
                         Felszerelése eltérő színű a többi játékosétól.</p>
                 </section>
-
                 <section>
                     <h3>Hátvédek (védők)</h3>
                     <p>Feladatuk az ellenfél gólszerzési kísérleteinek megakadályozása.</p>
                 </section>
-
                 <section>
                     <h3>Középpályások</h3>
                     <p>Előkészítik a labdát a támadóknak.</p>
                 </section>
-
                 <section>
                     <h3>Csatárok</h3>
                     <p>Legfontosabb feladatuk a gólszerzés, ezért általában ők a csapat legismertebb játékosai.</p>
                 </section>
-
             </article>
 
             <article id="Negyedikcikk" class = "masodikP">
@@ -130,7 +133,6 @@
                     <h3>Általános adatok egy focicsapatról</h3>
                     <p>Egy csapatból legfeljebb tizenegy játékos lehet egyszerre a játéktéren: egy kapus és 10 mezőnyjátékos. Rossz csere esetén – ha többen vannak, mint tizenegyen az egyik csapatban – sárga kártyás figyelmeztetéssel sújtható a vétkező csapat. Hét játékosnál kevesebb egyik csapatban sem lehet a játéktéren. <br>Tehát, ha sérülések, vagy kiállítások miatt az egyik csapatból öt játékos hiányzik, a találkozót le kell fújni. <br>Egy meccs viszont elvileg elkezdhető akkor is, ha valamelyik csapat nem tud játékba küldeni 11 játékost, gyakorlatilag azonban erre csak alacsonyabb osztályokban van példa.</p>
                 </section>
-
                 <section>
                     <h3>Top10 fooball csapat</h3>
                         <ol>
@@ -150,23 +152,21 @@
 
             <article id="OtodikCikk" class = "elsoP">
                 <h2 class="stilus1">Legeredményesebb játékosok </h2>
-    
+                 <!-- Általános stílusosztály alkalmazva h2 elemre  -->
+
                 <section>
                      <h3>Aranylabda</h3>
                      <p>A Ballon d’Or, vagyis az Aranylabda az európai labdarúgás legfontosabb egyéni trófeája, melyet a legjobb teljesítményt nyújtó labdarúgó kaphat meg. A díjat 1956-ban alapította a francia labdarúgó szaklap, a France Football Gabriel Hanot, Jacques Ferran, Jacques Goddet és Jacques de Ryswick újságírók kezdeményezése alapján.<br>
                         A választás szabályai az idők folyamán változtak, 1995 óta az Európában játszó labdarúgók is megkaphatják, vagyis nem számít, hogy milyen nemzetiségűek, csak európai csapatnál legyenek leigazolva, 2007-ben pedig kiterjesztették valamennyi labdarúgóra. Régebben az európai szövetség (UEFA) tagállamainak egy-egy szakújságírója szavazhatott a legjobbakra, 2007 után azonban 96-ra nőtt a zsűri tagjainak száma. 2010-ben a díjat összevonták a FIFA év játékosa díjjal.[2] 2016. szeptember 16-án bejelentették, hogy a France Football ismét önállóan adja át a díjat, valamint, hogy még az év vége előtt ismertetik a győztes kilétét az elmúlt évek gyakorlatától eltérően, a győztesekre pedig ismét csak az európai újságírók szavazhatnak</p>
                 </section>
-
                 <section>
                     <h3>Európai aranycipő</h3>
                     <p>A labdarúgó Európai aranycipő azt a játékost illeti meg, aki az európai bajnokságokban (1967/68 idénytől kezdve) a legtöbb gólt szerzi. Később változtattak ezen, így már pontszámítás alapján kerül ki a végső győztes. Így például az olasz bajnokságban lőtt 25 gól több pontot ér az elszámolásban, mint 25 gól az OTP Bank Ligában.</p>
                 </section>
-
                 <section>
                     <h3>Puskás Ferenc-díj</h3>
                     <p>A Puskás Ferenc-díjat (angol nevén FIFA Puskás Award) 2009-ben alapította a Nemzetközi Labdarúgó-szövetség (FIFA) Puskás Ferenc emlékére. A díjat minden évben a legszebb gólt szerző játékos kapja.</p>
                 </section>
-                    
                  <section>
                     <h3>Aktív játékosok ranglistája (top5)</h3>
                         <table style="width:100%">
@@ -217,6 +217,11 @@
                 </section>
 
             </article>
+
+            <!-- Oldjuk meg (táblázat használata nélkül), hogy egymás mellé kerüljön több kép-szöveg páros (a
+            képhez tartozó szöveg a kép jobboldalán helyezkedjen el, és az összetartozó kép illetve szöveg legyen
+            bekeretezve) -->
+
             <p>Említésre méltó játékosok:</p><br>
             <div class="container">
                 <img class="container__image" alt="Mbappe" src="Mbappe1.jpg" >
@@ -239,18 +244,6 @@
                     Jelenlegi klubja: visszavonult <br>
                     Poszt: Csatár<br>
                  </p>
-                </div>
-            </div>
-
-            <div class="container">
-                <img class="container__image" alt="Salah" src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Mohamed_Salah_2018.jpg">
-                <div class="container__text">
-                    <h2>Mohamed Salah</h2>
-                    <p>
-                    Születési dátum: 1992. június 15. (29 éves)<br>
-                    Jelenlegi klubja: Liverpool FC<br>
-                    Poszt: szélső támadó<br>
-                    </p>
                 </div>
             </div>
 
@@ -302,12 +295,7 @@
                 </div>
             </div>
 
-            <div>
-             <a class="a" href="https://www.hirstart.hu/foci.php" > További információk a football világából </a>
-            </div>
             <a class="b" href="#Eleje">Ugrás az oldal elejére </a> <br>
-
-      
 
         <footer>
             
@@ -315,7 +303,6 @@
             <p>Név: Velican László<br>Azonosító: vlim2099<br>Csoport: 524/2</p>
             
         </footer>
-
 
     </body>
 

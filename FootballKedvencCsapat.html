@@ -12,16 +12,16 @@
 
     <body>
 
-        <header>
-            <nav></nav>
-        </header>
-       
-        <nav>
+        <nav id = "Eleje">
+            <!-- Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
+            ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk.
+            első típusú link-->
             <a class="a" href="./FootballBevezeto.html" >Főoldal</a>
+            <a class="a" href="https://www.realmadrid.com/en" >További információk a csapatról</a>
         </nav>
 
         <div>
-            <h1 id = "Eleje">Real Madrid CF</h1>
+            <h1 >Real Madrid CF</h1>
             <h2>Tartalom jegyzek:</h2> 
         </div>
             <a href="realMadrid.png">
@@ -29,13 +29,16 @@
             </a>
         <div> 
             <p>
+                <!-- második típusú link -->
                 <a class="b" href="#Elsőcikk">Ugrás az első cikkhez </a>
                 <a class="b" href="#Másodikcikk">Ugrás a második cikkhez</a>
                 <a class="b" href="#Harmadikcikk">Ugrás a harmadik cikkhez</a>
                 <a class="b" href="#Negyedikcikk">Ugrás a negyedik cikkhez</a>
             </p> 
 
-            <article id="Elsőcikk" class="elsoP">
+             <!-- Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú paragrafus-t (p). Használjunk
+            csak az illető elemre vonatkozó stílusosztályokat (class). -->
+            <article id="Elsőcikk" class="elsoP">   <!-- első típusú paragrafus-t-->
                 <h2>Általános tudnivalók</h2>
                 <section>
                     <h3>Bevezető</h3>
@@ -66,33 +69,32 @@
                         A triunfar en buena lid, defendiendo tu color<br>
                         ¡Hala Madrid!, ¡Hala Madrid!, ¡Hala Madrid!<br></p>
                 </section>
-            
-
-            <section>
-                <h3>Stadion</h3>
-                <p>A klub alapítása után sokáig kisebb pályákon játszott, első nagyobb stadionjuk az 1912-ben átadott Campo de O’Donnell volt. Ez 11 évig maradt a Real hazai pályája. A korábbi egyszerű labdarúgópálya az utolsó években, amikor a Madrid ott játszott, már körülbelül hatezer néző befogadására is alkalmas volt. Ezt követően egy nyolcezer néző befogadására alkalmas stadionban, a Campo de Ciudad Lineal-ban játszottak. Ennek a stadionnak a nyitómeccsén négyezer (egyes feltételezések szerint nyolcezer) néző vett részt.
-                    Következő stadionjuk az Estadio Chamartín volt, amelyben már 22 500 néző foglalhatott helyet. A munkálatok 500 ezer pesetába kerültek, amit a korábbi játékos, Carlos López-Quesada, valamint az elnök, Pedro Parages és az igazgatósági tagok, José de la Pena, valamint Bernardo Menéndez finanszíroztak. A stadionnak nem volt hivatalos neve, de az emberek elsősorban Chamartínként említették, és később is így szerepelt mindenhol. Az első mérkőzést ebben a stadionban 1923. május 17-én vívták, a barátságos meccsen a Newcastle volt az ellenfél.
-                    A Real itt ünnepelhette első bajnoki címét. Az 1943-ban megválasztott elnök, Santiago Bernabéu Yeste egy idő után úgy gondolta, ez már nem elég nagy a klub ambícióihoz, és új stadiont építtetett. A ma a Bernabéu nevét viselő stadion 1947. december 14-én készült el.
-                    A Bernabéu stadion befogadóképessége sokszor változott, 1953-ban például akár 120 ezren is elfértek a stadionban. Ezután a stadiont a biztonsági okok miatt átépítették, és fokozatosan egyre kevesebb néző befogadására volt alkalmas. Az UEFA előírása, miszerint a BL-meccseket nem rendezhetik olyan stadionban, ahol állóhelyek is vannak, a stadiont 1999-ben ismét átalakították. Jelenlegi formáját 2003-ban nyerte el, az akkori, közel 5000 férőhelyes bővítés után a stadionban jelenleg 80 354 fő foglalhat helyet.
-                    A Bernabéu stadion több nagy torna döntőjének adott otthont, itt rendezték az 1964-es labdarúgó-Európa-bajnokság és az 1982-es labdarúgó-világbajnokság, valamint az 1957-es, az 1969-es és az 1980-as BEK-döntőt is. A Bajnokok Ligája döntőjét 2010-ben ismét itt rendezték.
-                    Az Alfredo di Stéfano stadionban jelenleg a Real Madrid tartalékcsapata, a Castilla játssza mérkőzéseit. A stadiont 2006. május 9-ére teljesen felújították. A nyitómérkőzésen, az 1956-os BEK-döntő „visszavágóján”, a Stade de Reims ellen a Real Madrid 6–1 nyert, Antonio Cassano és Roberto Soldado 2-2, valamint Sergio Ramos és José Manuel Jurado 1-1 góljával. A stadion befogadóképessége jelenleg ötezer fő, nevét a Real korábbi játékosáról, Alfredo Di Stéfanoról kapta.</p>
-            </section>
+                <section>
+                    <h3>Stadion</h3>
+                    <p>A klub alapítása után sokáig kisebb pályákon játszott, első nagyobb stadionjuk az 1912-ben átadott Campo de O’Donnell volt. Ez 11 évig maradt a Real hazai pályája. A korábbi egyszerű labdarúgópálya az utolsó években, amikor a Madrid ott játszott, már körülbelül hatezer néző befogadására is alkalmas volt. Ezt követően egy nyolcezer néző befogadására alkalmas stadionban, a Campo de Ciudad Lineal-ban játszottak. Ennek a stadionnak a nyitómeccsén négyezer (egyes feltételezések szerint nyolcezer) néző vett részt.
+                        Következő stadionjuk az Estadio Chamartín volt, amelyben már 22 500 néző foglalhatott helyet. A munkálatok 500 ezer pesetába kerültek, amit a korábbi játékos, Carlos López-Quesada, valamint az elnök, Pedro Parages és az igazgatósági tagok, José de la Pena, valamint Bernardo Menéndez finanszíroztak. A stadionnak nem volt hivatalos neve, de az emberek elsősorban Chamartínként említették, és később is így szerepelt mindenhol. Az első mérkőzést ebben a stadionban 1923. május 17-én vívták, a barátságos meccsen a Newcastle volt az ellenfél.
+                        A Real itt ünnepelhette első bajnoki címét. Az 1943-ban megválasztott elnök, Santiago Bernabéu Yeste egy idő után úgy gondolta, ez már nem elég nagy a klub ambícióihoz, és új stadiont építtetett. A ma a Bernabéu nevét viselő stadion 1947. december 14-én készült el.
+                        A Bernabéu stadion befogadóképessége sokszor változott, 1953-ban például akár 120 ezren is elfértek a stadionban. Ezután a stadiont a biztonsági okok miatt átépítették, és fokozatosan egyre kevesebb néző befogadására volt alkalmas. Az UEFA előírása, miszerint a BL-meccseket nem rendezhetik olyan stadionban, ahol állóhelyek is vannak, a stadiont 1999-ben ismét átalakították. Jelenlegi formáját 2003-ban nyerte el, az akkori, közel 5000 férőhelyes bővítés után a stadionban jelenleg 80 354 fő foglalhat helyet.
+                        A Bernabéu stadion több nagy torna döntőjének adott otthont, itt rendezték az 1964-es labdarúgó-Európa-bajnokság és az 1982-es labdarúgó-világbajnokság, valamint az 1957-es, az 1969-es és az 1980-as BEK-döntőt is. A Bajnokok Ligája döntőjét 2010-ben ismét itt rendezték.
+                        Az Alfredo di Stéfano stadionban jelenleg a Real Madrid tartalékcsapata, a Castilla játssza mérkőzéseit. A stadiont 2006. május 9-ére teljesen felújították. A nyitómérkőzésen, az 1956-os BEK-döntő „visszavágóján”, a Stade de Reims ellen a Real Madrid 6–1 nyert, Antonio Cassano és Roberto Soldado 2-2, valamint Sergio Ramos és José Manuel Jurado 1-1 góljával. A stadion befogadóképessége jelenleg ötezer fő, nevét a Real korábbi játékosáról, Alfredo Di Stéfanoról kapta.</p>
+                </section>
             </article>
-            <article id="Másodikcikk" class="masodikP">
+
+            <article id="Másodikcikk" class="masodikP"> <!-- második típusú paragrafus-t-->
                 <h2>Szurkolók, rivalizálások</h2>
                 <section>
                     <h3>Általános</h3>
                     <p>A hazai mérkőzéseken az ülőhelyek nagy része a bérletesek részére van fenntartva, akiknek létszáma évek óta 60 000 felett van. Ahhoz, hogy valaki bérlethez juthasson, klubtagnak (socio) kell lennie. Világszerte több mint 1800 hivatalos, a klub által is elismert rajongói klub (peña) van.
                     A klubnak szerte a világon több milliós rajongótábora van, akik több klubbal is rivalizálnak. Ezek közül a legismertebb az Barcelonával való rivalizálás. A szurkolók egy csoportja, az Ultras Sur ismert szélsőjobboldali nézeteiről. Ez a szurkolói csoport jó viszonyt ápol az SS Lazio Irriducibili nevű csoportjával. Az Ultras Surt játékosokkal történt incidensek után többször vizsgálta már az UEFA.</p>
                 </section>
-
                 <section>
                     <h3>El Clásico</h3>
+                    <!-- Definiáljunk egy olyan paragrafus stílust, mely be van keretezve szaggatott vonallal és félig átlátszó. A
+                    szöveg legyen jobbra illetve lefele tolódva a kereten belül (használjuk a padding beállítását). + tranzició -->
                     <p class = "a"> A Real Madrid egyik legnagyobb riválisa az FC Barcelona. A két klub rivalizálásának politikai okai is vannak, az ellentét legjobban a Franco-érában jelentkezett. Mivel a Real Madrid a Franco-rezsim támogatását élvezte, Katalónia pedig önállóságot követelt magának, a klub egyfajta fellegvár lett a politikai harcokban. Azokat a játékosokat, akik az egyik klubtól igazoltak a másikhoz, különösen nem szerették az ellenfél szurkolói.
                     A leghírhedtebb eset Luís Figóval történt, aki 2000-ben igazolt a katalán klubtól a Real Madridhoz: egy 2002. évi egymás elleni mérkőzésen, mikor Figo szögletet készült elvégezni, a katalán klub szimpatizánsai többek között egy malacfejet dobtak a játékos irányába. A Barcelona az eset után 4000 eurós büntetést kapott. Korábban Alfredo Di Stéfano volt a Barcelona szurkolói által legjobban utált játékos, mivel a Real Madrid és a Barcelona egyaránt megpróbálta leigazolni a játékost.
                     Di Stéfano végül a Real játékosa lett, és később a csapat egyik húzóemberévé vált. Mivel a Real és a Barcelona a két legeredményesebb csapat Spanyolországban, és szinte mindig esélyesek a bajnoki címre, az ellentét időről időre kiújul. Amikor 2009 nyarán a Barcelona bemutatta Zlatan Ibrahimović-ot a Nou Campban, a katalán szurkolók megvertek egy jelenlévő Real-szurkolót, majd fölgyújtották a mezét.</p>
                 </section>
-
                 <section>
                     <h3>El derbi madrileño</h3>
                     <p>A Real Madrid legközelebbi „szomszédja” a szintén madridi Atlético, és szintén a Real egyik legnagyobb riválisa. Bár a klubot baszk diákok alapították 1903-ban, a klubhoz több, a Realtól elküldött tag is csatlakozott, innen az ellentét oka. További ellentétre adott okot, hogy korábban a Real Madrid szurkolói főleg a középosztályból, míg az Atléticoé leginkább a munkásosztályból kerültek ki, de az ebből adódó ellentét mára már szinte teljesen eltűnt. A két csapat először 1929. február 21-én játszott egymás ellen a bajnokságban.
@@ -107,6 +109,8 @@
                     <h3>Híres játékosok</h3>
                     <p>Ez a lista tartalmazza a Real Madrid néhány fontosabb játékosait és a csapatkapitányait.
                     <div>
+                    <!--css fileban implementálva: Adjuk meg (kontextussal megadott szelektort használva) egy div elemben elhelyezkedő ul elemen
+                    belüli li elem stílusát (szövegszín, betű stílus: dőlt). -->
                         <ul>
                             <li>Alfredo Di Stefano</li>
                             <li>Cristiano Ronaldo</li>
@@ -121,7 +125,6 @@
                         </ul>
                     </div>
                 </section>
-                
                 <section>
                     <h3>Legdrágább játékosvásárlások</h3>
                     <p>A Real Madrid nevéhez fűződik a három legdrágább játékosvásárlás, az elnökség 2009 nyarán a Manchester Unitednek 80 millió fontot (94 millió euró) fizetett Cristiano Ronaldoért. Az előző rekord szintén a Realhoz köthető, Zinédine Zidane-ért 2001-ben 75 millió eurót fizetett a Juventusnak. A második helyen szintén egy 2009-es igazolás, Kaká található.</p>
@@ -133,7 +136,6 @@
                             <li>Zinédine Zidane</li>
                         </ol>
                     </section>
-
                 <section>
                     <h3>Legdrágább eladások</h3>
                     <p>A klub legdrágábban eladott játékosa jelenleg Cristiano Ronaldo, akiért a Juventus FC 117 millió fontot fizetett</p>
@@ -145,15 +147,13 @@
                             <li>Claude Makélélé</li>
                         </ol>
                 </section>
-
-                
             </article>
 
             <article id="Negyedikcikk" class="masodikP">
-                <h2 class="stilus1">Statisztika</h2>
+                <h2 class="stilus1">Statisztika</h2> <!-- Általános stílusosztály alkalmazva a h2 elemre  -->
                 <section>
                     <h3>Élvonalbeli bajnoki szereplések</h3>
-                    <em class="stilus1">Egyik legeredményesebb spanyol csapat</em>
+                    <em class="stilus1">Egyik legeredményesebb spanyol csapat</em>  <!-- Általános stílusosztály alkalmazva az em elemre  -->
                     <p>A Real Madrid a 2011-12-es szezont is beleértve a 81. alkalommal, megszakítás nélkül vesz részt a spanyol labdarúgó-bajnokság küzdelmeiben. Ebből 33 alkalommal szerezte meg a bajnoki címet, amivel a bajnokság csúcstartója. Ezzel jelentősen megelőzi a bajnokság második legeredményesebb csapatát az FC Barcelona együttesét, mely 24 bajnokságot nyert meg.
                     A klub legszebb és legeredményesebb periódusa az 1956-tól 1969-ig terjedő időszakra esik, ekkor 10 bajnoki címet és 3 ezüstérmet szerzett a csapat.</p>
                     <table style="width:100%">
@@ -183,7 +183,6 @@
                         </tr>
                     </table>
                 </section>
-                
                 <section>
                     <h3>Nemzetközi szereplés</h3>
                     <p> Real Madrid eddig 13 alkalommal nyerte meg a BEK-et (később Bajnokok Ligája), ami rekord.</p>
@@ -216,8 +215,11 @@
                 </section>
             </article>
 
+            <!-- Oldjuk meg (táblázat használata nélkül), hogy egymás mellé kerüljön több kép-szöveg páros (a
+            képhez tartozó szöveg a kép jobboldalán helyezkedjen el, és az összetartozó kép illetve szöveg legyen
+            bekeretezve) -->
+            
             <p>További kedvenc/kedvelt csapat(ok):</p><br>
-
             <div class="container">
                 <img class="container__image" alt="CFR" src="https://upload.wikimedia.org/wikipedia/ro/thumb/c/cc/CFR_Cluj.svg/1200px-CFR_Cluj.svg.png">
                 <div class="container__text">
@@ -230,9 +232,6 @@
                 </div>
             </div>
 
-            <div>
-                <a class="a" href="https://www.realmadrid.com/en" >További információk a csapatról</a>
-            </div>
             <a class="b" href="#Eleje">Ugrás az oldal elejére </a> <br>
 
         <footer>
