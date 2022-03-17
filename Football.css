@@ -1,0 +1,158 @@
+body{
+    background-color: rgb(5, 100, 129);
+    color : rgb(131, 213, 228);
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+h1,h3{
+    background-color:rgb(54, 182, 165);
+    color: rgb(47, 47, 189);
+    font-family: "Helvetica Neue",Helvetica;
+}
+
+.elsoP{
+    font-family: 'Times New Roman';
+    color: rgb(22, 197, 168);
+    font-size: 15px;
+}
+.masodikP{
+    font-family: 'Times New Roman';
+    color: rgb(58, 125, 226);
+    font-size: 17px;
+}
+
+nav > a {
+    border: 1px solid rgb(0, 0, 0) ;
+    background-color: rgb(196, 255, 255);
+    padding: 1em;
+    margin: 1em;
+    /* display: block; */
+    text-decoration: none;
+    width: fit-content;
+}
+
+
+nav {
+    margin-bottom: 1em ;
+}   
+
+p > a {
+    border: 1px solid rgb(0, 0, 0) ;
+    background-color: rgb(196, 255, 255);
+    padding: 1em;
+    margin: 1em;
+    /* display: block; */
+    text-decoration: none;
+    width: fit-content;
+}
+
+.stilus1 {
+    color: rgb(15, 15, 90);
+    font-family: "Helvetica Neue",Helvetica;
+    font-weight: 500;
+    text-decoration: overline;
+}
+
+.kep{
+    text-decoration: overline;
+    color: transparent;
+}
+
+div > ul > li{
+    color:rgb(38, 59, 90);
+    font-weight: bold;
+}
+
+a.a:link {
+  background-color: rgb(255, 255, 255);
+  text-decoration: underline overline;
+}
+
+a.a:visited {
+  background-color: rgb(64, 143, 218);
+  text-decoration: underline;
+
+}
+
+a.a:hover {
+  background-color: rgb(16, 180, 180);
+  text-decoration: line-through;
+
+}
+
+a.a:active {
+  background-color: rgb(39, 156, 137);
+  text-decoration: overline;
+
+} 
+
+
+
+a.b:link {
+    background-color: rgb(171, 228, 220);
+    text-decoration: overline;
+}
+  
+a.b:visited {
+    background-color: rgb(158, 199, 238);
+    text-decoration: underline overline;
+}
+
+a.b:hover {
+    background-color: rgb(30, 155, 238);
+    text-decoration: underline;
+}
+
+a.b:active {
+    background-color: rgb(1, 50, 65);
+    text-decoration: line-through;
+} 
+
+p.a{
+    border: 5px dashed rgba(0, 0, 0, 0.5);
+    background: transparent;
+    padding-bottom: 50px;
+    padding-left: 80px;
+    transition-duration: 2s;
+    transition-timing-function: linear;
+}
+
+p.a:hover{
+    border: 5px dashed rgba(0, 0, 0, 1);
+    background: transparent;
+    padding-bottom: 50px;
+    padding-left: 80px;
+}
+
+tr:nth-child(even) td:nth-child(even), tr:nth-child(odd) td:nth-child(odd) {
+    background: grey;
+  }
+  tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+    background: white;
+  }
+
+
+  .container {
+    border: 3px solid rgb(28, 62, 85);
+    padding: 8px 15px 15px;
+    max-width: 330px;
+    display: inline-block;
+  }
+  .container__image {
+    width: 100px;
+    height: 150px;
+    margin: 15px 15px 15px 0;
+    float: left;
+    
+  }
+  .container__text {
+    display:block;
+    color:rgb(154, 204, 216);
+  }
+
+  footer{
+      float: right;
+  }
