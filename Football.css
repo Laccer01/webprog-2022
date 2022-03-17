@@ -14,12 +14,12 @@ h1,h3{
 
 /* Definiáljunk (és használjunk a HTML oldalon) két különböző stílusú paragrafus-t (p). Használjunk
 csak az illető elemre vonatkozó stílusosztályokat (class). */
-.elsoP{
+p.elsoP{
     font-family: 'Times New Roman';
     color: rgb(22, 197, 168);
     font-size: 15px;
 }
-.masodikP{
+p.masodikP{
     font-family: 'Times New Roman';
     color: rgb(58, 125, 226);
     font-size: 17px;
@@ -35,17 +35,19 @@ legyen. Alkalmazzuk ugyanazt a stílusosztályt az em és h2 elemekre. */
     text-decoration: overline;
 }
 
-
 /* Adjuk meg (kontextussal megadott szelektort használva) egy div elemben elhelyezkedő ul elemen
 belüli li elem stílusát (szövegszín, betű stílus: dőlt). */
 div > ul > li{
     color:rgb(38, 59, 90);
-    font-weight: bold;
+    font-style: italic;
 }
 
 /* Definiáljunk két különböző hivatkozás (link) típust, melyeknek más és más a színe, szövegdíszítése
 ha rámegyünk az egérrel, ha aktív, ha már meglátogattuk. */
 /* első típusú link */
+a.a{                /*azért szükséges hogy az ablak méretének változtatásakor ne csusszanak egymásra a gombok */
+    display:inline-block;
+}
 a.a:link {
   background-color: rgb(255, 255, 255);
   text-decoration: underline overline;
@@ -67,6 +69,9 @@ a.a:active {
 } 
 
 /* második típusú link */
+a.b{                /*azért szükséges hogy az ablak méretének változtatásakor ne csusszanak egymásra a gombok */
+    display:inline-block;
+}
 a.b:link {
     background-color: rgb(171, 228, 220);
     text-decoration: overline;
@@ -136,7 +141,6 @@ bekeretezve) */
     color:rgb(154, 204, 216);
 }
 
-
 /* design miatt lettek implementálva */
 
 table, th, td {
@@ -162,7 +166,6 @@ nav > a {
     width: fit-content;
 }
 
-
 nav {
     margin-bottom: 1em ;
 }   
@@ -176,3 +179,4 @@ p > a {
     text-decoration: none;
     width: fit-content;
 }
+
