@@ -180,3 +180,9 @@ p > a {
     width: fit-content;
 }
 
+p, h1, h2, h3, em
+{
+    text-align: justify;
+    margin-left: 5px;
+}
+
