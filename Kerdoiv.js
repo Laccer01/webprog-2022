@@ -12,8 +12,14 @@ function emailEllenorzes(email) {           //Ellenőrzi ha egy megadott emailc�
     let emailEllenorizendo = email.value;
     let emailGmail = /\S+@gmail\.\S+/ 
     let emailYahoo = /\S+@yahoo\.\S+/
+
+    // Vonjuk össze a saját validátoraink a böngésző által generált automatikus validálás
+    // eredményével (tanulmányozzuk a document.forms.formId.elementId.validity.valid
+    // beállítást).
+
+    let megfelelo = document.forms['kerdoiv']['form-email'].validity.valid
     var error = document.getElementById("errorEMAIL")
-    if (emailGmail.test(emailEllenorizendo) || emailYahoo.test(emailEllenorizendo) || emailEllenorizendo == "") {
+    if ((emailGmail.test(emailEllenorizendo) || emailYahoo.test(emailEllenorizendo) || emailEllenorizendo == "") && megfelelo) {
         error.textContent = ""
     }
     else {
@@ -61,9 +67,14 @@ function urlEllenorzes(url) {            //Ellenőrzi ha egy megadott URL helyes
         }
     }
    
+//     Vonjuk össze a saját validátoraink a böngésző által generált automatikus validálás
+//     eredményével (tanulmányozzuk a document.forms.formId.elementId.validity.valid
+//     beállítást).
+    let megfelelo = document.forms['kerdoiv']['form-webOldal'].validity.valid
+
 //     A form leadását jelző submit gomb ne legyen elérhető, amig hibák vannak a formban. Ez
 //     megoldható CSS validitás szerinti szelektorral, vagy JavaScripttel.
-    if (vanHiba)
+    if (vanHiba || !megfelelo)
     {
         document.getElementById("form-submit").style.display = 'none';                              //ha nem helyes az emailcím nem elérhető a submit gomb
     }
@@ -140,9 +151,14 @@ function jelszoEllenorzes(jelszo) {           //Ellenőrzi ha egy megadott jelsz
         }
     }
 
+    // Vonjuk össze a saját validátoraink a böngésző által generált automatikus validálás
+    // eredményével (tanulmányozzuk a document.forms.formId.elementId.validity.valid
+    // beállítást).
+    let megfelelo = document.forms['kerdoiv']['form-jelszo'].validity.valid
+
     // A form leadását jelző submit gomb ne legyen elérhető, amig hibák vannak a formban. Ez
     // megoldható CSS validitás szerinti szelektorral, vagy JavaScripttel.
-    if (!eddigmegfelelo)
+    if (!eddigmegfelelo || !megfelelo)
     {
         document.getElementById("form-submit").style.display = 'none';                              //nem jelenik meg a submit gomb
     }
