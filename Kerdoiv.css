@@ -1,0 +1,36 @@
+/*  Név: Velican László
+    Azonosító: vlim2099
+    Labor: lab2
+    Sorszám: 10   */
+    
+form,footer {
+    text-align: center;
+}
+
+textarea {
+    background-color: rgb(240, 240, 240);
+    display: inline-block;
+}
+
+label,
+input {
+    display: inline-block;
+    margin-bottom: 1em;
+    padding-bottom: 0.75em;
+    margin-bottom: 1.5em;
+}
+
+
+.mozgoSzoveg {
+    color: black;
+    font-weight: bold;
+    white-space: nowrap;
+    clear: both;
+    float: left;
+}
+
+.mozgo-wrapper {
+    height: 25px;
+    width: 100%;
+    overflow: hidden;
+}

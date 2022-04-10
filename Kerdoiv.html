@@ -1,0 +1,97 @@
+<!--Név: Velican László
+    Azonosító: vlim2099
+    Labor: lab2
+    Sorszám: 10  -->
+
+<!DOCTYPE html>
+<html lang="hu">
+
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Űrlap</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet' type='text/css' media='screen' href='Kerdoiv.css'>
+        <script src='Kerdoiv.js'></script>                                              
+    </head>
+
+    <body>
+        <form action="#" method="post" id="kerdoiv" name = "kerdoiv">
+            <label>Kerdőív</label><br>
+
+            <label for="form-csNev">Családnév:</label>                                                         <!--  a felhasználó neve (családnév) -->
+            <!--Ellenőrizzük (a HTML pattern attribútumát használva), hogy a család- és keresztnév
+            nagybetűvel kezdődjön, és csak betűket tartalmazzon. -->
+            <input type="text" name="form-csNev" id="form-csNev" pattern="^[A-Z]{1}[a-z]{1,}$"
+                title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/>
+            <br>
+
+            <label for="form-vNev">Vezetéknév:</label>                                                        <!--  a felhasználó neve (vezetéknév) -->
+             <!--Ellenőrizzük (a HTML pattern attribútumát használva), hogy a család- és keresztnév
+            nagybetűvel kezdődjön, és csak betűket tartalmazzon. -->
+            <input type="text" name="form-vNev" id="form-vNev" pattern="^[A-Z]{1}[a-z]{1,}$"                   
+                title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű" /><br>
+
+            <label for="form-szulDat">Születési dátum:</label>                                                <!-- születési dátuma (date picker)-->
+            <input type="date" name="form-szulDat" id="form-szulDat" /><br>
+
+            <label for="form-email">Email cím:</label>
+            <input type="email" name="form-email" id="form-email" onblur="emailEllenorzes(this);"><br>        <!--e-mail címe-->
+            <div>
+                <span id="errorEMAIL"></span>
+            </div>
+
+            <label for="form-webOldal">Kedvenc weboldal:</label>                                              <!--kedvenc weboldalának a címe-->
+            <input type="url" name="form-webOldal" id="form-webOldal" onblur="urlEllenorzes(this);" /><br>
+            <div>
+                <span id="errorURL"></span>
+            </div>
+
+            <!-- (a) Jelszó formátumának ellenőrzése:
+            Egészítsük ki az első részben létrehozott űrlapot (form) egy jelszó bekérésére alkalmas mezővel.
+            Ellenőrizzük, hogy a begépelt jelszó teljesíti-e az alábbi feltételeket, és ha nem, írjuk ki, hogy mi az, ami
+            nem felel meg: -->
+            <label for="form-jelszo">Jelszo:</label>
+            <input type="password" name="form-jelszo" id="form-jelszo" onblur="jelszoEllenorzes(this);"/><br>
+            
+            <!-- Az ellenőrizhetőség kedvéért írjuk ki apró betűkkel a beírt jelszót. -->
+            <label for="form-jelszoEllenorzo">Jelszo ellenorzes:</label>
+            <input type="text" name="form-jelszoEllenorzo" id="form-jelszoEllenorzo" placeholder="jelszó" readonly >
+            <div>
+                <span id="errorPWD"></span>
+            </div>
+            <br>
+
+            <!-- Helyezzünk el egy űrlapon egy szövegdobozt (textarea), ahova beírunk egy szöveget -->
+            <textarea name="form-szovegdoboz" id="form_szovegdoboz" cols="40" rows="2"
+                    onblur="frissitMozgoSzoveg()">Köszönöm hogy kitöltötted a kérdőívet</textarea> <br>
+
+            <!-- Ezt a szöveget fogjuk a szövegdoboz alatt elhelyezett div elem által kijelölt területen belül görgetni -->
+            <div class="mozgo-wrapper">
+                <div id="mozogos" class="mozgoSzoveg"></div>
+            </div>
+
+            <!-- Helyezzünk továbbá egy legördülő listát (select), amelyből kiválaszthatjuk a görgetés irányát (balra
+            vagy jobbra). -->
+            <div>
+                <label for="form-iranyValasztas">Görgetés iránya:</label>
+                <select id="form-iranyValasztas" name="form-iranyValasztas">
+                    <option value="jobb">Jobb</option>
+                    <option value="bal">Bal</option>
+                </select>
+            </div>
+            
+            <!-- egy gomb megnyomásával újrakezdhető a görgetés. -->
+            <button type="button" onclick="gombUjrakezdes()">Újrajátkezdés!</button> <br><br>
+
+            <input type="submit" value="bekuld" id="form-submit"/><br>
+
+        </form>
+
+        <footer>
+            <p id="legutolsoValtoztatas"></p>
+        </footer> 
+
+    </body>
+
+</html>
