@@ -78,9 +78,3 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
-
-#kepek helye
-uploadDir/
-
-static/lab1
-static/lab2

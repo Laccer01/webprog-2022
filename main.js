@@ -31,13 +31,16 @@ app.use('/lekezelRendezvenyBevezetese', (request, response) => {
   });
 
   if (megfelelo) {
+    const szervezok = request.fields['form-rendezvenySzervezok'];
+    const szervezokLista = szervezok.split(', ');
+
     localArray.push(
       {
         rendezvenyNev: request.fields['form-rendezvenyNev'],
         rendezvenyKezdesiIdopont: request.fields['form-rendezvenyKezdesiIdopont'],
         rendezvenyVegzesiIdopont: request.fields['form-rendezvenyVegzesiIdopont'],
         rendezvenyHelyszine: request.fields['form-rendezvenyHelyszine'],
-        rendezvenySzemelyekListaja: request.fields['form-rendezvenySzervezok'],
+        rendezvenySzemelyekListaja: szervezokLista,
         rendezenyID: ujID,
         rendezvenyKepek: [],
       },
@@ -73,21 +76,20 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
   localArray.forEach((value) => {
     if (value.rendezenyID === request.fields['form-rendezvenyID']) {
       rendezvenyLetezik = true;
-      const szervezok = value.rendezvenySzemelyekListaja.split(', ');
+      const szervezok = value.rendezvenySzemelyekListaja;
       if (request.fields['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
         szervezok.forEach((value1) => {
           if (value1 === request.fields['form-rendezvenySzervezo']) csatlakozhat = false;
         });
         if (csatlakozhat === true) {
-          value.rendezvenySzemelyekListaja += `, ${request.fields['form-rendezvenySzervezo']}`;
+          value.rendezvenySzemelyekListaja.push(request.fields['form-rendezvenySzervezo']);
         }
       } else {
-        value.rendezvenySzemelyekListaja = '';
         szervezok.forEach((value1) => {
           if (value1 === request.fields['form-rendezvenySzervezo']) {
             kilephet = true;
-          } else if (value.rendezvenySzemelyekListaja === '') value.rendezvenySzemelyekListaja += value1;
-          else value.rendezvenySzemelyekListaja += `, ${value1}`;
+            szervezok.pop(request.fields['form-rendezvenySzervezo']);
+          }
         });
       }
     }
@@ -150,8 +152,7 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
         // valtoztatjuk a formot
         writeFileSync('./ide.json', JSON.stringify(localArray), () => {
         });
-      } 
-      else {
+      } else {
         const fileHandler = request.files['form-rendezvenyFenykep'];
         const { path } = fileHandler;
 

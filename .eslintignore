@@ -13,3 +13,9 @@ bower_components/
 # conf files
 protractor.conf.js
 karma.conf.js
+
+#kepek helye
+uploadDir/
+
+static/lab1/
+static/lab2/
