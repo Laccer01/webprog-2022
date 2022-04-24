@@ -74,20 +74,19 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
   let respBody = '';
 
   localArray.forEach((value) => {
-    if (value.rendezenyID == request.fields['form-rendezvenyID']) {
-      console.log(value.rendezenyID)
+    if (String(value.rendezenyID) === String(request.fields['form-rendezvenyID'])) {
       rendezvenyLetezik = true;
       const szervezok = value.rendezvenySzemelyekListaja;
-      if (request.fields['form-rendezvenySzervezoValasztas'] == 'csatlakozas') {
+      if (request.fields['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
         szervezok.forEach((value1) => {
-          if (value1 == request.fields['form-rendezvenySzervezo']) csatlakozhat = false;
+          if (String(value1) === String(request.fields['form-rendezvenySzervezo'])) csatlakozhat = false;
         });
         if (csatlakozhat === true) {
           value.rendezvenySzemelyekListaja.push(request.fields['form-rendezvenySzervezo']);
         }
       } else {
         szervezok.forEach((value1) => {
-          if (value1 == request.fields['form-rendezvenySzervezo']) {
+          if (String(value1) === String(request.fields['form-rendezvenySzervezo'])) {
             kilephet = true;
             szervezok.pop(request.fields['form-rendezvenySzervezo']);
           }
@@ -137,11 +136,11 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
   let respBody = '';
 
   localArray.forEach((value) => {
-    if (value.rendezenyID === request.fields['form-rendezvenyID']) {
+    if (String(value.rendezenyID) === String(request.fields['form-rendezvenyID'])) {
       rendezvenyLetezik = true;
       const szervezok = value.rendezvenySzemelyekListaja.split(', ');
       szervezok.forEach((value1) => {
-        if (value1 === request.fields['form-rendezvenySzervezo']) szervezoE = true;
+        if (String(value1) === String(request.fields['form-rendezvenySzervezo'])) szervezoE = true;
       });
       if (szervezoE === true) {
         // itt kene hozza adni a kepet a kepekhez
