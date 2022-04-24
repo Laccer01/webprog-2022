@@ -1,6 +1,9 @@
 # node_modules, if in subfolder, is not ignored
 node_modules/
 bower_components/
+uploadDir/
+static/lab1/
+static/lab2/
 
 # ignore 3rd party libs possibly included
 **/bootstrap.*.js
@@ -16,8 +19,3 @@ karma.conf.js
 
 # client side typical
 script.js
-
-uploadDir/
-
-static/lab1/
-static/lab2/
