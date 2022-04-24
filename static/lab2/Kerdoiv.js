@@ -48,7 +48,7 @@ function urlEllenorzes(url) {            //Ellenőrzi ha egy megadott URL helyes
             if (url1[0] === "http:" || url1[0] === "https:") {
                 var host = url1[1].split('.');
 
-                if (host.length <= 3) {
+                if (host.length < 3) {
                     error.textContent = "Hianyzik a domain vagy a subdomain"            //Hiba esetén jelenítsünk meg egy megfelelő hibaüzenetet
                     error.style.color = "red"
                     vanHiba = true
