@@ -74,19 +74,20 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
   let respBody = '';
 
   localArray.forEach((value) => {
-    if (value.rendezenyID === request.fields['form-rendezvenyID']) {
+    if (value.rendezenyID == request.fields['form-rendezvenyID']) {
+      console.log(value.rendezenyID)
       rendezvenyLetezik = true;
       const szervezok = value.rendezvenySzemelyekListaja;
-      if (request.fields['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
+      if (request.fields['form-rendezvenySzervezoValasztas'] == 'csatlakozas') {
         szervezok.forEach((value1) => {
-          if (value1 === request.fields['form-rendezvenySzervezo']) csatlakozhat = false;
+          if (value1 == request.fields['form-rendezvenySzervezo']) csatlakozhat = false;
         });
         if (csatlakozhat === true) {
           value.rendezvenySzemelyekListaja.push(request.fields['form-rendezvenySzervezo']);
         }
       } else {
         szervezok.forEach((value1) => {
-          if (value1 === request.fields['form-rendezvenySzervezo']) {
+          if (value1 == request.fields['form-rendezvenySzervezo']) {
             kilephet = true;
             szervezok.pop(request.fields['form-rendezvenySzervezo']);
           }
