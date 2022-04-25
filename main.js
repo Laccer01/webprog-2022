@@ -138,7 +138,7 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
   localArray.forEach((value) => {
     if (String(value.rendezenyID) === String(request.fields['form-rendezvenyID'])) {
       rendezvenyLetezik = true;
-      const szervezok = value.rendezvenySzemelyekListaja
+      const szervezok = value.rendezvenySzemelyekListaja;
       szervezok.forEach((value1) => {
         if (String(value1) === String(request.fields['form-rendezvenySzervezo'])) szervezoE = true;
       });
