@@ -1,0 +1,40 @@
+<!--Név: Velican László
+    Azonosító: vlim2099
+    Labor: lab2
+    Sorszám: 10  -->
+
+    <!DOCTYPE html>
+    <html lang="hu">
+    
+        <head>
+            <meta charset='utf-8'>
+            <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+            <title>Rendezvény bevezetése</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+            <script src='Rendezveny.js'></script>                                              
+        </head>
+    
+            <form action="/lekezelRendezvenySzervezoFenykepHozzaadas" method="post" id="RendezvenySzervezoFenykepHozzaadas" name = "RendezvenySzervezoFenykepHozzaadas" enctype="multipart/form-data">
+                <label>Rendezvényhez fénykép hozzáadása</label><br>
+    
+                <label for="form-rendezvenySzervezo">Szervező neve:</label>                                             
+                <input type="text" name="form-rendezvenySzervezo" id="form-rendezvenySzervezo" pattern="^[A-Z]{1}[a-z]{1,}$"                   
+                title="Csak betűtet tartalmazhat, az első nagybetű a többi kisbetű"/><br>
+
+                <label for="form-rendezvenyID">Rendezvény id:</label>
+                <input type="text" name="form-rendezvenyID" id="form-rendezvenyID"><br>    
+    
+                <label>Válaszd ki a feltöltendő fényképet:</label>
+                <input type="file" name="form-rendezvenyFenykep" id="form-rendezvenyFenykep">
+
+                <br><br>
+                <input type="submit" value="bekuldes" id="form-saveSzervezoCsatlakozas"/>
+               
+            </form>
+    
+
+    
+    
+    </html>
+    
