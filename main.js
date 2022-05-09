@@ -10,7 +10,6 @@ import morgan from 'morgan';
 const app = express();
 const uploadDir = join(process.cwd(), 'uploadDir');
 
-
 // feltöltési mappa elkészítése
 if (!existsSync(uploadDir)) {
   mkdirSync(uploadDir);
@@ -21,7 +20,6 @@ app.use(express.static(join(process.cwd(), 'static')));
 app.use(eformidable({ uploadDir }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
-
 
 app.use('/lekezelRendezvenyBevezetese', (request, response) => {
   const localArray = JSON.parse(readFileSync('./ide.json', () => {}));
@@ -201,4 +199,3 @@ app.listen(8000, () => {
 //     res.send('Error');
 //   }
 // });
-
