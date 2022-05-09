@@ -26,7 +26,6 @@
   "dependencies": {
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
-    "formidable": "^2.0.1",
     "morgan": "^1.10.0"
   }
 }
