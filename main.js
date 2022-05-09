@@ -10,6 +10,7 @@ import morgan from 'morgan';
 const app = express();
 const uploadDir = join(process.cwd(), 'uploadDir');
 
+
 // feltöltési mappa elkészítése
 if (!existsSync(uploadDir)) {
   mkdirSync(uploadDir);
@@ -18,6 +19,9 @@ if (!existsSync(uploadDir)) {
 app.use(morgan('tiny'));
 app.use(express.static(join(process.cwd(), 'static')));
 app.use(eformidable({ uploadDir }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), 'views'));
+
 
 app.use('/lekezelRendezvenyBevezetese', (request, response) => {
   const localArray = JSON.parse(readFileSync('./ide.json', () => {}));
@@ -186,3 +190,15 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
 app.listen(8000, () => {
   console.log('Server listening on http://localhost:8000/ ...');
 });
+
+// app.use('/', async (req, res) => {
+//   try {
+//     const csokik = await findAllChockolate();
+//     res.render('index', { csokik: csokik[0] });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500);
+//     res.send('Error');
+//   }
+// });
+

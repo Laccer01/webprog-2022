@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Rezdezvenyek listazva</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="main.js"></script>    
+    </script>
+</head>
+<body>
+    <h2>Rendezvenyek</h2>
+
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev"><%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo"> <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo"><%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin"><%= rendezvenyek.helyszin %></div>
+            </div>
+        <% }) %>
+    </div>
+
+</body>
+</html>
