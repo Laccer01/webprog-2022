@@ -54,7 +54,7 @@ export function findAllRendezveny()
   return connection_pool.query('select * from Rendezveny');
 }
 
-export function findAllRendezveny()
+export function findAllSzervezo()
 {
   return connection_pool.query('select * from Szervezo');
 }
