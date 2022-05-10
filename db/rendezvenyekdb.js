@@ -40,7 +40,8 @@ export function findRendezvenyID(rendezveny) {
   const x = connectionPool.query(`SELECT rendezvenyID 
     FROM Rendezveny
     Where Rendezveny.nev = ? `, [rendezveny['form-rendezvenyNev']]);
-  return x;
+  console.log(x);
+  x.then((result) => result);
 }
 
 export function findSzervezoID(szervezo) {
@@ -62,13 +63,8 @@ export function insertRendezveny(rendezveny) {
 
 export function insertRendezvenySzervezok(rendezveny) {
   const array = [];
-
-  rendezveny[0].then((result) => {
-    console.log(result);
-  });
-
   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
-
+  console.log(rendezvenyIDjelenlegi);
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
   let y;
 
@@ -98,8 +94,12 @@ export function insertSzervezok(szervezo) {
 }
 
 export function insertRendezvenyKepek(rendezveny) {
-  return connectionPool.query(`insert into RendezvenyKepek 
-  values (default, ?, ?)`, [rendezveny.ID, rendezveny.picture]);
+  console.log(rendezveny.files);
+  const rendezveny1 = rendezveny.fields;
+  const x = connectionPool.query(`insert into RendezvenyKepek 
+    values (default, ?, ?)`, [rendezveny1['form-rendezvenyID'], null]);
+
+  return x;
 }
 
 export function findAllRendezveny() {
