@@ -43,15 +43,34 @@ export function findRendezvenyID(rendezveny) {
   return x;
 }
 
+export function findSzervezoID(szervezo) {
+  const x = connectionPool.query(`SELECT szervezoID 
+      FROM Szervezo
+      Where Szervezo.szervezoID = ? `, [szervezo['form-rendezvenySzervezo']]);
+  return x;
+}
+
 export function insertRendezveny(rendezveny) {
-  console.log(rendezveny);
   const array = [];
-  let y;
   const x = connectionPool.query(`insert into Rendezveny 
     values (default, ?, ?, ?, ?)`, [rendezveny['form-rendezvenyNev'], rendezveny['form-rendezvenyKezdesiIdopont'], rendezveny['form-rendezvenyVegzesiIdopont'], rendezveny['form-rendezvenyHelyszine']]);
+
+  array.push(x);
+
+  return array;
+}
+
+export function insertRendezvenySzervezok(rendezveny) {
+  const array = [];
+
+  rendezveny[0].then((result) => {
+    console.log(result);
+  });
+
   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
 
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+  let y;
 
   rendezvenyIDjelenlegi.then((result) => {
     Object.keys(szervezok).forEach((szervezoJelenlegi) => {
@@ -60,15 +79,22 @@ export function insertRendezveny(rendezveny) {
       array.push(y);
     });
   });
-  array.push(x);
 
   return array;
 }
 
 export function insertSzervezok(szervezo) {
-  console.log(szervezo);
-//   return connectionPool.query(`insert into Szervezok
-//   values (default, ?, ?)`, [null, null]);
+  let y;
+  if (szervezo['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
+    if (findSzervezoID(szervezo) !== undefined) {
+      y = connectionPool.query(`insert into Szervezo 
+        values (default, ?, ?)`, [szervezo['form-rendezvenySzervezo'], szervezo['form-rendezvenyID']]);
+    }
+  } else if (findSzervezoID(szervezo) !== undefined) {
+    y = connectionPool.query(`DELETE From Szervezo 
+        Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezo['form-rendezvenySzervezo'], szervezo['form-rendezvenyID']]);
+  }
+  return y;
 }
 
 export function insertRendezvenyKepek(rendezveny) {
@@ -86,6 +112,11 @@ export function findAllSzervezo() {
 
 export function findAllRendezvenyKepek() {
   return connectionPool.query('select * from RendezvenyKepek');
+}
+
+export function findAllRendezvenyKepei(rendezvenyID) {
+  console.log(rendezvenyID);
+  return connectionPool.query('select * from RendezvenyKepek Where RendezvenyKepek.rendezvenyID = rendezvenyID');
 }
 
 // createTable().then(
