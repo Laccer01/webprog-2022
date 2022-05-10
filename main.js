@@ -1,6 +1,6 @@
 import express from 'express';
-import fs, {
-  existsSync, mkdirSync, writeFileSync, readFileSync,
+import {
+  existsSync, mkdirSync,
 } from 'fs';
 
 import { join } from 'path';
@@ -9,7 +9,7 @@ import morgan from 'morgan';
 
 import {
   // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
-  insertRendezveny, insertRendezvenySzervezok, findAllRendezveny,
+  insertRendezveny, insertRendezvenySzervezok, findAllRendezveny, insertRendezvenyKepek,
   insertSzervezok, findAllRendezvenyKepei,
   // findAllSzervezo, findAllRendezvenyKepek,
 } from './db/rendezvenyekdb.js';
@@ -25,6 +25,16 @@ function checkIfUsed(body) {
 }
 
 function checkIfIsSzervezo(body) {
+  return new Promise((resolve) => {
+    // if (body.sweetness > 10) {
+    //   reject();
+    // } else {
+    resolve(body);
+    // }
+  });
+}
+
+function checkIfIsSzervezoRendezvenyen(body) {
   return new Promise((resolve) => {
     // if (body.sweetness > 10) {
     //   reject();
@@ -51,7 +61,10 @@ app.use('/lekezelRendezvenyBevezetese', (request, response) => {
   checkIfUsed(request.fields).catch(() => {
     response.status(400);
     response.send('A megadott rendezveny mar be van szurva az adatbazisba!');
-  }).then(insertRendezveny).then(insertRendezvenySzervezok)
+  }).then(((request1) => {
+    insertRendezveny(request);
+    return request1;
+  })).then(insertRendezvenySzervezok)
     .then(() => {
       response.redirect('/');
     })
@@ -77,65 +90,25 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
 });
 
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  const localArray = JSON.parse(readFileSync('./ide.json', () => {}));
-
-  let rendezvenyLetezik = false;
-  let szervezoE = false;
-  let respBody = '';
-
-  localArray.forEach((value) => {
-    if (String(value.rendezenyID) === String(request.fields['form-rendezvenyID'])) {
-      rendezvenyLetezik = true;
-      const szervezok = value.rendezvenySzemelyekListaja;
-      szervezok.forEach((value1) => {
-        if (String(value1) === String(request.fields['form-rendezvenySzervezo'])) szervezoE = true;
-      });
-      if (szervezoE === true) {
-        // itt kene hozza adni a kepet a kepekhez
-        const fileHandler = request.files['form-rendezvenyFenykep'];
-        const file = fileHandler.path;
-        const fileLista = file.split('\\');
-        value.rendezvenyKepek.push(fileLista[fileLista.length - 1]);
-
-        // valtoztatjuk a formot
-        writeFileSync('./ide.json', JSON.stringify(localArray), () => {
-        });
-      } else {
-        const fileHandler = request.files['form-rendezvenyFenykep'];
-        const { path } = fileHandler;
-
-        console.log(path);
-        fs.unlink(path, (err) => {
-          if (err) {
-            console.error(err);
-          }
-        });
-      }
-    }
-  });
-
-  // writeFileSync('./ide.json', JSON.stringify(localArray),(err) => {})
-
-  if (!rendezvenyLetezik) {
-    respBody = 'Nem letezik az adott Id-ju esemeny';
+  // console.log(request.files)
+  checkIfIsSzervezoRendezvenyen(request).catch(() => {
     response.status(400);
-  } else if (!szervezoE) {
-    respBody = 'A megadott szemely nem szervezo a valasztott esemenyen';
-    response.status(400);
-  } else {
-    respBody = 'Sikerult hozzaadni a kivalasztott kepet az esemenyhez';
-    response.status(200);
-  }
-
-  response.set('Content-Type', 'text/plain;charset=utf-8');
-  response.end(respBody);
+    response.send('Mar szervezo vagy az esemenyen!');
+  }).then(insertRendezvenyKepek).then(() => {
+    response.redirect('/kepek');
+  })
+    .catch((err) => {
+      console.error(err);
+      response.status(500);
+      response.send('Error');
+    });
 });
 
 app.listen(8000, () => {
   console.log('Server listening on http://localhost:8000/ ...');
 });
 
-app.use('/', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     const rendezvenyek = await findAllRendezveny();
     res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0] });
@@ -146,7 +119,7 @@ app.use('/', async (req, res) => {
   }
 });
 
-app.get('/kepek/', async (req, res) => {
+app.get('/kepek', async (req, res) => {
   try {
     const rendezvenyKepei = await findAllRendezvenyKepei(1);
     res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0] });

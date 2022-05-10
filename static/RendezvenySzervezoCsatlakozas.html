@@ -24,7 +24,8 @@
                 title="Csak betűtet tartalmazhat, az első nagybetű a többi kisbetű"/><br>
 
                 <label for="form-rendezvenyID">Rendezvény id:</label>
-                <input type="text" name="form-rendezvenyID" id="form-rendezvenyID"><br>    
+                <input type="text" name="form-rendezvenyID" id="form-rendezvenyID" pattern="[0-9]{1,}$"
+                title="Csak egy szám lehet az ID"/><br>    
 
                 <label for="form-rendezvenySzervezoValasztas">Szervező választása:</label>
                 <select id="form-rendezvenySzervezoValasztas" name="form-rendezvenySzervezoValasztas">
@@ -32,6 +33,12 @@
                         <option value="visszalepes">Visszalépés</option>
                 </select>
                 <br><br>
+
+                <div>
+                    <span id="errorBekuldes2"></span>
+                </div>
+
+
                 <input type="submit" value="bekuldes" id="form-saveSzervezoCsatlakozas"/>
                
             </form>
