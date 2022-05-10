@@ -47,10 +47,12 @@ GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 
 
--- USE Rendezveny
--- SELECT * FROM Rendezveny
+-- SELECT * FROM Rendezveny;
 
+-- SELECT * FROM Szervezo;
 -- USE Rendezveny
 -- DELETE FROM Rendezveny
 
+-- USE Rendezveny
+-- SELECT * FROM Szervezok
 

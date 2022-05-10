@@ -36,14 +36,43 @@ export function createTableRendezvenyKepek() {
     CONSTRAINT FK_Rendezveny_RendezvenyKepek FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID)`);
 }
 
+export function findRendezvenyID(rendezveny) {
+    let x = connectionPool.query(`SELECT rendezvenyID 
+    FROM Rendezveny
+    Where Rendezveny.nev = ? `, [rendezveny['form-rendezvenyNev']]);
+    return x;
+}
+
+
 export function insertRendezveny(rendezveny) {
-  return connectionPool.query(`insert into Rendezveny 
-  values (default, ?, ?, ?, ?)`, [rendezveny['form-rendezvenyNev'], rendezveny['form-rendezvenyKezdesiIdopont'], rendezveny['form-rendezvenyVegzesiIdopont'], rendezveny['form-rendezvenyHelyszine']]);
+    console.log(rendezveny)
+    let array = []
+    let y;
+    let x = connectionPool.query(`insert into Rendezveny 
+    values (default, ?, ?, ?, ?)`, [rendezveny['form-rendezvenyNev'], rendezveny['form-rendezvenyKezdesiIdopont'], rendezveny['form-rendezvenyVegzesiIdopont'], rendezveny['form-rendezvenyHelyszine']]);
+    let rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
+    let legujabbID;
+    let szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+
+    rendezvenyIDjelenlegi.then(function(result) {
+        for (const szervezoJelenlegi of szervezok) {
+            y = connectionPool.query(`insert into Szervezo 
+        values (default, ?, ?)`, [szervezoJelenlegi, result[0][0]['rendezvenyID']]);
+            array.push(y);
+        }
+     })
+
+    
+    array.push(x);
+    
+    return array;
+
 }
 
 export function insertSzervezok(szervezo) {
-  return connectionPool.query(`insert into Szervezok 
-  values (default, ?, ?)`, [szervezo.name, szervezo.rendezvenyID]);
+//   console.log(szervezo.)
+//   return connectionPool.query(`insert into Szervezok 
+//   values (default, ?, ?)`, [null, null]);
 }
 
 export function insertRendezvenyKepek(rendezveny) {

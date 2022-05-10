@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Rezdezvenyek listazva</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src="main.js"></script>    
+    </script>
+</head>
+<body>
+    <h2>Rendezveny részletei </h2>
+    <h2>Képek a rendezvényről </h2>
+
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev"><%= rendezvenyek.utvonal %></div>
+            </div>
+        <% }) %>
+    </div>
+
+</body>
+</html>
