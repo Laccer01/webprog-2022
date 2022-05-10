@@ -52,16 +52,14 @@ export function insertRendezveny(rendezveny) {
   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
 
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
-  let szervezoJelenlegi;
 
   rendezvenyIDjelenlegi.then((result) => {
-    for (szervezoJelenlegi in szervezok) {
+    Object.keys(szervezok).forEach((szervezoJelenlegi) => {
       y = connectionPool.query(`insert into Szervezo 
         values (default, ?, ?)`, [szervezoJelenlegi, result[0][0].rendezvenyID]);
       array.push(y);
-    }
+    });
   });
-
   array.push(x);
 
   return array;
