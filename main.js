@@ -9,7 +9,7 @@ import morgan from 'morgan';
 
 import {
   // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
-  insertRendezveny, findAllRendezveny,insertSzervezok
+  insertRendezveny, findAllRendezveny, insertSzervezok,
   // findAllSzervezo, findAllRendezvenyKepek,
 } from './db/rendezvenyekdb.js';
 
@@ -41,7 +41,6 @@ app.use('/lekezelRendezvenyBevezetese', (request, response) => {
     response.status(400);
     response.send('A megadott rendezveny mar be van szurva az adatbazisba!');
   }).then(insertRendezveny).then(() => {
-
     response.redirect('/');
   })
     .catch((err) => {

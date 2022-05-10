@@ -37,41 +37,38 @@ export function createTableRendezvenyKepek() {
 }
 
 export function findRendezvenyID(rendezveny) {
-    let x = connectionPool.query(`SELECT rendezvenyID 
+  const x = connectionPool.query(`SELECT rendezvenyID 
     FROM Rendezveny
     Where Rendezveny.nev = ? `, [rendezveny['form-rendezvenyNev']]);
-    return x;
+  return x;
 }
 
-
 export function insertRendezveny(rendezveny) {
-    console.log(rendezveny)
-    let array = []
-    let y;
-    let x = connectionPool.query(`insert into Rendezveny 
+  console.log(rendezveny);
+  const array = [];
+  let y;
+  const x = connectionPool.query(`insert into Rendezveny 
     values (default, ?, ?, ?, ?)`, [rendezveny['form-rendezvenyNev'], rendezveny['form-rendezvenyKezdesiIdopont'], rendezveny['form-rendezvenyVegzesiIdopont'], rendezveny['form-rendezvenyHelyszine']]);
-    let rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
-    let legujabbID;
-    let szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+  const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
 
-    rendezvenyIDjelenlegi.then(function(result) {
-        for (const szervezoJelenlegi of szervezok) {
-            y = connectionPool.query(`insert into Szervezo 
-        values (default, ?, ?)`, [szervezoJelenlegi, result[0][0]['rendezvenyID']]);
-            array.push(y);
-        }
-     })
+  const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
 
-    
-    array.push(x);
-    
-    return array;
+  rendezvenyIDjelenlegi.then((result) => {
+    for (const szervezoJelenlegi of szervezok) {
+      y = connectionPool.query(`insert into Szervezo 
+        values (default, ?, ?)`, [szervezoJelenlegi, result[0][0].rendezvenyID]);
+      array.push(y);
+    }
+  });
 
+  array.push(x);
+
+  return array;
 }
 
 export function insertSzervezok(szervezo) {
-//   console.log(szervezo.)
-//   return connectionPool.query(`insert into Szervezok 
+  console.log(szervezo)
+//   return connectionPool.query(`insert into Szervezok
 //   values (default, ?, ?)`, [null, null]);
 }
 
