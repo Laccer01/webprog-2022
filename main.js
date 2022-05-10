@@ -7,6 +7,22 @@ import { join } from 'path';
 import eformidable from 'express-formidable';
 import morgan from 'morgan';
 
+import {
+  // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
+  insertRendezveny, findAllRendezveny,
+  // findAllSzervezo, findAllRendezvenyKepek,
+} from './db/rendezvenyekdb.js';
+
+function checkIfUsed(body) {
+  return new Promise((resolve, reject) => {
+    // if (body.sweetness > 10) {
+    //   reject();
+    // } else {
+    resolve(body);
+    // }
+  });
+}
+
 const app = express();
 const uploadDir = join(process.cwd(), 'uploadDir');
 
@@ -19,53 +35,19 @@ app.use(morgan('tiny'));
 app.use(express.static(join(process.cwd(), 'static')));
 app.use(eformidable({ uploadDir }));
 app.set('view engine', 'ejs');
-app.set('views', path.join(process.cwd(), 'views'));
 
 app.use('/lekezelRendezvenyBevezetese', (request, response) => {
-  const localArray = JSON.parse(readFileSync('./ide.json', () => {}));
-  const ujID = localArray.length + 1;
-  let megfelelo = true;
-
-  localArray.forEach((value) => {
-    if (value.rendezvenyNev === request.fields['form-rendezvenyNev']) {
-      megfelelo = false;
-    }
-  });
-
-  if (megfelelo) {
-    const szervezok = request.fields['form-rendezvenySzervezok'];
-    const szervezokLista = szervezok.split(', ');
-
-    localArray.push(
-      {
-        rendezvenyNev: request.fields['form-rendezvenyNev'],
-        rendezvenyKezdesiIdopont: request.fields['form-rendezvenyKezdesiIdopont'],
-        rendezvenyVegzesiIdopont: request.fields['form-rendezvenyVegzesiIdopont'],
-        rendezvenyHelyszine: request.fields['form-rendezvenyHelyszine'],
-        rendezvenySzemelyekListaja: szervezokLista,
-        rendezenyID: ujID,
-        rendezvenyKepek: [],
-      },
-    );
-
-    writeFileSync('./ide.json', JSON.stringify(localArray), () => {
+  checkIfUsed(request.fields).catch(() => {
+    response.status(400);
+    response.send('A megadott rendezveny mar be van szurva az adatbazisba!');
+  }).then(insertRendezveny).then(() => {
+    response.redirect('/');
+  })
+    .catch((err) => {
+      console.error(err);
+      response.status(500);
+      response.send('Error');
     });
-  }
-
-  let respBody = `A szerver sikeresen megkapta a következő információt:
-    név: ${request.fields['form-rendezvenyNev']}
-    kezdesiIdopont: ${request.fields['form-rendezvenyKezdesiIdopont']}
-    vegzesiIdopont: ${request.fields['form-rendezvenyVegzesiIdopont']}
-    helyszint: ${request.fields['form-rendezvenyHelyszine']}
-    szervezok: ${request.fields['form-rendezvenySzervezok']}
-    beszurtID: ${ujID}
-  `;
-  response.status(200);
-
-  if (!megfelelo) respBody += 'Volt mar ilyen nevu esemeny';
-
-  response.set('Content-Type', 'text/plain;charset=utf-8');
-  response.end(respBody);
 });
 
 app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
@@ -189,13 +171,13 @@ app.listen(8000, () => {
   console.log('Server listening on http://localhost:8000/ ...');
 });
 
-// app.use('/', async (req, res) => {
-//   try {
-//     const csokik = await findAllChockolate();
-//     res.render('index', { csokik: csokik[0] });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500);
-//     res.send('Error');
-//   }
-// });
+app.use('/', async (req, res) => {
+  try {
+    const rendezvenyek = await findAllRendezveny();
+    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});

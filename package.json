@@ -24,8 +24,10 @@
     "main.js": "^0.0.1"
   },
   "dependencies": {
+    "ejs": "^3.1.7",
     "express": "^4.17.3",
     "express-formidable": "^1.2.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3"
   }
 }
