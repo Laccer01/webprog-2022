@@ -14,7 +14,7 @@ import {
 } from './db/rendezvenyekdb.js';
 
 function checkIfUsed(body) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // if (body.sweetness > 10) {
     //   reject();
     // } else {
