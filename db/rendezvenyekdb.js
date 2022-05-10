@@ -52,9 +52,10 @@ export function insertRendezveny(rendezveny) {
   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
 
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+  let szervezoJelenlegi;
 
   rendezvenyIDjelenlegi.then((result) => {
-    for (const szervezoJelenlegi of szervezok) {
+    for (szervezoJelenlegi in szervezok) {
       y = connectionPool.query(`insert into Szervezo 
         values (default, ?, ?)`, [szervezoJelenlegi, result[0][0].rendezvenyID]);
       array.push(y);
@@ -67,7 +68,7 @@ export function insertRendezveny(rendezveny) {
 }
 
 export function insertSzervezok(szervezo) {
-  console.log(szervezo)
+  console.log(szervezo);
 //   return connectionPool.query(`insert into Szervezok
 //   values (default, ?, ?)`, [null, null]);
 }

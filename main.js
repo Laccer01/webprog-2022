@@ -9,7 +9,7 @@ import morgan from 'morgan';
 
 import {
   // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
-  insertRendezveny, findAllRendezveny, insertSzervezok,
+  insertRendezveny, findAllRendezveny,
   // findAllSzervezo, findAllRendezvenyKepek,
 } from './db/rendezvenyekdb.js';
 
