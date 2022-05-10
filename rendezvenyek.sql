@@ -50,6 +50,8 @@ FLUSH PRIVILEGES;
 SELECT * FROM Rendezveny;
 
 SELECT * FROM Szervezo;
+
+SELECT * FROM RendezvenyKepek;
 -- USE Rendezveny
 -- DELETE FROM Rendezveny
 

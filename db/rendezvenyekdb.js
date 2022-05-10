@@ -37,24 +37,26 @@ export function createTableRendezvenyKepek() {
 }
 
 export function findRendezvenyID(rendezveny) {
-  const x = connectionPool.query(`SELECT rendezvenyID 
+  console.log(rendezveny);
+  const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
     FROM Rendezveny
-    Where Rendezveny.nev = ? `, [rendezveny['form-rendezvenyNev']]);
-  console.log(x);
-  x.then((result) => result);
+    Where Rendezveny.rendezvenyID = 2 `);
+
+  return x;
 }
 
 export function findSzervezoID(szervezo) {
   const x = connectionPool.query(`SELECT szervezoID 
       FROM Szervezo
       Where Szervezo.szervezoID = ? `, [szervezo['form-rendezvenySzervezo']]);
+
   return x;
 }
 
 export function insertRendezveny(rendezveny) {
   const array = [];
   const x = connectionPool.query(`insert into Rendezveny 
-    values (default, ?, ?, ?, ?)`, [rendezveny['form-rendezvenyNev'], rendezveny['form-rendezvenyKezdesiIdopont'], rendezveny['form-rendezvenyVegzesiIdopont'], rendezveny['form-rendezvenyHelyszine']]);
+    values (default, ?, ?, ?, ?)`, [rendezveny.fields['form-rendezvenyNev'], rendezveny.fields['form-rendezvenyKezdesiIdopont'], rendezveny.fields['form-rendezvenyVegzesiIdopont'], rendezveny.fields['form-rendezvenyHelyszine']]);
 
   array.push(x);
 
@@ -63,18 +65,21 @@ export function insertRendezveny(rendezveny) {
 
 export function insertRendezvenySzervezok(rendezveny) {
   const array = [];
-  const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
-  console.log(rendezvenyIDjelenlegi);
+  //   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
+  // console.log(rendezvenyIDjelenlegi);
+
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+
   let y;
 
-  rendezvenyIDjelenlegi.then((result) => {
-    Object.keys(szervezok).forEach((szervezoJelenlegi) => {
-      y = connectionPool.query(`insert into Szervezo 
-        values (default, ?, ?)`, [szervezoJelenlegi, result[0][0].rendezvenyID]);
-      array.push(y);
-    });
+  //   rendezvenyIDjelenlegi.then((result) => {
+  //    console.log(((result[0])[0])['rendezvenyID']);
+  Object.values(szervezok).forEach((szervezoJelenlegi) => {
+    y = connectionPool.query(`insert into Szervezo 
+        values (default, ?, ?)`, [szervezoJelenlegi, 2]);       // emiatt itt sem működik
+    array.push(y);
   });
+  //   });
 
   return array;
 }
@@ -94,12 +99,14 @@ export function insertSzervezok(szervezo) {
 }
 
 export function insertRendezvenyKepek(rendezveny) {
-  console.log(rendezveny.files);
-  const rendezveny1 = rendezveny.fields;
-  const x = connectionPool.query(`insert into RendezvenyKepek 
-    values (default, ?, ?)`, [rendezveny1['form-rendezvenyID'], null]);
+  const fileHandler = rendezveny.files['form-rendezvenyFenykep'];
+  const file = fileHandler.path;
+  const fileLista = file.split('\\');
 
-  return x;
+  // console.log ((rendezveny.files['form-rendezvenyFenykep']))
+  // console.log(((result[0])[0])['rendezvenyID']);
+  return connectionPool.query(`insert into RendezvenyKepek 
+    values (default, ?, ?)`, [rendezveny.fields['form-rendezvenyID'], fileLista[fileLista.length - 1]]);       // emiatt itt sem működik
 }
 
 export function findAllRendezveny() {
@@ -118,12 +125,3 @@ export function findAllRendezvenyKepei(rendezvenyID) {
   console.log(rendezvenyID);
   return connectionPool.query('select * from RendezvenyKepek Where RendezvenyKepek.rendezvenyID = rendezvenyID');
 }
-
-// createTable().then(
-// insertChoclate).then(findAllChockolate
-
-//   ).catch((err) => {
-//     console.error(err);
-//   }).then((result)=>{
-//     console.log(result[0]);
-//   })
