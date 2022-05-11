@@ -121,7 +121,7 @@ app.get('/', async (req, res) => {
 
 app.get('/kepek', async (req, res) => {
   try {
-    const rendezvenyKepei = await findAllRendezvenyKepei(1);
+    const rendezvenyKepei = await findAllRendezvenyKepei(req[0]);
     res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0] });
   } catch (err) {
     console.error(err);

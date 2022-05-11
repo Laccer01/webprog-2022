@@ -40,7 +40,7 @@ export function findRendezvenyID(rendezveny) {
   console.log(rendezveny);
   const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
     FROM Rendezveny
-    Where Rendezveny.rendezvenyID = 2 `);
+    Where Rendezveny.nev =?`, [rendezveny['form-rendezvenyNev']]);
 
   return x;
 }
@@ -65,21 +65,24 @@ export function insertRendezveny(rendezveny) {
 
 export function insertRendezvenySzervezok(rendezveny) {
   const array = [];
-  //   const rendezvenyIDjelenlegi = findRendezvenyID(rendezveny);
-  // console.log(rendezvenyIDjelenlegi);
-
+  const rendezvenyIDjelenlegiDic = findRendezvenyID(rendezveny);
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
 
-  let y;
+  let rendezvenyIDjelenlegi;
+  rendezvenyIDjelenlegiDic.then((result) => {
+    //   console.log ( result[0][0] );
 
-  //   rendezvenyIDjelenlegi.then((result) => {
-  //    console.log(((result[0])[0])['rendezvenyID']);
-  Object.values(szervezok).forEach((szervezoJelenlegi) => {
-    y = connectionPool.query(`insert into Szervezo 
-        values (default, ?, ?)`, [szervezoJelenlegi, 2]);       // emiatt itt sem működik
-    array.push(y);
+    Object.values(result[0][0]).forEach((key) => {
+      rendezvenyIDjelenlegi = result[0][0][key];
+      let y;
+
+      Object.values(szervezok).forEach((szervezoJelenlegi) => {
+        y = connectionPool.query(`insert into Szervezo 
+            values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegi]);       // emiatt itt sem működik
+        array.push(y);
+      });
+    });
   });
-  //   });
 
   return array;
 }
