@@ -1,7 +1,11 @@
 function save() {
   const error = document.forms.RendezvenyBevezetes.errorBekuldes1;
 
-  if (document.getElementById('form-rendezvenyNev').value !== '' && document.getElementById('form-rendezvenyKezdesiIdopont').value !== '' && document.getElementById('form-rendezvenyVegzesiIdopont').value !== '' && document.getElementById('form-rendezvenyHelyszine').value !== '' && document.getElementById('form-rendezvenySzervezok').value !== '') {
+  if (document.getElementById('form-rendezvenyNev').value !== ''
+   && document.getElementById('form-rendezvenyKezdesiIdopont').value !== ''
+   && document.getElementById('form-rendezvenyVegzesiIdopont').value !== ''
+   && document.getElementById('form-rendezvenyHelyszine').value !== ''
+    && document.getElementById('form-rendezvenySzervezok').value !== '') {
     error.textContent = '';
     return true;
   }

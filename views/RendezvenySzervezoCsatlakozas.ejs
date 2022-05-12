@@ -19,14 +19,33 @@
             <form action="/lekezelRendezvenySzervezoCsatlakozas" method="post" id="RendezvenySzervezoCsatlakozas" name = "RendezvenySzervezoCsatlakozas" enctype="multipart/form-data">
                 <label>Rendezvényhez csatlakozás szervezőknek</label><br>
     
-                <label for="form-rendezvenySzervezo">Szervező neve:</label>                                             
+
+                <label for="form-rendezvenySzervezo">Szervező neve:</label> 
+
                 <div>
-                    <select id="form-rendezvenySzervezo"></select>
+                    <select id="form-rendezvenySzervezo">
+                      
+                      <% rendezvenySzervezokNevei.forEach((rendezvenySzervezokNevei) => { %>
+                        <option value = <%= rendezvenySzervezokNevei.szervezoNev %>><%= rendezvenySzervezokNevei.szervezoNev %></option>
+                        <% }) %>   
+                    </select>   
+            
                 </div>
+                   
+                </div> 
+
+                    
+                
 
                 <label for="form-rendezvenyID">Rendezvény id:</label>
                 <div>
-                    <select id="form-rendezvenyID"></select>
+                    <select id="form-rendezvenyID">
+                      
+                      <% rendezvenyIDk.forEach((rendezvenyIDk) => { %>
+                        <option value = <%= rendezvenyIDk.rendezvenyID %>><%= rendezvenyIDk.rendezvenyID %></option>
+                        <% }) %>   
+                    </select>   
+            
                 </div>
 
                 <label for="form-rendezvenySzervezoValasztas">Szervező választása:</label>

@@ -37,10 +37,18 @@ export function createTableRendezvenyKepek() {
 }
 
 export function findRendezvenyID(rendezveny) {
-  console.log(rendezveny);
+//   console.log(rendezveny);
   const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
     FROM Rendezveny
     Where Rendezveny.nev =?`, [rendezveny['form-rendezvenyNev']]);
+
+  return x;
+}
+
+export async function findRendezvenyNevvel(rendezvenyNev) {
+  const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
+      FROM Rendezveny
+      Where Rendezveny.nev =?`, [rendezvenyNev]);
 
   return x;
 }
@@ -53,10 +61,27 @@ export function findSzervezoID(szervezo) {
   return x;
 }
 
+export function findSzervezoIDNevvel(szervezo) {
+  const x = connectionPool.query(`SELECT szervezoID 
+        FROM Szervezo
+        Where Szervezo.nev = ? `, [szervezo]);
+  console.log(x);
+  return x;
+}
+
+export function findRendezvenyIdRendezvenyKepek(Kep) {
+  const x = connectionPool.query(`SELECT RendezvenyKepek.rendezvenyID
+        FROM RendezvenyKepek
+        Where RendezvenyKepek.utvonal = ? `, [Kep]);
+  //   console.log(x);
+  return x;
+}
+
 export function insertRendezveny(rendezveny) {
   const array = [];
   const x = connectionPool.query(`insert into Rendezveny 
-    values (default, ?, ?, ?, ?)`, [rendezveny.fields['form-rendezvenyNev'], rendezveny.fields['form-rendezvenyKezdesiIdopont'], rendezveny.fields['form-rendezvenyVegzesiIdopont'], rendezveny.fields['form-rendezvenyHelyszine']]);
+    values (default, ?, ?, ?, ?)`, [rendezveny.fields['form-rendezvenyNev'], rendezveny.fields['form-rendezvenyKezdesiIdopont'],
+    rendezveny.fields['form-rendezvenyVegzesiIdopont'], rendezveny.fields['form-rendezvenyHelyszine']]);
 
   array.push(x);
 
@@ -65,20 +90,18 @@ export function insertRendezveny(rendezveny) {
 
 export function insertRendezvenySzervezok(rendezveny) {
   const array = [];
-  const rendezvenyIDjelenlegiDic = findRendezvenyID(rendezveny);
+  const rendezvenyIDjelenlegiDic =  findRendezvenyID(rendezveny);
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
 
-  let rendezvenyIDjelenlegi;
   rendezvenyIDjelenlegiDic.then((result) => {
     //   console.log ( result[0][0] );
 
-    Object.values(result[0][0]).forEach((key) => {
-      rendezvenyIDjelenlegi = result[0][0][key];
+    result[0][0].forEach((key) => {
       let y;
-
+      // console.log(result[0][0][key])
       Object.values(szervezok).forEach((szervezoJelenlegi) => {
         y = connectionPool.query(`insert into Szervezo 
-            values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegi]);       // emiatt itt sem működik
+            values (default, ?, ?)`, [szervezoJelenlegi, result[0][0][key]]);
         array.push(y);
       });
     });
@@ -105,11 +128,17 @@ export function insertRendezvenyKepek(rendezveny) {
   const fileHandler = rendezveny.files['form-rendezvenyFenykep'];
   const file = fileHandler.path;
   const fileLista = file.split('\\');
+  //   console.log(request.query.rendezvenyID)
+  if (rendezveny.fields['form-rendezvenyID'] === undefined) {
+    return connectionPool.query(`insert into RendezvenyKepek 
+    values (default, ?, ?)`, [rendezveny.query.rendezvenyID, fileLista[fileLista.length - 1]]);
+  }
+
+  return connectionPool.query(`insert into RendezvenyKepek 
+    values (default, ?, ?)`, [rendezveny.fields['form-rendezvenyID'], fileLista[fileLista.length - 1]]);
 
   // console.log ((rendezveny.files['form-rendezvenyFenykep']))
   // console.log(((result[0])[0])['rendezvenyID']);
-  return connectionPool.query(`insert into RendezvenyKepek 
-    values (default, ?, ?)`, [rendezveny.fields['form-rendezvenyID'], fileLista[fileLista.length - 1]]);       // emiatt itt sem működik
 }
 
 export function findAllRendezveny() {
@@ -124,7 +153,31 @@ export function findAllRendezvenyKepek() {
   return connectionPool.query('select * from RendezvenyKepek');
 }
 
-export function findAllRendezvenyKepei(rendezvenyID) {
-  console.log(rendezvenyID);
-  return connectionPool.query('select * from RendezvenyKepek Where RendezvenyKepek.rendezvenyID = rendezvenyID');
+export async function findAllRendezvenyKepei(rendezvenyNev) {
+  const rendezvenyIDjelenlegiDic =  await findRendezvenyNevvel(rendezvenyNev);
+
+  //    console.log((rendezvenyIDjelenlegiDic[0][0]));
+  const y = Object.values(rendezvenyIDjelenlegiDic[0][0])[0];
+  //   console.log(y);
+  const x =  connectionPool.query('select RendezvenyKepek.utvonal from RendezvenyKepek Where RendezvenyKepek.rendezvenyID = ?', [y]);
+
+  return x;
+}
+
+export function findAllRendezvenyID() {
+  return connectionPool.query(
+    'select unique(Rendezveny.rendezvenyID) from Rendezveny',
+  );
+}
+
+export async function findRendezvenySzervezokNevei() {
+  return connectionPool.query(
+    'select Szervezo.szervezoNev from Szervezo',
+  );
+}
+
+export async function findRendezvenyIdk() {
+  return connectionPool.query(
+    'select Rendezveny.rendezvenyID from Rendezveny',
+  );
 }

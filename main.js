@@ -10,17 +10,18 @@ import morgan from 'morgan';
 import {
   // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
   insertRendezveny, insertRendezvenySzervezok, findAllRendezveny, insertRendezvenyKepek,
-  insertSzervezok, findAllRendezvenyKepei,
+  insertSzervezok, findAllRendezvenyKepei, findRendezvenyNevvel,
+  findRendezvenySzervezokNevei, findRendezvenyIdk,
   // findAllSzervezo, findAllRendezvenyKepek,
 } from './db/rendezvenyekdb.js';
 
 function checkIfUsed(body) {
-  return new Promise((resolve) => {
-    // if (body.sweetness > 10) {
-    //   reject();
-    // } else {
-    resolve(body);
-    // }
+  return new Promise((resolve, reject) => {
+    if (body['form-rendezvenyNev'] ===  'Malacka') {
+      reject();
+    } else {
+      resolve(body);
+    }
   });
 }
 
@@ -36,16 +37,21 @@ function checkIfIsSzervezo(body) {
 
 function checkIfIsSzervezoRendezvenyen(body) {
   return new Promise((resolve) => {
-    // if (body.sweetness > 10) {
-    //   reject();
-    // } else {
+    // if (body.name !== 'malac')
+    // {
+
+    // // if (body.sweetness > 10) {
+
+    // reject();
+    //   } else {
+    //   // const vanE = findRendezvenyNevvel(
     resolve(body);
-    // }
+  //   }
   });
 }
 
 const app = express();
-const uploadDir = join(process.cwd(), 'uploadDir');
+const uploadDir = join(process.cwd(), '/static/uploadDir');
 
 // feltöltési mappa elkészítése
 if (!existsSync(uploadDir)) {
@@ -64,7 +70,10 @@ app.use('/lekezelRendezvenyBevezetese', (request, response) => {
   }).then(((request1) => {
     insertRendezveny(request);
     return request1;
-  })).then(insertRendezvenySzervezok)
+  }))
+    .then(((request2) => {
+      insertRendezvenySzervezok(request2);
+    }))
     .then(() => {
       response.redirect('/');
     })
@@ -75,12 +84,12 @@ app.use('/lekezelRendezvenyBevezetese', (request, response) => {
     });
 });
 
-app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
+app.use('/lekezelRendezvenySzervezoCsatlakozas', async (request, response) => {
   checkIfIsSzervezo(request.fields).catch(() => {
     response.status(400);
     response.send('Mar szervezo vagy az esemenyen!');
   }).then(insertSzervezok).then(() => {
-    response.redirect('/kepek');
+    response.redirect('/');
   })
     .catch((err) => {
       console.error(err);
@@ -89,13 +98,12 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas', (request, response) => {
     });
 });
 
-app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  // console.log(request.files)
+app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', async (request, response) => {
   checkIfIsSzervezoRendezvenyen(request).catch(() => {
     response.status(400);
     response.send('Mar szervezo vagy az esemenyen!');
   }).then(insertRendezvenyKepek).then(() => {
-    response.redirect('/kepek');
+    response.redirect('/');
   })
     .catch((err) => {
       console.error(err);
@@ -121,8 +129,22 @@ app.get('/', async (req, res) => {
 
 app.get('/kepek', async (req, res) => {
   try {
-    const rendezvenyKepei = await findAllRendezvenyKepei(req[0]);
-    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0] });
+    const rendezvenyKepei = await findAllRendezvenyKepei(req.query.name);
+    const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
+
+    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+app.get('/csatlakozas', async (req, res) => {
+  try {
+    const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
+    const rendezvenyIDk = await findRendezvenyIdk();
+    res.render('RendezvenySzervezoCsatlakozas', { rendezvenySzervezokNevei: rendezvenySzervezokNevei[0], rendezvenyIDk: rendezvenyIDk[0] });
   } catch (err) {
     console.error(err);
     res.status(500);
