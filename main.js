@@ -8,24 +8,23 @@ import eformidable from 'express-formidable';
 import morgan from 'morgan';
 
 import {
-  // insertRendezveny, insertSzervezok, insertRendezvenyKepek,
   insertRendezveny, insertRendezvenySzervezok, findAllRendezveny, insertRendezvenyKepek,
   insertSzervezok, findAllRendezvenyKepei, findRendezvenyNevvel,
-  findRendezvenySzervezokNevei, findRendezvenyIdk, findSzervezo,
-  // findAllSzervezo, findAllRendezvenyKepek,
+  findRendezvenySzervezokNevei, findRendezvenyIdk,
+  // findSzervezo,
 } from './db/rendezvenyekdb.js';
 
-// function checkIfUsed(body) {                                                                   //1.nem működő függvény
+// function checkIfUsed(body) {                              //1.nem működő függvény
 //   console.log(body['form-rendezvenyNev']);
 //   const x = findRendezvenyNevvel(body['form-rendezvenyNev']);
 //   console.log(x);
-//   return new Promise((resolve, reject) => {           
+//   return new Promise((resolve, reject) => {
 //     x.then((result) => {
 //       console.log(result[0])
-//       if (result[0] === []) 
+//       if (result[0] === [])
 //       {
 //         resolve(body);
-//       } else 
+//       } else
 //       {
 //         reject();
 //       }
@@ -37,12 +36,12 @@ function checkIfUsed(body) {
   console.log(body['form-rendezvenyNev']);
   const x = findRendezvenyNevvel(body['form-rendezvenyNev']);
   console.log(x);
-  return new Promise((resolve) => {     
+  return new Promise((resolve) => {
     resolve(body);
   });
 }
 
-// function checkIfIsSzervezo(body) {                                                               //2.nem működő függvény
+// function checkIfIsSzervezo(body) {                          //2.nem működő függvény
 //   const x = findSzervezo(body['form-rendezvenySzervezo'], body['form-rendezvenyID']);
 //   console.log(x);
 //   x.then((result) => {
@@ -59,7 +58,7 @@ function checkIfUsed(body) {
 //       {
 //         reject();
 //       }
-//     } else  
+//     } else
 //     {
 //       if (result[0] === [])           //a szervezo meg nincs csatlakozva a rendezvenyhez
 //   //akkor nem tud kilepni a rendezvenybol
@@ -75,13 +74,13 @@ function checkIfUsed(body) {
 // });
 // }
 
-function checkIfIsSzervezo(body) {                                   
+function checkIfIsSzervezo(body) {
   return new Promise((resolve) => {
     resolve(body);
   });
 }
 
-// function checkIfIsSzervezoRendezvenyen(body) {                                               //3.nem működő függvény
+// function checkIfIsSzervezoRendezvenyen(body) {                    //3.nem működő függvény
 //   console.log(body.fields['form-rendezvenySzervezo']);
 //   console.log(body.query.rendezvenyID)
 //   const x = findSzervezo (body.fields['form-rendezvenySzervezo'],body.query.rendezvenyID)
@@ -101,9 +100,8 @@ function checkIfIsSzervezo(body) {
 //     });
 // }
 
-function checkIfIsSzervezoRendezvenyen(body)
-{
-  return new Promise((resolve) => {  
+function checkIfIsSzervezoRendezvenyen(body) {
+  return new Promise((resolve) => {
     resolve(body);
   });
 }
