@@ -2,7 +2,8 @@
 #Azonosító: vlim2099
 #Csoport: 523/1(régi 524/2)
 
-#Ez a script létrehoz minden szükséges táblát és a közöttük levő kapcsolatokat is, csak futtatni kell
+#a rendezvenyek.sql script létrehoz minden szükséges táblát, a táblák között levő kapcsolatokat és a felhasználót is, csak futtatni kell
+
 -- CREATE DATABASE Rendezvenyek ;
 USE Rendezvenyek;
 

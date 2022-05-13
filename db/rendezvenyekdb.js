@@ -36,8 +36,7 @@ export function createTableRendezvenyKepek() {
     CONSTRAINT FK_Rendezveny_RendezvenyKepek FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID)`);
 }
 
-export function findRendezvenyID(rendezveny) {
-//   console.log(rendezveny);
+export async function findRendezvenyID(rendezveny) {
   const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
     FROM Rendezveny
     Where Rendezveny.nev =?`, [rendezveny['form-rendezvenyNev']]);
@@ -46,7 +45,6 @@ export function findRendezvenyID(rendezveny) {
 }
 
 export async function findRendezvenyNev(rendezvenyID) {
-  //   console.log(rendezveny);
   const  x = connectionPool.query(`SELECT Rendezveny.nev
       FROM Rendezveny
         Where Rendezveny.rendezvenyID =?`, [rendezvenyID]);
@@ -81,7 +79,6 @@ export function findRendezvenyIdRendezvenyKepek(Kep) {
   const x = connectionPool.query(`SELECT RendezvenyKepek.rendezvenyID
         FROM RendezvenyKepek
         Where RendezvenyKepek.utvonal = ? `, [Kep]);
-  //   console.log(x);
   return x;
 }
 
@@ -98,17 +95,29 @@ export async function insertRendezveny(rendezveny) {
 
 export async function insertRendezvenySzervezok(rendezveny) {
   const array = [];
-  const rendezvenyIDjelenlegiDic =  await findRendezvenyID(rendezveny);
+
+  let rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
+
+  if  (rendezvenyIDjelenlegiDic.toString() !== '') {
+    setTimeout(() => {
+    }, 10000);
+    rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
+  }
+  rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
+
+  // Valamiért néha nem találja meg a rendezvényId mert még nincs
+  // beszúrva az adatbázisban ezért van ez a megoldás hogy megvárja
+  // amíg beszúródik a megelelő rendezvény
+
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(', ');
-  //   console.log ( result[0][0] );
 
   let y;
-  Object.values(szervezok).forEach((szervezoJelenlegi) => {
-    y = connectionPool.query(`insert into Szervezo 
-            values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegiDic[0][0].rendezvenyID]);
-    array.push(y);
-  });
 
+  await Promise.all(szervezok.map(async (szervezoJelenlegi) => {
+    y = connectionPool.query(`insert into Szervezo 
+      values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegiDic[0][0].rendezvenyID]);
+    array.push(y);
+  }));
   return array;
 }
 
@@ -130,7 +139,7 @@ export function insertRendezvenyKepek(rendezveny) {
   const fileHandler = rendezveny.files['form-rendezvenyFenykep'];
   const file = fileHandler.path;
   const fileLista = file.split('\\');
-  //   console.log(request.query.rendezvenyID)
+
   if (rendezveny.fields['form-rendezvenyID'] === undefined) {
     return connectionPool.query(`insert into RendezvenyKepek 
     values (default, ?, ?)`, [rendezveny.query.rendezvenyID, fileLista[fileLista.length - 1]]);
@@ -138,9 +147,6 @@ export function insertRendezvenyKepek(rendezveny) {
 
   return connectionPool.query(`insert into RendezvenyKepek 
     values (default, ?, ?)`, [rendezveny.fields['form-rendezvenyID'], fileLista[fileLista.length - 1]]);
-
-  // console.log ((rendezveny.files['form-rendezvenyFenykep']))
-  // console.log(((result[0])[0])['rendezvenyID']);
 }
 
 export function findAllRendezveny() {
@@ -157,13 +163,11 @@ export async function findAllSzervezoFromRendezveny(rendezvenyID) {
 
 export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
   const y = [];
-  // console.log(rendezvenyek)
   await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
     const result = await findAllSzervezoFromRendezveny(rendezveny.rendezvenyID);
     y.push(result[0]);
   }));
-  // console.log(rendezvenyek1.rendezvenyID)
-  // console.log(y)
+
   return y;
 }
 
@@ -174,9 +178,7 @@ export function findAllRendezvenyKepek() {
 export async function findAllRendezvenyKepei(rendezvenyNev) {
   const rendezvenyIDjelenlegiDic =  await findRendezvenyNevvel(rendezvenyNev);
 
-  //    console.log((rendezvenyIDjelenlegiDic[0][0]));
   const y = Object.values(rendezvenyIDjelenlegiDic[0][0])[0];
-  //   console.log(y);
   const x =  connectionPool.query('select RendezvenyKepek.utvonal from RendezvenyKepek Where RendezvenyKepek.rendezvenyID = ?', [y]);
 
   return x;

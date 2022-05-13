@@ -29,6 +29,6 @@ label {
     margin-bottom: 1em;
 }
 
-form {
+form,h2 {
     text-align: center;
 }

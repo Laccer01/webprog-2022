@@ -14,7 +14,7 @@ import {
   findAllSzervezoFromRendezvenyek, findSzervezo,
 } from './db/rendezvenyekdb.js';
 
-function checkIfUsed(body) {                              // 1.nem működő függvény
+function checkIfUsed(body) {   // vizsgálja ha létezik e olyan nevű rendezvény e
   const x = findRendezvenyNevvel(body['form-rendezvenyNev']);
   return new Promise((resolve, reject) => {
     x.then((result) => {
@@ -29,24 +29,22 @@ function checkIfUsed(body) {                              // 1.nem működő fü
   });
 }
 
-function checkIfIsSzervezo(body) {                          // 2.nem működő függvény
+function checkIfIsSzervezo(body) {    // vizsgálom ha olyan csatlakozik/kilép
+  // egy eseményhez/eseményből aki megteheti
   const x = findSzervezo(body['form-rendezvenySzervezo'], parseInt(body['form-rendezvenyID'], 10));
   return new Promise((resolve, reject) => {
-    // resolve(body);
-
     x.then((result) => {
       const text = result[0].toString();
-      // resolve(body);
 
       if (body['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
-      // vizsgálom ha csatlakozni akar a szervező
+        // vizsgálom ha csatlakozni akar a szervező
         if (text === '') {          // a szervezo meg nincs csatlakozva a rendezvenyhez
           resolve(body);
         } else {
           reject();
         }
       } else if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
-      // akkor nem tud kilepni a rendezvenybol
+        // akkor nem tud kilepni a rendezvenybol
         reject();
       } else {
         resolve(body);
@@ -55,14 +53,12 @@ function checkIfIsSzervezo(body) {                          // 2.nem működő f
   });
 }
 
-function checkIfIsSzervezoRendezvenyen(body) {
-  // console.log(body.fields['form-rendezvenySzervezo'])
-  // console.log(parseInt(body.query.rendezvenyID))
+function checkIfIsSzervezoRendezvenyen(body) {        // vizsgálom ha a felhasználó
+  // szervező e az adott eseményen
   const x = findSzervezo(body.fields['form-rendezvenySzervezo'], parseInt(body.query.rendezvenyID, 10));
 
   return new Promise((resolve, reject) => {
     x.then((result) => {
-      // console.log(result[0])
       const text = result[0].toString();
       if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
         reject();
@@ -86,19 +82,20 @@ app.use(express.static(join(process.cwd(), 'static')));
 app.use(eformidable({ uploadDir }));
 app.set('view engine', 'ejs');
 
-app.use('/lekezelRendezvenyBevezetese', (request, response) => {
-  checkIfUsed(request.fields).then(((request1) => {
-    insertRendezveny(request);
-    return request1;
-  }))
-    .then(((request2) => {
-      insertRendezvenySzervezok(request2);
+app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
+  checkIfUsed(request.fields)
+    .then(((request1) => {
+      insertRendezveny(request);
+      return request1;
+    }))
+    .then(((request1) => {
+      insertRendezvenySzervezok(request1);
     }))
     .then(() => {
       response.redirect('/');
     })
     .catch(() => {
-      response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar megvan ez a rendezveny' });
+      response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar be van vezetve ilyen nevű rendezvény' });
     })
     .catch((err) => {
       console.error(err);
@@ -113,7 +110,6 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
   }))
 
     .then(() => {
-      // console.log(request.fields[0].szervezoID);
       response.redirect('/csatlakozasSikeres');
     })
     .catch(() => {
@@ -134,22 +130,16 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
     .then(() => {
       const jelenlegiRendezvenyId = request.query.rendezvenyID;
       const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
-      console.log(jelenlegiRendezvenyNev);
       jelenlegiRendezvenyNev.then((result) => {
-        console.log(result[0][0].nev);
         const x = `/kepek?name=${result[0][0].nev}`;
-        // console.log(x)
         response.redirect(x);
       });
     })
     .catch(() => {
       const jelenlegiRendezvenyId = request.query.rendezvenyID;
       const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
-      console.log(jelenlegiRendezvenyNev);
       jelenlegiRendezvenyNev.then((result) => {
-        console.log(result[0][0].nev);
         const x = `/kepekHiba?name=${result[0][0].nev}`;
-        // console.log(x)
         response.redirect(x);
       });
     })
@@ -167,9 +157,7 @@ app.listen(8000, () => {
 app.get('/', async (req, res) => {
   try {
     const rendezvenyek = await findAllRendezveny();
-    // console.log(rendezvenyek[0])
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
-    // console.log(rendezvenySzervezok[0])
 
     res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok });
   } catch (err) {
@@ -197,7 +185,7 @@ app.get('/kepekHiba', async (req, res) => {
     const rendezvenyKepei = await findAllRendezvenyKepei(req.query.name);
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
 
-    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: 'Nem vagy szervezo ezen a rendezvényen' });
+    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: 'Nem vagy szervező ezen a rendezvényen' });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -234,7 +222,7 @@ app.get('/csatlakozasHiba', async (req, res) => {
   }
 });
 
-app.get('/csatlakozasHiba', async (req, res) => {
+app.get('/csatlakozasSikeres', async (req, res) => {
   try {
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
     const rendezvenyIDk = await findRendezvenyIdk();
@@ -257,3 +245,10 @@ app.get('/RendezvenyBevezetese.html', (req, response) => {
 app.get('/RendezvenyBevezetese.html', (req, response) => {
   response.render('RendezvenyBevezetese');
 });
+
+// főoldal: /
+// új rendezvény bevezetése: /RendezvenyBevezetese.html
+// csatlakozási form: /csatlakozas
+
+// a rendezvenyek.sql script létrehoz minden szükséges táblát, a táblák
+// között levő kapcsolatokat és a felhasználót is, csak futtatni kell
