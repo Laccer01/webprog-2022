@@ -234,7 +234,6 @@ app.get('/csatlakozasHiba', async (req, res) => {
   }
 });
 
-
 app.get('/csatlakozasHiba', async (req, res) => {
   try {
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
