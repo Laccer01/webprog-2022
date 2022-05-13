@@ -2,7 +2,7 @@
 #Azonosító: vlim2099
 #Csoport: 523/1(régi 524/2)
 
-
+#Ez a script létrehoz minden szükséges táblát és a közöttük levő kapcsolatokat is, csak futtatni kell
 -- CREATE DATABASE Rendezvenyek ;
 USE Rendezvenyek;
 
@@ -47,9 +47,9 @@ GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 
 
-SELECT * FROM Rendezveny;
+-- SELECT * FROM Rendezveny;
 
-SELECT * FROM Szervezo;
+-- SELECT * FROM Szervezo;
 
 
 -- SELECT * FROM RendezvenyKepek;

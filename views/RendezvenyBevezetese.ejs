@@ -1,0 +1,58 @@
+<!--Név: Velican László
+    Azonosító: vlim2099
+    Labor: lab2
+    Sorszám: 10  -->
+
+    <!DOCTYPE html>
+    <html lang="hu">
+    
+        <head>
+            <meta charset='utf-8'>
+            <title>Rendezvény bevezetése</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+            <script src='Rendezveny.js'></script>                                              
+        </head>
+    
+        <body>
+            <form action="/lekezelRendezvenyBevezetese" onsubmit="required()" method="POST" id="RendezvenyBevezetes" name = "RendezvenyBevezetes" enctype="multipart/form-data">
+                
+                <label>Rendezvény bevezetése</label><br>
+                
+                <h2> <%= hibaUzenet %></h2>
+                
+                <label for="form-rendezvenyNev">Rendezvény neve:</label>                                             
+                <input type="text" name="form-rendezvenyNev" id="form-rendezvenyNev" value=""pattern="^[A-Z]{1}[a-z]{1,}$"
+                title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/> <br>
+    
+                <label for="form-rendezvenyKezdesiIdopont">Rendezvény kezdésének időpontja:</label>                                         
+                <input type="date" name="form-rendezvenyKezdesiIdopont" id="form-rendezvenyKezdesiIdopont" /><br>
+
+
+                <label for="form-rendezvenyVegzesiIdopont">Rendezvény végének időpontja:</label>                              
+                <input type="date" name="form-rendezvenyVegzesiIdopont" id="form-rendezvenyVegzesiIdopont" /><br>
+
+
+                <label for="form-rendezvenyHelyszine">Rendezvény helyszíne:</label>
+                <input type="text" name="form-rendezvenyHelyszine" id="form-rendezvenyHelyszine" pattern="^[A-Z]{1}[a-z]{1,}$"
+                title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/><br>    
+                
+
+                <label for="form-rendezvenySzervezok">Rendezvény szervezőinek a listája:</label>
+                <input type="text" name="form-rendezvenySzervezok" id="form-rendezvenySzervezok" value="" pattern="^[A-Za-z ,]{1,}$"                   
+                    title="Csak betűtet tartalmazhat, a nevek vesszővel kell legyenek elválasztva" ><br>    
+            
+                <input type="submit" value="bekuld" id="form-submit"/><br>
+    
+                <div>
+                    <span id="errorBekuldes1"></span>
+                </div>
+
+            </form>
+    
+
+    
+        </body>
+    
+    </html>
+    

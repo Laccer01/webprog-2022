@@ -45,6 +45,15 @@ export function findRendezvenyID(rendezveny) {
   return x;
 }
 
+export async function findRendezvenyNev(rendezvenyID) {
+  //   console.log(rendezveny);
+  const  x = connectionPool.query(`SELECT Rendezveny.nev
+      FROM Rendezveny
+        Where Rendezveny.rendezvenyID =?`, [rendezvenyID]);
+
+  return x;
+}
+
 export async function findRendezvenyNevvel(rendezvenyNev) {
   const  x = connectionPool.query(`SELECT Rendezveny.rendezvenyID
       FROM Rendezveny
@@ -65,7 +74,6 @@ export function findSzervezoIDNevvel(szervezo) {
   const x = connectionPool.query(`SELECT szervezoID 
         FROM Szervezo
         Where Szervezo.nev = ? `, [szervezo]);
-  console.log(x);
   return x;
 }
 
@@ -89,11 +97,9 @@ export async function insertRendezveny(rendezveny) {
 }
 
 export async function insertRendezvenySzervezok(rendezveny) {
-  console.log(rendezveny);
   const array = [];
   const rendezvenyIDjelenlegiDic =  await findRendezvenyID(rendezveny);
-  console.log(rendezvenyIDjelenlegiDic);
-  const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+  const szervezok = rendezveny['form-rendezvenySzervezok'].split(', ');
   //   console.log ( result[0][0] );
 
   let y;
@@ -145,6 +151,22 @@ export function findAllSzervezo() {
   return connectionPool.query('select * from Szervezo');
 }
 
+export async function findAllSzervezoFromRendezveny(rendezvenyID) {
+  return connectionPool.query('select * from Szervezo Where Szervezo.rendezvenyID = ?', [rendezvenyID]);
+}
+
+export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
+  const y = [];
+  // console.log(rendezvenyek)
+  await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
+    const result = await findAllSzervezoFromRendezveny(rendezveny.rendezvenyID);
+    y.push(result[0]);
+  }));
+  // console.log(rendezvenyek1.rendezvenyID)
+  // console.log(y)
+  return y;
+}
+
 export function findAllRendezvenyKepek() {
   return connectionPool.query('select * from RendezvenyKepek');
 }
@@ -179,5 +201,5 @@ export async function findRendezvenyIdk() {
 }
 
 export function findSzervezo(nev, rendezvenyId) {
-  return connectionPool.query('select Szervezo.szervezoID from Szervezo Where Szervezo.szervezoNev = ? And Szervezo.szervezoNev = ?', [nev, rendezvenyId]);
+  return connectionPool.query('select Szervezo.szervezoID from Szervezo Where Szervezo.szervezoNev = ? And Szervezo.rendezvenyID = ?', [nev, rendezvenyId]);
 }

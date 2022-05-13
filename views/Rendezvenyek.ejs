@@ -19,6 +19,17 @@
                 <div class="form-kezdIdo"> <%= rendezvenyek.kezdesiIdo %></div>
                 <div class="form-vegIdo"><%= rendezvenyek.vegzesiIdo %></div>
                 <div class="form-helyszin"><%= rendezvenyek.helyszin %></div>
+                <div class="form-nev">
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                       
+                        <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                            <% if (rendezvenySzervezok.rendezvenyID === rendezvenyek.rendezvenyID) { %>
+                                <%= rendezvenySzervezok.szervezoNev %>
+                                ,<% } %>
+
+                         <% }) %>
+                    <% }) %>
+                </div>
             </div>
             <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a>
         <% }) %>
