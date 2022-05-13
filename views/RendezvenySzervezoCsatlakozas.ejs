@@ -21,38 +21,32 @@
     
 
                 <label for="form-rendezvenySzervezo">Szervező neve:</label> 
-
-                <div>
-                    <select id="form-rendezvenySzervezo">
+                <select id="form-rendezvenySzervezo" name="form-rendezvenySzervezo"">
                       
                       <% rendezvenySzervezokNevei.forEach((rendezvenySzervezokNevei) => { %>
                         <option value = <%= rendezvenySzervezokNevei.szervezoNev %>><%= rendezvenySzervezokNevei.szervezoNev %></option>
                         <% }) %>   
-                    </select>   
-            
-                </div>
-                   
+                </select>   
+                               
                 </div> 
 
-                    
-                
 
                 <label for="form-rendezvenyID">Rendezvény id:</label>
-                <div>
-                    <select id="form-rendezvenyID">
+                <select id="form-rendezvenyID" name="form-rendezvenyID">
                       
                       <% rendezvenyIDk.forEach((rendezvenyIDk) => { %>
                         <option value = <%= rendezvenyIDk.rendezvenyID %>><%= rendezvenyIDk.rendezvenyID %></option>
                         <% }) %>   
-                    </select>   
+                </select>   
             
-                </div>
 
                 <label for="form-rendezvenySzervezoValasztas">Szervező választása:</label>
                 <select id="form-rendezvenySzervezoValasztas" name="form-rendezvenySzervezoValasztas">
                         <option value="csatlakozas">Csatlakozas</option>
                         <option value="visszalepes">Visszalépés</option>
                 </select>
+                <br><br>
+
                 <br><br>
 
                 <div>

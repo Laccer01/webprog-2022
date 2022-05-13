@@ -77,7 +77,7 @@ export function findRendezvenyIdRendezvenyKepek(Kep) {
   return x;
 }
 
-export function insertRendezveny(rendezveny) {
+export async function insertRendezveny(rendezveny) {
   const array = [];
   const x = connectionPool.query(`insert into Rendezveny 
     values (default, ?, ?, ?, ?)`, [rendezveny.fields['form-rendezvenyNev'], rendezveny.fields['form-rendezvenyKezdesiIdopont'],
@@ -88,23 +88,19 @@ export function insertRendezveny(rendezveny) {
   return array;
 }
 
-export function insertRendezvenySzervezok(rendezveny) {
+export async function insertRendezvenySzervezok(rendezveny) {
+  console.log(rendezveny);
   const array = [];
-  const rendezvenyIDjelenlegiDic =  findRendezvenyID(rendezveny);
+  const rendezvenyIDjelenlegiDic =  await findRendezvenyID(rendezveny);
+  console.log(rendezvenyIDjelenlegiDic);
   const szervezok = rendezveny['form-rendezvenySzervezok'].split(',');
+  //   console.log ( result[0][0] );
 
-  rendezvenyIDjelenlegiDic.then((result) => {
-    //   console.log ( result[0][0] );
-
-    result[0][0].forEach((key) => {
-      let y;
-      // console.log(result[0][0][key])
-      Object.values(szervezok).forEach((szervezoJelenlegi) => {
-        y = connectionPool.query(`insert into Szervezo 
-            values (default, ?, ?)`, [szervezoJelenlegi, result[0][0][key]]);
-        array.push(y);
-      });
-    });
+  let y;
+  Object.values(szervezok).forEach((szervezoJelenlegi) => {
+    y = connectionPool.query(`insert into Szervezo 
+            values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegiDic[0][0].rendezvenyID]);
+    array.push(y);
   });
 
   return array;
@@ -180,4 +176,8 @@ export async function findRendezvenyIdk() {
   return connectionPool.query(
     'select Rendezveny.rendezvenyID from Rendezveny',
   );
+}
+
+export function findSzervezo(nev, rendezvenyId) {
+  return connectionPool.query('select Szervezo.szervezoID from Szervezo Where Szervezo.szervezoNev = ? And Szervezo.szervezoNev = ?', [nev, rendezvenyId]);
 }
