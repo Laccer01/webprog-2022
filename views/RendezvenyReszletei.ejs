@@ -14,7 +14,26 @@
     <h2> <%= hibaUzenet %></h2>
 
     <h2>Rendezveny részletei </h2>
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+                <div class="form-nev">Szervezők: 
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                       
+                        <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                            <% if (rendezvenySzervezok.rendezvenyID === rendezvenyek.rendezvenyID) { %>
+                                <%= rendezvenySzervezok.szervezoNev %>
+                                ,<% } %>
 
+                         <% }) %>
+                    <% }) %>
+                </div>
+            </div>
+        <% }) %>
 
     <h2>Képek a rendezvényről </h2>
 

@@ -8,16 +8,24 @@ import eformidable from 'express-formidable';
 import morgan from 'morgan';
 
 import {
-  insertRendezveny, insertRendezvenySzervezok, findAllRendezveny, insertRendezvenyKepek,
-  insertSzervezok, findAllRendezvenyKepei, findRendezvenyNevvel, findRendezvenyNev,
-  findRendezvenySzervezokNevei, findRendezvenyIdk,
+  insertRendezveny, findAllRendezveny, findRendezvenyNevvel, findRendezvenyNev,
+  findRendezvenyIdk, findRendezvenyWithId,
+} from './db/redezvenyekRendezveny.js';
+
+import {
+  insertRendezvenySzervezok, insertSzervezok, findRendezvenySzervezokNevei,
   findAllSzervezoFromRendezvenyek, findSzervezo,
-} from './db/rendezvenyekdb.js';
+
+} from './db/rendezvenyekSzervezo.js';
+
+import {
+  insertRendezvenyKepek, findAllRendezvenyKepei,
+} from './db/rendezvenyekKepek.js';
 
 function checkIfUsed(body) {   // vizsgálja ha létezik e olyan nevű rendezvény e
-  const x = findRendezvenyNevvel(body['form-rendezvenyNev']);
+  const rendezveny = findRendezvenyNevvel(body['form-rendezvenyNev']);
   return new Promise((resolve, reject) => {
-    x.then((result) => {
+    rendezveny.then((result) => {
       const text = result[0].toString();
 
       if (text === '') {
@@ -31,9 +39,9 @@ function checkIfUsed(body) {   // vizsgálja ha létezik e olyan nevű rendezvé
 
 function checkIfIsSzervezo(body) {    // vizsgálom ha olyan csatlakozik/kilép
   // egy eseményhez/eseményből aki megteheti
-  const x = findSzervezo(body['form-rendezvenySzervezo'], parseInt(body['form-rendezvenyID'], 10));
+  const szervezo = findSzervezo(body['form-rendezvenySzervezo'], parseInt(body['form-rendezvenyID'], 10));
   return new Promise((resolve, reject) => {
-    x.then((result) => {
+    szervezo.then((result) => {
       const text = result[0].toString();
 
       if (body['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
@@ -55,10 +63,10 @@ function checkIfIsSzervezo(body) {    // vizsgálom ha olyan csatlakozik/kilép
 
 function checkIfIsSzervezoRendezvenyen(body) {        // vizsgálom ha a felhasználó
   // szervező e az adott eseményen
-  const x = findSzervezo(body.fields['form-rendezvenySzervezo'], parseInt(body.query.rendezvenyID, 10));
+  const szervezo = findSzervezo(body.fields['form-rendezvenySzervezo'], parseInt(body.query.rendezvenyID, 10));
 
   return new Promise((resolve, reject) => {
-    x.then((result) => {
+    szervezo.then((result) => {
       const text = result[0].toString();
       if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
         reject();
@@ -131,16 +139,16 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
       const jelenlegiRendezvenyId = request.query.rendezvenyID;
       const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
       jelenlegiRendezvenyNev.then((result) => {
-        const x = `/kepek?name=${result[0][0].nev}`;
-        response.redirect(x);
+        const utvonal = `/kepek?name=${result.nev}`;
+        response.redirect(utvonal);
       });
     })
     .catch(() => {
       const jelenlegiRendezvenyId = request.query.rendezvenyID;
       const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
       jelenlegiRendezvenyNev.then((result) => {
-        const x = `/kepekHiba?name=${result[0][0].nev}`;
-        response.redirect(x);
+        const utvonal = `/kepekHiba?name=${result.nev}`;
+        response.redirect(utvonal);
       });
     })
     .catch((err) => {
@@ -148,10 +156,6 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
       response.status(500);
       response.send('Error');
     });
-});
-
-app.listen(8000, () => {
-  console.log('Server listening on http://localhost:8000/ ...');
 });
 
 app.get('/', async (req, res) => {
@@ -171,8 +175,12 @@ app.get('/kepek', async (req, res) => {
   try {
     const rendezvenyKepei = await findAllRendezvenyKepei(req.query.name);
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
+    const rendezvenyek = await findRendezvenyWithId(rendezvenyAzonosito[0][0].rendezvenyID);
+    const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
 
-    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: '' });
+    res.render('RendezvenyReszletei', {
+      rendezvenyek: rendezvenyek[0], rendezvenySzervezok, rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: '',
+    });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -244,6 +252,10 @@ app.get('/RendezvenyBevezetese.html', (req, response) => {
 
 app.get('/RendezvenyBevezetese.html', (req, response) => {
   response.render('RendezvenyBevezetese');
+});
+
+app.listen(8000, () => {
+  console.log('Server listening on http://localhost:8000/ ...');
 });
 
 // főoldal: /
