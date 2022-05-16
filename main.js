@@ -22,56 +22,63 @@ import {
   insertRendezvenyKepek, findAllRendezvenyKepei,
 } from './db/rendezvenyekKepek.js';
 
-function checkIfUsed(body) {   // vizsgálja ha létezik e olyan nevű rendezvény e
-  const rendezveny = findRendezvenyNevvel(body['form-rendezvenyNev']);
+function checkIfUsed(feldolgozandoAdatok) {   // vizsgálja ha létezik e olyan nevű rendezvény e
+  const rendezvenyNev = feldolgozandoAdatok[0];
+  const rendezveny = findRendezvenyNevvel(rendezvenyNev);
   return new Promise((resolve, reject) => {
     rendezveny.then((result) => {
       const text = result[0].toString();
 
       if (text === '') {
-        resolve(body);
+        resolve(feldolgozandoAdatok);
       } else {
-        reject();
+        reject(new Error('Hiba, letezik ez a rendezveny'));
       }
     });
   });
 }
 
-function checkIfIsSzervezo(body) {    // vizsgálom ha olyan csatlakozik/kilép
+function checkIfIsSzervezo(feldolgozandoAdatok) {    // vizsgálom ha olyan csatlakozik/kilép
   // egy eseményhez/eseményből aki megteheti
-  const szervezo = findSzervezo(body['form-rendezvenySzervezo'], parseInt(body['form-rendezvenyID'], 10));
+  const szervezoNev = feldolgozandoAdatok[1];
+  const rendezvenyId = parseInt(feldolgozandoAdatok[2], 10);
+  const rendezvenySzervezoValasztasa = feldolgozandoAdatok[0];
+  const szervezo = findSzervezo(szervezoNev, rendezvenyId);
+
   return new Promise((resolve, reject) => {
     szervezo.then((result) => {
       const text = result[0].toString();
 
-      if (body['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
+      if (rendezvenySzervezoValasztasa === 'csatlakozas') {
         // vizsgálom ha csatlakozni akar a szervező
         if (text === '') {          // a szervezo meg nincs csatlakozva a rendezvenyhez
-          resolve(body);
+          resolve(feldolgozandoAdatok);
         } else {
-          reject();
+          reject(new Error('Hiba, a csatlakozas/visszalepesnel'));
         }
       } else if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
         // akkor nem tud kilepni a rendezvenybol
-        reject();
+        reject(new Error('Hiba, a csatlakozas/visszalepesnel'));
       } else {
-        resolve(body);
+        resolve(feldolgozandoAdatok);
       }
     });
   });
 }
 
-function checkIfIsSzervezoRendezvenyen(body) {        // vizsgálom ha a felhasználó
+function checkIfIsSzervezoRendezvenyen(feldolgozandoAdatok) {        // vizsgálom ha a felhasználó
   // szervező e az adott eseményen
-  const szervezo = findSzervezo(body.fields['form-rendezvenySzervezo'], parseInt(body.query.rendezvenyID, 10));
+  const rendezvenySzervezo = feldolgozandoAdatok[2];
+  const rendezvenyID = parseInt(feldolgozandoAdatok[3], 10);
+  const szervezo = findSzervezo(rendezvenySzervezo, rendezvenyID);
 
   return new Promise((resolve, reject) => {
     szervezo.then((result) => {
       const text = result[0].toString();
       if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
-        reject();
+        reject(new Error('Hiba, nem szervezo a rendezvenyen'));
       } else {
-        resolve(body);
+        resolve(feldolgozandoAdatok);
       }
     });
   });
@@ -91,70 +98,109 @@ app.use(eformidable({ uploadDir }));
 app.set('view engine', 'ejs');
 
 app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
-  checkIfUsed(request.fields)
+  const feldolgozandoAdatok = [];
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyNev']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyKezdesiIdopont']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyVegzesiIdopont']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyHelyszine']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezok']);
+
+  checkIfUsed(feldolgozandoAdatok)
     .then(((request1) => {
-      insertRendezveny(request);
+      const rendezvenyNev = request1[0];
+      const endezvenyKezdesiIdopont = request1[1];
+      const rendezvenyVegeIdopont = request1[2];
+      const rendezvenyHelyszine = request1[3];
+      insertRendezveny(
+        rendezvenyNev,
+        endezvenyKezdesiIdopont,
+        rendezvenyVegeIdopont,
+        rendezvenyHelyszine,
+      );
       return request1;
     }))
     .then(((request1) => {
-      insertRendezvenySzervezok(request1);
+      const rendezvenyNev = request1[0];
+      const rendezvenySzervezok = request1[4];
+      insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok);
     }))
     .then(() => {
       response.redirect('/');
     })
-    .catch(() => {
-      response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar be van vezetve ilyen nevű rendezvény' });
-    })
-    .catch((err) => {
-      console.error(err);
-      response.status(500);
-      response.send('Error');
+    .catch((hiba) => {
+      if (hiba.toString() === 'Error: Hiba, letezik ez a rendezveny') response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar be van vezetve ilyen nevű rendezvény' });
+      else {
+        console.error(hiba);
+        response.status(500);
+        response.send('Error');
+      }
     });
 });
 
 app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
-  checkIfIsSzervezo(request.fields).then((() => {
-    insertSzervezok(request.fields);
+  const feldolgozandoAdatok = [];
+  feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezoValasztas']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezo']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
+
+  checkIfIsSzervezo(feldolgozandoAdatok).then(((request1) => {
+    const szervezoValasztasa = request1[0];
+    const szervezoNev = request1[1];
+    const szervezoID = request1[2];
+    insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID);
   }))
 
     .then(() => {
-      response.redirect('/csatlakozasSikeres');
+      response.redirect('/csatlakozas?uzenet=Sikeresen csatlakoztál/visszaléptél');
     })
-    .catch(() => {
-      response.redirect('/csatlakozasHiba');
-    })
-    .catch((err) => {
-      console.error(err);
-      response.status(500);
-      response.send('Error');
+    .catch((hiba) => {
+      if (hiba.toString() === 'Error: Hiba, a csatlakozas/visszalepesnel') {
+        response.redirect('/csatlakozas?uzenet=Hiba, ha szervező vagy a rendezvényen '
+        + 'nem tudsz újra csatlakozni és ha nem vagy szervező a reszdezvényen nem tudsz visszalépni');
+      } else {
+        console.error(hiba);
+        response.status(500);
+        response.send('Error');
+      }
     });
 });
 
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  checkIfIsSzervezoRendezvenyen(request).then(() => {
-    insertRendezvenyKepek(request);
-  })
+  const feldolgozandoAdatok = [];
+  feldolgozandoAdatok.push(request.files['form-rendezvenyFenykep']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
+  feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezo']);
+  feldolgozandoAdatok.push(request.query.rendezvenyID);
+
+  checkIfIsSzervezoRendezvenyen(feldolgozandoAdatok)
+    .then(() => {
+      const rendezvenyKep = feldolgozandoAdatok[0];
+      const rendezvenyID = feldolgozandoAdatok[1];
+      const rendezvenyId = feldolgozandoAdatok[3];
+      insertRendezvenyKepek(rendezvenyKep, rendezvenyID, rendezvenyId);
+    })
 
     .then(() => {
-      const jelenlegiRendezvenyId = request.query.rendezvenyID;
+      const jelenlegiRendezvenyId = feldolgozandoAdatok[3];
       const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
       jelenlegiRendezvenyNev.then((result) => {
-        const utvonal = `/kepek?name=${result.nev}`;
+        const utvonal = `/kepek?name=${result.nev}&uzenet=`;
         response.redirect(utvonal);
       });
     })
-    .catch(() => {
-      const jelenlegiRendezvenyId = request.query.rendezvenyID;
-      const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
-      jelenlegiRendezvenyNev.then((result) => {
-        const utvonal = `/kepekHiba?name=${result.nev}`;
-        response.redirect(utvonal);
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      response.status(500);
-      response.send('Error');
+    .catch((hiba) => {
+      if (hiba.toString() === 'Error: Hiba, nem szervezo a rendezvenyen') {
+        const jelenlegiRendezvenyId = feldolgozandoAdatok[3];
+        const jelenlegiRendezvenyNev =  findRendezvenyNev(jelenlegiRendezvenyId);
+        jelenlegiRendezvenyNev.then((result) => {
+          const utvonal = `/kepek?name=${result.nev}&uzenet=Nem vagy szervező ezen a rendezvényen!`;
+          response.redirect(utvonal);
+        });
+      } else {
+        console.error(hiba);
+        response.status(500);
+        response.send('Error');
+      }
     });
 });
 
@@ -177,23 +223,14 @@ app.get('/kepek', async (req, res) => {
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
     const rendezvenyek = await findRendezvenyWithId(rendezvenyAzonosito[0][0].rendezvenyID);
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
-
+    const { uzenet } = req.query;
     res.render('RendezvenyReszletei', {
-      rendezvenyek: rendezvenyek[0], rendezvenySzervezok, rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: '',
+      rendezvenyek: rendezvenyek[0],
+      rendezvenySzervezok,
+      rendezvenyKepei: rendezvenyKepei[0],
+      rendezvenyAzonosito: rendezvenyAzonosito[0],
+      hibaUzenet: uzenet,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-    res.send('Error');
-  }
-});
-
-app.get('/kepekHiba', async (req, res) => {
-  try {
-    const rendezvenyKepei = await findAllRendezvenyKepei(req.query.name);
-    const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
-
-    res.render('RendezvenyReszletei', { rendezvenyKepei: rendezvenyKepei[0], rendezvenyAzonosito: rendezvenyAzonosito[0], hibaUzenet: 'Nem vagy szervező ezen a rendezvényen' });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -203,46 +240,19 @@ app.get('/kepekHiba', async (req, res) => {
 
 app.get('/csatlakozas', async (req, res) => {
   try {
+    const { uzenet } = req.query;
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
     const rendezvenyIDk = await findRendezvenyIdk();
-    res.render('RendezvenySzervezoCsatlakozas', { rendezvenySzervezokNevei: rendezvenySzervezokNevei[0], rendezvenyIDk: rendezvenyIDk[0], hibaUzenet: '' });
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-    res.send('Error');
-  }
-});
 
-app.get('/csatlakozasHiba', async (req, res) => {
-  try {
-    const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
-    const rendezvenyIDk = await findRendezvenyIdk();
     res.render('RendezvenySzervezoCsatlakozas', {
       rendezvenySzervezokNevei: rendezvenySzervezokNevei[0],
       rendezvenyIDk: rendezvenyIDk[0],
-      hibaUzenet: 'Hiba, ha szervező vagy a rendezvényen '
-    + 'nem tudsz újra csatlakozni és ha nem vagy szervező a reszdezvényen nem tudsz visszalépni',
+      hibaUzenet: uzenet,
     });
   } catch (err) {
     console.error(err);
     res.status(500);
-    res.send('Error');
-  }
-});
-
-app.get('/csatlakozasSikeres', async (req, res) => {
-  try {
-    const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
-    const rendezvenyIDk = await findRendezvenyIdk();
-    res.render('RendezvenySzervezoCsatlakozas', {
-      rendezvenySzervezokNevei: rendezvenySzervezokNevei[0],
-      rendezvenyIDk: rendezvenyIDk[0],
-      hibaUzenet: 'Sikeresen csatlakoztál/visszaléptél',
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-    res.send('Error');
+    res.send('Error');                       //         sziiiia jaccej nagyon szejetlek es te vagy a mindenem legyel nagyon ugyes es tegyel buszkeve
   }
 });
 

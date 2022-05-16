@@ -1,9 +1,9 @@
 import { connectionPool } from './rendezvenyekTablak.js';
 
-export async function findRendezvenyID(rendezveny) {
+export async function findRendezvenyID(rendezvenyNev) {
   const  rendezvenyID = connectionPool.query(`SELECT Rendezveny.rendezvenyID
       FROM Rendezveny
-      Where Rendezveny.nev =?`, [rendezveny['form-rendezvenyNev']]);
+      Where Rendezveny.nev =?`, [rendezvenyNev]);
 
   return rendezvenyID;
 }
@@ -43,11 +43,15 @@ export async function findRendezvenyIdk() {
   );
 }
 
-export async function insertRendezveny(rendezveny) {
+export async function insertRendezveny(
+  rendezvenyNev,
+  rendezvenyKezdesiIdopont,
+  rendezvenyVegeIdopont,
+  rendezvenyHelyszine,
+) {
   const beszurtRendezvenyek = [];
   const beszurtRendezveny = connectionPool.query(`insert into Rendezveny 
-      values (default, ?, ?, ?, ?)`, [rendezveny.fields['form-rendezvenyNev'], rendezveny.fields['form-rendezvenyKezdesiIdopont'],
-    rendezveny.fields['form-rendezvenyVegzesiIdopont'], rendezveny.fields['form-rendezvenyHelyszine']]);
+        values (default, ?, ?, ?, ?)`, [rendezvenyNev, rendezvenyKezdesiIdopont, rendezvenyVegeIdopont, rendezvenyHelyszine]);
 
   beszurtRendezvenyek.push(beszurtRendezveny);
 

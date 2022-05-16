@@ -11,18 +11,18 @@ export function findRendezvenyIdRendezvenyKepek(Kep) {
   return rendezvenyID;
 }
 
-export function insertRendezvenyKepek(rendezveny) {
-  const fileHandler = rendezveny.files['form-rendezvenyFenykep'];
+export function insertRendezvenyKepek(rendezvenyKep, rendezvenyID, rendezvenyId) {
+  const fileHandler = rendezvenyKep;
   const file = fileHandler.path;
   const fileLista = file.split('\\');
 
-  if (rendezveny.fields['form-rendezvenyID'] === undefined) {
+  if (rendezvenyID === undefined) {
     return connectionPool.query(`insert into RendezvenyKepek 
-    values (default, ?, ?)`, [rendezveny.query.rendezvenyID, fileLista[fileLista.length - 1]]);
+    values (default, ?, ?)`, [rendezvenyId, fileLista[fileLista.length - 1]]);
   }
 
   return connectionPool.query(`insert into RendezvenyKepek 
-    values (default, ?, ?)`, [rendezveny.fields['form-rendezvenyID'], fileLista[fileLista.length - 1]]);
+    values (default, ?, ?)`, [rendezvenyID, fileLista[fileLista.length - 1]]);
 }
 
 export function findAllRendezvenyKepek() {

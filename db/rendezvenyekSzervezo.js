@@ -4,10 +4,10 @@ import {
   findRendezvenyID,
 } from './redezvenyekRendezveny.js';
 
-export function findSzervezoID(szervezo) {
+export function findSzervezoID(szervezoNev) {
   const szervezoID = connectionPool.query(`SELECT szervezoID 
         FROM Szervezo
-        Where Szervezo.szervezoID = ? `, [szervezo['form-rendezvenySzervezo']]);
+        Where Szervezo.szervezoID = ? `, [szervezoNev]);
 
   return szervezoID;
 }
@@ -19,16 +19,16 @@ export function findSzervezoIDNevvel(szervezo) {
   return szervezoID;
 }
 
-export function insertSzervezok(szervezo) {
+export function insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID) {
   let beszurtRendezvenySzervezo;
-  if (szervezo['form-rendezvenySzervezoValasztas'] === 'csatlakozas') {
-    if (findSzervezoID(szervezo) !== undefined) {
+  if (szervezoValasztasa === 'csatlakozas') {
+    if (findSzervezoID(szervezoNev) !== undefined) {
       beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
-          values (default, ?, ?)`, [szervezo['form-rendezvenySzervezo'], szervezo['form-rendezvenyID']]);
+          values (default, ?, ?)`, [szervezoNev, szervezoID]);
     }
-  } else if (findSzervezoID(szervezo) !== undefined) {
+  } else if (findSzervezoID(szervezoNev) !== undefined) {
     beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
-          Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezo['form-rendezvenySzervezo'], szervezo['form-rendezvenyID']]);
+          Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezoNev, szervezoID]);
   }
   return beszurtRendezvenySzervezo;
 }
@@ -43,7 +43,7 @@ export async function findAllSzervezoFromRendezveny(rendezvenyID) {
 
 export async function findRendezvenySzervezokNevei() {
   return connectionPool.query(
-    'select Szervezo.szervezoNev from Szervezo',
+    'select DISTINCT Szervezo.szervezoNev from Szervezo',
   );
 }
 
@@ -61,23 +61,22 @@ export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
   return rendezvenyekSzervezok;
 }
 
-export async function insertRendezvenySzervezok(rendezveny) {
+export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok) {
   const beszurtRendezvenySzervezok = [];
 
-  let rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
+  let rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
 
   if  (rendezvenyIDjelenlegiDic.toString() !== '') {
     setTimeout(() => {
     }, 10000);
-    rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
+    rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
   }
-  rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezveny);
-
+  rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
   // Valamiért néha nem találja meg a rendezvényId mert még nincs
   // beszúrva az adatbázisban ezért van ez a megoldás hogy megvárja
   // amíg beszúródik a megelelő rendezvény
 
-  const szervezok = rendezveny['form-rendezvenySzervezok'].split(', ');
+  const szervezok = rendezvenySzervezok.split(', ');
 
   let beszurtRendezvenySzervezo;
 
