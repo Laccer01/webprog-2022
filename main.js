@@ -22,6 +22,8 @@ import {
   insertRendezvenyKepek, findAllRendezvenyKepei,
 } from './db/rendezvenyekKepek.js';
 
+import apiRouter from './api/router.js';
+
 function checkIfUsed(feldolgozandoAdatok) {   // vizsgálja ha létezik e olyan nevű rendezvény e
   const rendezvenyNev = feldolgozandoAdatok[0];
   const rendezveny = findRendezvenyNevvel(rendezvenyNev);
@@ -93,6 +95,8 @@ if (!existsSync(uploadDir)) {
 }
 
 app.use(morgan('tiny'));
+app.use('/api', apiRouter);
+app.use(express.static('static/'));
 app.use(express.static(join(process.cwd(), 'static')));
 app.use(eformidable({ uploadDir }));
 app.set('view engine', 'ejs');
@@ -207,9 +211,9 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
 app.get('/', async (req, res) => {
   try {
     const rendezvenyek = await findAllRendezveny();
-    const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
+    const rendezvenySzervezok = await findRendezvenySzervezokNevei();
 
-    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok });
+    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok: rendezvenySzervezok[0] });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -262,6 +266,10 @@ app.get('/RendezvenyBevezetese.html', (req, response) => {
 
 app.get('/RendezvenyBevezetese.html', (req, response) => {
   response.render('RendezvenyBevezetese');
+});
+
+app.get('/message', (req, res) => {
+  res.send('Hello from the server');
 });
 
 app.listen(8000, () => {

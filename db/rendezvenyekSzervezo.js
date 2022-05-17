@@ -61,6 +61,16 @@ export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
   return rendezvenyekSzervezok;
 }
 
+export async function findAllSzervezoNevekFromRendezvenyek(rendezvenyek) {
+  const rendezvenyekSzervezok = [];
+  await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
+    const rendezvenySzervezok = await findAllSzervezoFromRendezveny(rendezveny.rendezvenyID);
+    rendezvenyekSzervezok.push(rendezvenySzervezok[0][1]);
+  }));
+
+  return rendezvenyekSzervezok;
+}
+
 export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok) {
   const beszurtRendezvenySzervezok = [];
 

@@ -6,34 +6,40 @@
     <title>Rezdezvenyek listazva</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src="main.js"></script>    
-    </script>
+    <script src='/script.js'></script>
 </head>
 <body>
     <h2>Rendezvenyek</h2>
 
+
+   
+
     <div class="list-container">
         <% rendezvenyek.forEach((rendezvenyek) => { %>
+           
             <div class="list-item">
-                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                
+                <div class="form-nev">
+                    <br><a onclick='showMore("<%=rendezvenyek.rendezvenyID%>")'>Rendezvény neve: <%= rendezvenyek.nev %></a>
+                </div>
                 <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
                 <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
                 <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
-                <div class="form-nev">Szervezők: 
+                <div class="form-nev" id="content-text<%=rendezvenyek.rendezvenyID%>">
+                    <!-- Szervezők:  -->
+                    
+                </div>
+                <div class = "form-nemLatszik">
                     <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
-                       
-                        <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
-                            <% if (rendezvenySzervezok.rendezvenyID === rendezvenyek.rendezvenyID) { %>
-                                <%= rendezvenySzervezok.szervezoNev %>
-                                ,<% } %>
-
-                         <% }) %>
+                        <button id="button-<%=rendezvenyek.rendezvenyID%>-<%=rendezvenySzervezok.szervezoNev%>" 
+                                onclick='csatlakozasVagyKilepes("<%= rendezvenyek.rendezvenyID %>", "<%= rendezvenySzervezok.szervezoNev %>")'></button> 
+                        
                     <% }) %>
                 </div>
             </div>
             <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a>
+           
         <% }) %>
     </div>
-
 </body>
 </html>

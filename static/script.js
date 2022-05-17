@@ -53,3 +53,36 @@ el2.addEventListener('click', saveSzervezoCsatlakozas, false);
 
 const el3 = document.forms.RendezvenySzervezoFenykepHozzaadas['form-saveSzervezoCsatlakozas'];
 el3.addEventListener('click', saveRendezvenyFenykepHozzaadas, false);
+
+async function csatlakozasVagyKilepes(id, szervezoNev) {
+  try {
+    const result = await fetch(`/api/szervezoCsatlakozasKilepes?id=${id}&name=${szervezoNev}`);
+    const megvaltozottValasztas = await result.json();
+    document.getElementById(`button-${id}-${szervezoNev}`).innerText = megvaltozottValasztas;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function showMore(id) {
+  try {
+    const result = await fetch(`/api/rendezveny/${id}`);
+    const rendezveny = await result.json();
+
+    const result1 = await fetch('/api/szervezok');
+    const szervezok = await result1.json();
+
+    document.getElementById(`content-text${id}`).innerText = rendezveny;
+
+    let result3,
+      csatlakozasVagyKilepesValtozo;
+    await Promise.all(szervezok.map(async (szervezo) => {
+      result3 = await fetch(`/api/szervezoE?id=${id}&name=${szervezo}`);
+      csatlakozasVagyKilepesValtozo = await result3.json();
+      document.getElementById(`button-${id}-${szervezo}`).innerText = csatlakozasVagyKilepesValtozo;
+
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+}
