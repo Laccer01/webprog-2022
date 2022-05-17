@@ -81,6 +81,9 @@ async function showMore(id) {
       csatlakozasVagyKilepesValtozo = await result3.json();
       document.getElementById(`button-${id}-${szervezo}`).innerText = csatlakozasVagyKilepesValtozo;
 
+      let hidden = document.getElementById(`button-${id}-${szervezo}`).getAttribute("hidden");
+      if (hidden === "hidden")
+        document.getElementById(`button-${id}-${szervezo}`).removeAttribute("hidden");
     }));
   } catch (error) {
     console.log(error);

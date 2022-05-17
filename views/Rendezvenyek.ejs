@@ -32,7 +32,7 @@
                 <div class = "form-nemLatszik">
                     <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
                         <button id="button-<%=rendezvenyek.rendezvenyID%>-<%=rendezvenySzervezok.szervezoNev%>" 
-                                onclick='csatlakozasVagyKilepes("<%= rendezvenyek.rendezvenyID %>", "<%= rendezvenySzervezok.szervezoNev %>")'></button> 
+                                onclick='csatlakozasVagyKilepes("<%= rendezvenyek.rendezvenyID %>", "<%= rendezvenySzervezok.szervezoNev %>")', hidden = "hidden"></button> 
                         
                     <% }) %>
                 </div>
