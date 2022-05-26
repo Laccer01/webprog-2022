@@ -46,7 +46,6 @@ router.get('/szervezok', async (req, res) => {
 
 router.get('/szervezoE', async (req, res) => {
   try {
-
     let csatlakozasVagyKilepes;
 
     const szervezo = await findSzervezo(req.query.name, parseInt(req.query.id, 10));
@@ -91,6 +90,5 @@ router.use('/rendezveny/:id', express.json());
 router.use('/szervezok', express.json());
 router.use('/szervezoE', express.json());
 router.use('/szervezoCsatlakozasKilepes', express.json());
-
 
 export default router;

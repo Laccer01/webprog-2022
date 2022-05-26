@@ -22,22 +22,19 @@ export function findSzervezoIDNevvel(szervezo) {
 export async function insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID) {
   let beszurtRendezvenySzervezo;
   if (szervezoValasztasa === 'csatlakozas') {
-    if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []){
+    if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []) {
       beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
           values (default, ?, ?)`, [szervezoNev, szervezoID]);
     }
   } else if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []) {
-      if (((await findSzervezoIDNevvel(szervezoNev))[0]).length == 1)                         //csak egy eseményhez tartozik a szervező
-       {
-        beszurtRendezvenySzervezo = connectionPool.query(`UPDATE Szervezo SET Szervezo.rendezvenyID = ?
+    if (((await findSzervezoIDNevvel(szervezoNev))[0]).length === 1) {
+    // csak egy eseményhez tartozik a szervező
+      beszurtRendezvenySzervezo = connectionPool.query(`UPDATE Szervezo SET Szervezo.rendezvenyID = ?
         Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [null, szervezoNev, szervezoID]);
-       }
-       else
-       {
-        beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
+    } else {
+      beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
         Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezoNev, szervezoID]);
-       }
-        
+    }
   }
   return beszurtRendezvenySzervezo;
 }
