@@ -15,20 +15,29 @@ export function findSzervezoID(szervezoNev) {
 export function findSzervezoIDNevvel(szervezo) {
   const szervezoID = connectionPool.query(`SELECT szervezoID 
           FROM Szervezo
-          Where Szervezo.nev = ? `, [szervezo]);
+          Where Szervezo.szervezoNev = ? `, [szervezo]);
   return szervezoID;
 }
 
-export function insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID) {
+export async function insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID) {
   let beszurtRendezvenySzervezo;
   if (szervezoValasztasa === 'csatlakozas') {
-    if (findSzervezoID(szervezoNev) !== undefined) {
+    if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []){
       beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
           values (default, ?, ?)`, [szervezoNev, szervezoID]);
     }
-  } else if (findSzervezoID(szervezoNev) !== undefined) {
-    beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
-          Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezoNev, szervezoID]);
+  } else if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []) {
+      if (((await findSzervezoIDNevvel(szervezoNev))[0]).length == 1)                         //csak egy eseményhez tartozik a szervező
+       {
+        beszurtRendezvenySzervezo = connectionPool.query(`UPDATE Szervezo SET Szervezo.rendezvenyID = ?
+        Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [null, szervezoNev, szervezoID]);
+       }
+       else
+       {
+        beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
+        Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezoNev, szervezoID]);
+       }
+        
   }
   return beszurtRendezvenySzervezo;
 }

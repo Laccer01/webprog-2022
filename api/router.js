@@ -10,9 +10,6 @@ const router = express.Router();
 
 router.get('/rendezveny/:id', async (req, res) => {
   try {
-    // const rendezvenyek = await findRendezvenyWithId(req.params.id);
-    // const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
-
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
 
     let szervezokLista = 'Szervezők:\n';
@@ -31,8 +28,6 @@ router.get('/rendezveny/:id', async (req, res) => {
 
 router.get('/szervezok', async (req, res) => {
   try {
-    // const rendezvenyek = await findRendezvenyWithId(req.params.id);
-    // const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const lista = [];
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
 
@@ -51,10 +46,7 @@ router.get('/szervezok', async (req, res) => {
 
 router.get('/szervezoE', async (req, res) => {
   try {
-    // const rendezvenyek = await findRendezvenyWithId(req.params.id);
-    // const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
 
-    // req.params.id
     let csatlakozasVagyKilepes;
 
     const szervezo = await findSzervezo(req.query.name, parseInt(req.query.id, 10));
@@ -100,29 +92,5 @@ router.use('/szervezok', express.json());
 router.use('/szervezoE', express.json());
 router.use('/szervezoCsatlakozasKilepes', express.json());
 
-// router.delete('/csokik/:id', async (req, res) => {
-//   try {
-//     await deleteById(req.params.id);
-//     res.status(204);
-//     res.send();
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500);
-//     res.send('Error');
-//   }
-// });
-
-// router.use('/csokik/:id', express.json());
-
-// router.put('/csokik/:id', async (req, res) => {
-//   try {
-//     await updateDescription(req.params.id, req.body.description);
-//     res.send(JSON.stringify({ description: req.body.description }));
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500);
-//     res.send('Error');
-//   }
-// });
 
 export default router;
