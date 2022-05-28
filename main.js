@@ -13,14 +13,19 @@ import {
 } from './db/redezvenyekRendezveny.js';
 
 import {
-  insertRendezvenySzervezok, insertSzervezok, findRendezvenySzervezokNevei,
-  findAllSzervezoFromRendezvenyek, findSzervezo,
+  findRendezvenySzervezokNevei,
+  insertSzervezokRendezvenyeken, findAllSzervezoFromRendezvenyek,
 
 } from './db/rendezvenyekSzervezo.js';
 
 import {
   insertRendezvenyKepek, findAllRendezvenyKepei,
 } from './db/rendezvenyekKepek.js';
+
+import {
+  findSzervezoNevRendezvenyen, insertSzervezok,
+  findSzervezo,
+} from './db/rendezvenySzervezokRendezvenyeken.js';
 
 import apiRouter from './api/router.js';
 
@@ -72,7 +77,7 @@ function checkIfIsSzervezoRendezvenyen(feldolgozandoAdatok) {        // vizsgál
   // szervező e az adott eseményen
   const rendezvenySzervezo = feldolgozandoAdatok[2];
   const rendezvenyID = parseInt(feldolgozandoAdatok[3], 10);
-  const szervezo = findSzervezo(rendezvenySzervezo, rendezvenyID);
+  const szervezo = findSzervezoNevRendezvenyen(rendezvenySzervezo, rendezvenyID);
 
   return new Promise((resolve, reject) => {
     szervezo.then((result) => {
@@ -123,10 +128,11 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
       );
       return request1;
     }))
+
     .then(((request1) => {
       const rendezvenyNev = request1[0];
       const rendezvenySzervezok = request1[4];
-      insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok);
+      insertSzervezokRendezvenyeken(rendezvenyNev, rendezvenySzervezok);
     }))
     .then(() => {
       response.redirect('/');

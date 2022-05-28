@@ -13,38 +13,14 @@ export function findSzervezoID(szervezoNev) {
 }
 
 export function findSzervezoIDNevvel(szervezo) {
-  const szervezoID = connectionPool.query(`SELECT szervezoID 
+  const szervezoIDreturn = connectionPool.query(`SELECT szervezoID 
           FROM Szervezo
           Where Szervezo.szervezoNev = ? `, [szervezo]);
-  return szervezoID;
-}
-
-export async function insertSzervezok(szervezoValasztasa, szervezoNev, szervezoID) {
-  let beszurtRendezvenySzervezo;
-  if (szervezoValasztasa === 'csatlakozas') {
-    if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []) {
-      beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
-          values (default, ?, ?)`, [szervezoNev, szervezoID]);
-    }
-  } else if ((await findSzervezoIDNevvel(szervezoNev))[0] !== []) {
-    if (((await findSzervezoIDNevvel(szervezoNev))[0]).length === 1) {
-    // csak egy eseményhez tartozik a szervező
-      beszurtRendezvenySzervezo = connectionPool.query(`UPDATE Szervezo SET Szervezo.rendezvenyID = ?
-        Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [null, szervezoNev, szervezoID]);
-    } else {
-      beszurtRendezvenySzervezo = connectionPool.query(`DELETE From Szervezo 
-        Where Szervezo.szervezoNev = ? and Szervezo.rendezvenyID = ?`, [szervezoNev, szervezoID]);
-    }
-  }
-  return beszurtRendezvenySzervezo;
+  return szervezoIDreturn;
 }
 
 export function findAllSzervezo() {
   return connectionPool.query('select * from Szervezo');
-}
-
-export async function findAllSzervezoFromRendezveny(rendezvenyID) {
-  return connectionPool.query('select * from Szervezo Where Szervezo.rendezvenyID = ?', [rendezvenyID]);
 }
 
 export async function findRendezvenySzervezokNevei() {
@@ -53,15 +29,36 @@ export async function findRendezvenySzervezokNevei() {
   );
 }
 
-export function findSzervezo(nev, rendezvenyId) {
-  return connectionPool.query('select Szervezo.szervezoID from Szervezo Where Szervezo.szervezoNev = ? And Szervezo.rendezvenyID = ?', [nev, rendezvenyId]);
+export async function findAllSzervezoFromRendezveny(rendezvenyID) {
+  const szervezokIDRendezvenyrol = await connectionPool.query('select * from RendezokRendezvenyeken Where RendezokRendezvenyeken.rendezvenyID = ?', [rendezvenyID]);
+  return szervezokIDRendezvenyrol;
 }
 
-export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
+export function findSzervezoNev(szervezoID) {
+  return connectionPool.query('select Szervezo.szervezoNev from Szervezo Where Szervezo.szervezoID = ?', [szervezoID]);
+}
+
+export function findSzervezoMinden(szervezoID) {
+  return connectionPool.query('select * from Szervezo Where Szervezo.szervezoID = ?', [szervezoID]);
+}
+
+export async function findAllSzervezoFromRendezvenyekID(rendezvenyek) {
   const rendezvenyekSzervezok = [];
   await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
     const rendezvenySzervezok = await findAllSzervezoFromRendezveny(rendezveny.rendezvenyID);
     rendezvenyekSzervezok.push(rendezvenySzervezok[0]);
+  }));
+
+  return rendezvenyekSzervezok;
+}
+
+export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
+  const szervezok = await findAllSzervezoFromRendezvenyekID(rendezvenyek);
+
+  const rendezvenyekSzervezok = [];
+  await Promise.all(szervezok[0].map(async (rendezveny) => {
+    const rendezvenySzervezok = await findSzervezoMinden(rendezveny.szervezoID);
+    rendezvenyekSzervezok.push(rendezvenySzervezok[0][0]);
   }));
 
   return rendezvenyekSzervezok;
@@ -84,7 +81,7 @@ export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervez
 
   if  (rendezvenyIDjelenlegiDic.toString() !== '') {
     setTimeout(() => {
-    }, 10000);
+    }, 15000000);
     rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
   }
   rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
@@ -97,8 +94,61 @@ export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervez
   let beszurtRendezvenySzervezo;
 
   await Promise.all(szervezok.map(async (szervezoJelenlegi) => {
-    beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
-        values (default, ?, ?)`, [szervezoJelenlegi, rendezvenyIDjelenlegiDic[0][0].rendezvenyID]);
+    const jelenlegiSzervzo = await connectionPool.query(`SELECT Szervezo.szervezoID
+    FROM Szervezo
+    Where  Szervezo.szervezoNev = ?`, [szervezoJelenlegi]);
+
+    if (jelenlegiSzervzo[0].toString() === '') {
+      beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
+        values (default, ?)`, [szervezoJelenlegi]);
+      beszurtRendezvenySzervezok.push(beszurtRendezvenySzervezo);
+    }
+  }));
+  return beszurtRendezvenySzervezok;
+}
+
+export async function insertSzervezokRendezvenyeken(rendezvenyNev, rendezvenySzervezok) {
+  await insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok);
+  const beszurtRendezvenySzervezok = [];
+
+  let rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
+
+  if  (rendezvenyIDjelenlegiDic.toString() !== '') {
+    setTimeout(() => {
+    }, 10000);
+    rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
+  }
+  rendezvenyIDjelenlegiDic = await findRendezvenyID(rendezvenyNev);
+
+  // Valamiért néha nem találja meg a rendezvényId mert még nincs
+  // beszúrva az adatbázisban ezért van ez a megoldás hogy megvárja
+  // amíg beszúródik a megelelő rendezvény
+
+  const szervezok = rendezvenySzervezok.split(', ');
+
+  let beszurtRendezvenySzervezo;
+  let szervezoID;
+
+  await Promise.all(szervezok.map(async (szervezoJelenlegi) => {
+    szervezoID = await findSzervezoIDNevvel(szervezoJelenlegi);
+
+    setTimeout(() => {
+    }, 150000000);
+    szervezoID = await findSzervezoIDNevvel(szervezoJelenlegi);
+    setTimeout(() => {
+    }, 150000000);
+    szervezoID = await findSzervezoIDNevvel(szervezoJelenlegi);
+
+    setTimeout(() => {
+    }, 150000000);
+    szervezoID = await findSzervezoIDNevvel(szervezoJelenlegi);
+
+    setTimeout(() => {
+    }, 150000000);
+    szervezoID = await findSzervezoIDNevvel(szervezoJelenlegi);
+
+    beszurtRendezvenySzervezo = connectionPool.query(`insert into RendezokRendezvenyeken 
+        values (default, ?, ?)`, [rendezvenyIDjelenlegiDic[0][0].rendezvenyID, szervezoID[0][0].szervezoID]);
     beszurtRendezvenySzervezok.push(beszurtRendezvenySzervezo);
   }));
   return beszurtRendezvenySzervezok;

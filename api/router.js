@@ -2,9 +2,12 @@ import express from 'express';
 
 import {
   findRendezvenySzervezokNevei,
-  findSzervezo, insertSzervezok,
 
 } from '../db/rendezvenyekSzervezo.js';
+
+import {
+  findSzervezoRendezvenyken, insertSzervezok,
+} from '../db/rendezvenySzervezokRendezvenyeken.js';
 
 const router = express.Router();
 
@@ -48,7 +51,7 @@ router.get('/szervezoE', async (req, res) => {
   try {
     let csatlakozasVagyKilepes;
 
-    const szervezo = await findSzervezo(req.query.name, parseInt(req.query.id, 10));
+    const szervezo = await findSzervezoRendezvenyken(req.query.name, parseInt(req.query.id, 10));
 
     if (szervezo[0][0] === undefined) csatlakozasVagyKilepes = 'csatlakozas';
     else csatlakozasVagyKilepes = 'kilepes';
@@ -65,8 +68,8 @@ router.get('/szervezoE', async (req, res) => {
 router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
   try {
     let csatlakozasVagyKilepes,
-      csatlakozasVagyKilepesValasz;
-    const szervezo = await findSzervezo(req.query.name, parseInt(req.query.id, 10));
+      csatlakozasVagyKilepesValasz = '';
+    const szervezo = await findSzervezoRendezvenyken(req.query.name, parseInt(req.query.id, 10));
     if (szervezo[0][0] === undefined) {
       csatlakozasVagyKilepes = 'csatlakozas';
       csatlakozasVagyKilepesValasz = 'kilepes';

@@ -23,13 +23,8 @@
                 <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
                 <div class="form-nev">Szervezők: 
                     <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
-                       
-                        <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
-                            <% if (rendezvenySzervezok.rendezvenyID === rendezvenyek.rendezvenyID) { %>
-                                <%= rendezvenySzervezok.szervezoNev %>
-                                ,<% } %>
-
-                         <% }) %>
+                        <%= rendezvenySzervezok.szervezoNev %>
+                        ,
                     <% }) %>
                 </div>
             </div>

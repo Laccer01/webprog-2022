@@ -7,15 +7,19 @@
 -- CREATE DATABASE Rendezvenyek ;
 USE Rendezvenyek;
 
-ALTER TABLE Szervezo
-DROP CONSTRAINT FK_Rendezveny_Szervezo;
-
 ALTER TABLE RendezvenyKepek
 DROP CONSTRAINT FK_Rendezveny_RendezvenyKepek;
+
+ALTER TABLE RendezokRendezvenyeken
+DROP CONSTRAINT FK_RendezokRendezvenyeken_Rendezveny;
+
+ALTER TABLE RendezokRendezvenyeken
+DROP CONSTRAINT FK_RendezokRendezvenyeken_Szervezo;
 
 DROP TABLE IF EXISTS Rendezveny;
 DROP TABLE IF EXISTS Szervezo;
 DROP TABLE IF EXISTS RendezvenyKepek;
+DROP TABLE IF EXISTS RendezokRendezvenyeken;
 
 CREATE TABLE Rendezveny
 (
@@ -29,9 +33,7 @@ CREATE TABLE Rendezveny
 CREATE TABLE Szervezo
 (
 	szervezoID int primary key auto_increment,
-	szervezoNev VARCHAR(30),
-    rendezvenyID INT,
-	CONSTRAINT FK_Rendezveny_Szervezo FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID)
+	szervezoNev VARCHAR(30)
 );
 
 CREATE TABLE RendezvenyKepek
@@ -42,18 +44,28 @@ CREATE TABLE RendezvenyKepek
     CONSTRAINT FK_Rendezveny_RendezvenyKepek FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID)
 );
 
+CREATE TABLE RendezokRendezvenyeken 
+(
+	kapcsolatID int primary key auto_increment,
+    rendezvenyID INT,
+    szervezoID INT,
+    CONSTRAINT FK_RendezokRendezvenyeken_Rendezveny FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID),
+    CONSTRAINT FK_RendezokRendezvenyeken_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(szervezoID)
+);
+
 USE Rendezvenyek;
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 
 
--- SELECT * FROM Rendezveny;
+SELECT * FROM Rendezveny;
 
--- SELECT * FROM Szervezo;
+SELECT * FROM Szervezo;
 
--- USE Rendezveny
--- SELECT * FROM RendezvenyKepek;
+SELECT * FROM RendezvenyKepek;
+
+SELECT * FROM RendezokRendezvenyeken;
 -- DELETE FROM Rendezveny
 
 -- USE Rendezveny
