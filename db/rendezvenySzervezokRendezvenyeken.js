@@ -53,5 +53,5 @@ export async function findSzervezo(nev, rendezvenyId) {
   const szervezoID = await findSzervezoIDNevvel(nev);
   return connectionPool.query(`select RendezokRendezvenyeken.szervezoID
         from RendezokRendezvenyeken
-        Where RendezokRendezvenyeken.szervezoID = ? And RendezokRendezvenyeken.rendezvenyID = ?`, [szervezoID, rendezvenyId]);
+        Where RendezokRendezvenyeken.szervezoID = ? And RendezokRendezvenyeken.rendezvenyID = ?`, [szervezoID[0][0], rendezvenyId]);
 }
