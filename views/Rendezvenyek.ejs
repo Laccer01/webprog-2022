@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Rezdezvenyek listazva</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='/script.js'></script>
+</head>
+<body>
+    <h2>Rendezvenyek</h2>
+
+
+   
+
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+           
+            <div class="list-item">
+                
+                <div class="form-nev">
+                    <br><a onclick='showMore("<%=rendezvenyek.rendezvenyID%>")'>Rendezvény neve: <%= rendezvenyek.nev %></a>
+                </div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+                <div class="form-nev" id="content-text<%=rendezvenyek.rendezvenyID%>">
+                    <!-- Szervezők:  -->
+                    
+                </div>
+                <div class = "form-nemLatszik">
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                        <button id="button-<%=rendezvenyek.rendezvenyID%>-<%=rendezvenySzervezok.szervezoNev%>" 
+                                onclick='csatlakozasVagyKilepes("<%= rendezvenyek.rendezvenyID %>", "<%= rendezvenySzervezok.szervezoNev %>")', hidden = "hidden"></button> 
+                        
+                    <% }) %>
+                </div>
+            </div>
+            <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a>
+           
+        <% }) %>
+    </div>
+</body>
+</html>

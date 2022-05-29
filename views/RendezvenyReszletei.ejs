@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Rezdezvenyek listazva</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src="main.js"></script>    
+    </script>
+</head>
+<body>
+    <h2> <%= hibaUzenet %></h2>
+
+    <h2>Rendezveny részletei </h2>
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+                <div class="form-nev">Szervezők: 
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                        <%= rendezvenySzervezok.szervezoNev %>
+                        ,
+                    <% }) %>
+                </div>
+            </div>
+        <% }) %>
+
+    <h2>Képek a rendezvényről </h2>
+
+    <div class="list-container">
+        <% rendezvenyKepei.forEach((rendezvenyKepei) => { %>
+            <div class="list-item">
+                <div class="form-nev"><%= rendezvenyKepei.utvonal %></div>
+                
+
+            </div>
+        <% }) %> 
+    </div>
+       
+
+    <form action="/lekezelRendezvenySzervezoFenykepHozzaadas?rendezvenyID=<%= rendezvenyAzonosito[0].rendezvenyID %>" method="post" id="RendezvenySzervezoFenykepHozzaadas" name = "RendezvenySzervezoFenykepHozzaadas" enctype="multipart/form-data">
+        <label>Adj hozzá egy fényképet</label><br>
+
+        <label for="form-rendezvenySzervezo">Szervező neve:</label>                                             
+        <input type="text" name="form-rendezvenySzervezo" id="form-rendezvenySzervezo" pattern="^[A-Z]{1}[a-z]{1,}$"                   
+        title="Csak betűtet tartalmazhat, az első nagybetű a többi kisbetű"/><br>
+
+        <label>Válaszd ki a feltöltendő fényképet:</label>
+        <input type="file" name="form-rendezvenyFenykep" id="form-rendezvenyFenykep">
+
+        <div>
+            <span id="errorBekuldes3"></span>
+        </div>
+
+        <br><br>
+        <input type="submit" value="bekuldes" id="form-saveSzervezoCsatlakozas"/>
+       
+    </form>
+</body>
+</html>

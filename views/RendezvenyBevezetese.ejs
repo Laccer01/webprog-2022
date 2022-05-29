@@ -17,8 +17,10 @@
         <body>
             <form action="/lekezelRendezvenyBevezetese" onsubmit="required()" method="POST" id="RendezvenyBevezetes" name = "RendezvenyBevezetes" enctype="multipart/form-data">
                 
-                <label>Rendezvény bevezetése</label><br>
-    
+                <h2> <%= hibaUzenet %></h2> 
+
+                <label>Rendezvény bevezetése</label><br>                
+                
                 <label for="form-rendezvenyNev">Rendezvény neve:</label>                                             
                 <input type="text" name="form-rendezvenyNev" id="form-rendezvenyNev" value=""pattern="^[A-Z]{1}[a-z]{1,}$"
                 title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/> <br>
