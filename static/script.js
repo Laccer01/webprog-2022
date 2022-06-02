@@ -89,3 +89,8 @@ async function showMore(id) {
     console.log(error);
   }
 }
+
+function saveUj() {
+  return 1;
+}
+

@@ -32,3 +32,13 @@ label {
 form,h2 {
     text-align: center;
 }
+
+.login, .uj{
+    text-align: right;
+    font-size: 10px;
+}
+
+.loginData{
+    text-align: left;
+    font-size: 1px;
+}

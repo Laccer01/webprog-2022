@@ -6,31 +6,17 @@
     <!DOCTYPE html>
     <html lang="hu">
     
-        <head>
-            <meta charset='utf-8'>
-            <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-            <title>Rendezvény bevezetése</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-            <script src='Rendezveny.js'></script>                                              
-        </head>
+        <%- include('partials/head.ejs', { title: 'Rendezvények csatlakozás' }) %>
+
     
         <body>
+            <%- include('partials/login.ejs', { username: username}) %>
+
             <h2> <%= hibaUzenet %></h2>
 
             <form action="/lekezelRendezvenySzervezoCsatlakozas" method="post" id="RendezvenySzervezoCsatlakozas" name = "RendezvenySzervezoCsatlakozas" enctype="multipart/form-data">
                 <label>Rendezvényhez csatlakozás szervezőknek</label><br>
-    
 
-                <label for="form-rendezvenySzervezo">Szervező neve:</label> 
-                <select id="form-rendezvenySzervezo" name="form-rendezvenySzervezo"">
-                      
-                      <% rendezvenySzervezokNevei.forEach((rendezvenySzervezokNevei) => { %>
-                        <option value = <%= rendezvenySzervezokNevei.szervezoNev %>><%= rendezvenySzervezokNevei.szervezoNev %></option>
-                        <% }) %>   
-                </select>   
-                               
-                </div> 
 
 
                 <label for="form-rendezvenyID">Rendezvény id:</label>
@@ -49,14 +35,12 @@
                 </select>
                 <br><br>
 
-                <br><br>
 
                 <div>
                     <span id="errorBekuldes"></span>
                 </div>
 
                 
-
                 <input type="submit" value="bekuldes" id="form-saveSzervezoCsatlakozas"/>
                
             </form>

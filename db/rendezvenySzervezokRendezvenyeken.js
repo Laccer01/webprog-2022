@@ -13,10 +13,12 @@ export function findSzervezoRendezvenyen(szervezoID, rendezvenyID) {
 
 export async function findSzervezoNevRendezvenyen(szervezoNev, rendezvenyID) {
   const szervezoID = await findSzervezoIDNevvel(szervezoNev);
-
-  const szervezoIDreturn = connectionPool.query(`SELECT RendezokRendezvenyeken.kapcsolatID 
+  let szervezoIDreturn;
+  if (szervezoID[0][0] !== undefined) {
+    szervezoIDreturn = connectionPool.query(`SELECT RendezokRendezvenyeken.kapcsolatID 
         FROM RendezokRendezvenyeken
         Where RendezokRendezvenyeken.rendezvenyID = ? And RendezokRendezvenyeken.szervezoID = ?`, [rendezvenyID, szervezoID[0][0].szervezoID]);
+  }
 
   return szervezoIDreturn;
 }
@@ -53,5 +55,5 @@ export async function findSzervezo(nev, rendezvenyId) {
   const szervezoID = await findSzervezoIDNevvel(nev);
   return connectionPool.query(`select RendezokRendezvenyeken.szervezoID
         from RendezokRendezvenyeken
-        Where RendezokRendezvenyeken.szervezoID = ? And RendezokRendezvenyeken.rendezvenyID = ?`, [szervezoID, rendezvenyId]);
+        Where RendezokRendezvenyeken.szervezoID = ? And RendezokRendezvenyeken.rendezvenyID = ?`, [szervezoID[0][0].szervezoID, rendezvenyId]);
 }

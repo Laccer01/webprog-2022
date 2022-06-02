@@ -24,7 +24,9 @@ export function createTableRendezvenyek() {
 export function createTableSzervezok() {
   return connectionPool.query(`create table if not exists Szervezo 
   (szervezoID int primary key auto_increment,
-    szervezoNev VARCHAR(30)`);
+    szervezoNev VARCHAR(30),
+    szerepkor VARCHAR(30),
+    jelszo VARCHAR(100)`);
 }
 
 export function createTableRendezvenyKepek() {

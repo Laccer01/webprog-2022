@@ -33,7 +33,9 @@ CREATE TABLE Rendezveny
 CREATE TABLE Szervezo
 (
 	szervezoID int primary key auto_increment,
-	szervezoNev VARCHAR(30)
+	szervezoNev VARCHAR(30),
+    szerepkor VARCHAR(30),
+    jelszo VARCHAR(100)
 );
 
 CREATE TABLE RendezvenyKepek
@@ -61,7 +63,7 @@ FLUSH PRIVILEGES;
 
 SELECT * FROM Rendezveny;
 
-SELECT * FROM Szervezo;
+	SELECT * FROM Szervezo;
 
 SELECT * FROM RendezvenyKepek;
 
@@ -71,3 +73,5 @@ SELECT * FROM RendezokRendezvenyeken;
 -- USE Rendezveny
 -- SELECT * FROM Szervezok
 
+INSERT INTO Szervezo
+VALUES (default, 'user1', 'felhasznalo', 'hey'), (default, 'user2', 'felhasznalo', 'hey');
