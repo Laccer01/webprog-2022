@@ -90,7 +90,4 @@ async function showMore(id) {
   }
 }
 
-function saveUj() {
-  return 1;
-}
 

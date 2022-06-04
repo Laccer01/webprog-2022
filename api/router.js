@@ -26,8 +26,7 @@ router.get('/rendezveny/:id', async (req, res) => {
       szervezokLista += `${szervezok.szervezoNev}, `;
     });
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(szervezokLista));
+    res.send(szervezokLista);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -44,8 +43,7 @@ router.get('/szervezok', async (req, res) => {
       lista.push(szervezok.szervezoNev);
     });
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(lista));
+    res.send(lista);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -62,8 +60,7 @@ router.get('/szervezoE', async (req, res) => {
     if (szervezo[0][0] === undefined) csatlakozasVagyKilepes = 'csatlakozas';
     else csatlakozasVagyKilepes = 'kilepes';
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(csatlakozasVagyKilepes));
+    res.send(csatlakozasVagyKilepes);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -95,8 +92,7 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
       await insertSzervezok(csatlakozasVagyKilepes, req.query.name, req.query.id, felhasznaloNev);
     }
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
+    res.send(csatlakozasVagyKilepesValasz);
   } catch (err) {
     console.error(err);
     res.status(500);

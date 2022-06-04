@@ -35,6 +35,10 @@ import authrouter from './auth/auth.js';
 
 import { secret } from './config.js';
 
+import {
+  checkJWT, validateJWT
+} from './auth/middleware.js'
+
 function checkIfUsed(feldolgozandoAdatok) {   // vizsgálja ha létezik e olyan nevű rendezvény e
   const rendezvenyNev = feldolgozandoAdatok[0];
   const rendezveny = findRendezvenyNevvel(rendezvenyNev);
@@ -259,10 +263,12 @@ app.get('/', async (req, res) => {
     const rendezvenyek = await findAllRendezveny();
     const rendezvenySzervezok = await findRendezvenySzervezokNevei();
 
-    res.locals.jwtToken = req.cookies.auth;
-    const decode = jwt.verify(res.locals.jwtToken, secret);
-    res.locals.name = decode.name;
-    const felhasznaloNev =  res.locals.name;
+    // res.locals.jwtToken = req.cookies.auth;
+    // const decode = jwt.verify(res.locals.jwtToken, secret);
+    // res.locals.name = decode.name;
+    // const felhasznaloNev =  res.locals.name;
+    checkJWT(req, res);
+    let felhasznaloNev = validateJWT (req, res);
 
     res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok: rendezvenySzervezok[0], username: felhasznaloNev });
   } catch (err) {
@@ -280,10 +286,12 @@ app.use('/kepek', async (req, res) => {
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const { uzenet } = req.query;
 
-    res.locals.jwtToken = req.cookies.auth;
-    const decode = jwt.verify(res.locals.jwtToken, secret);
-    res.locals.name = decode.name;
-    const felhasznaloNev =  res.locals.name;
+    // res.locals.jwtToken = req.cookies.auth;
+    // const decode = jwt.verify(res.locals.jwtToken, secret);
+    // res.locals.name = decode.name;
+    // const felhasznaloNev =  res.locals.name;
+    checkJWT(req, res);
+    let felhasznaloNev = validateJWT (req, res);
 
     res.render('RendezvenyReszletei', {
       rendezvenyek: rendezvenyek[0],
@@ -305,10 +313,12 @@ app.get('/csatlakozas', async (req, res) => {
     const { uzenet } = req.query;
     const rendezvenyIDk = await findRendezvenyIdk();
 
-    res.locals.jwtToken = req.cookies.auth;
-    const decode = jwt.verify(res.locals.jwtToken, secret);
-    res.locals.name = decode.name;
-    const felhasznaloNev =  res.locals.name;
+    // res.locals.jwtToken = req.cookies.auth;
+    // const decode = jwt.verify(res.locals.jwtToken, secret);
+    // res.locals.name = decode.name;
+    // const felhasznaloNev =  res.locals.name;
+    checkJWT(req, res);
+    felhasznaloNev = validateJWT (req, res);
 
     res.render('RendezvenySzervezoCsatlakozas', {
       rendezvenyIDk: rendezvenyIDk[0],
