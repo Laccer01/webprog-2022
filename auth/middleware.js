@@ -23,7 +23,6 @@ export function validateJWT(req, res) {
       res.send();
     }
   } else {
-    res.status(401);
-    res.send();
+    res.locals.name = '';
   }
 }

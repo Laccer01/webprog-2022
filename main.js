@@ -25,9 +25,12 @@ import {
 } from './db/rendezvenyekKepek.js';
 
 import {
-  findSzervezoNevRendezvenyen, insertSzervezok,
-  findSzervezo,
+  insertSzervezok,
 } from './db/rendezvenySzervezokRendezvenyeken.js';
+
+import {
+  checkJWT, validateJWT,
+} from './auth/middleware.js';
 
 import apiRouter from './api/router.js';
 
@@ -36,85 +39,12 @@ import authrouter from './auth/auth.js';
 import { secret } from './config.js';
 
 import {
-  checkJWT, validateJWT,
-} from './auth/middleware.js';
-
-function checkIfUsed(feldolgozandoAdatok) {   // vizsgálja ha létezik e olyan nevű rendezvény e
-  const rendezvenyNev = feldolgozandoAdatok[0];
-  const rendezveny = findRendezvenyNevvel(rendezvenyNev);
-  return new Promise((resolve, reject) => {
-    rendezveny.then((result) => {
-      const text = result[0].toString();
-
-      if (text === '') {
-        resolve(feldolgozandoAdatok);
-      } else {
-        reject(new Error('Hiba, letezik ez a rendezveny'));
-      }
-    });
-  });
-}
-
-function checkIfIsSzervezo(feldolgozandoAdatok) {    // vizsgálom ha olyan csatlakozik/kilép
-  // egy eseményhez/eseményből aki megteheti
-
-  const szervezoNev = feldolgozandoAdatok[1];
-  const rendezvenyId = parseInt(feldolgozandoAdatok[2], 10);
-  const rendezvenySzervezoValasztasa = feldolgozandoAdatok[0];
-  const jelenlegiBejelentkezett = feldolgozandoAdatok[3];
-  console.log(jelenlegiBejelentkezett);
-
-  return new Promise((resolve, reject) => {
-    if (jelenlegiBejelentkezett === '') {
-      reject(new Error('Hiba, nem vagy bejelentkezve'));
-    } else {
-      const szervezo = findSzervezo(szervezoNev, rendezvenyId);
-
-      szervezo.then((result) => {
-        const text = result[0].toString();
-
-        if (rendezvenySzervezoValasztasa === 'csatlakozas') {
-          // vizsgálom ha csatlakozni akar a szervező
-          if (text === '') {          // a szervezo meg nincs csatlakozva a rendezvenyhez
-            resolve(feldolgozandoAdatok);
-          } else {
-            reject(new Error('Hiba, a csatlakozas/visszalepesnel'));
-          }
-        } else if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
-          // akkor nem tud kilepni a rendezvenybol
-          reject(new Error('Hiba, a csatlakozas/visszalepesnel'));
-        } else {
-          resolve(feldolgozandoAdatok);
-        }
-      });
-    }
-  });
-}
-
-function checkIfIsSzervezoRendezvenyen(feldolgozandoAdatok) {        // vizsgálom ha a felhasználó
-  // szervező e az adott eseményen
-
-  const rendezvenySzervezo = feldolgozandoAdatok[4];
-  const rendezvenyID = parseInt(feldolgozandoAdatok[3], 10);
-  const szervezo = findSzervezoNevRendezvenyen(rendezvenySzervezo, rendezvenyID);
-
-  return new Promise((resolve, reject) => {
-    szervezo.then((result) => {
-      if (result === undefined || result[0] === undefined) {
-        reject(new Error('Hiba, nem szervezo a rendezvenyen'));
-      } else {
-        const text = result[0].toString();
-        if (text === '') {           // a szervezo meg nincs csatlakozva a rendezvenyhez
-          reject(new Error('Hiba, nem szervezo a rendezvenyen'));
-        } else {
-          resolve(feldolgozandoAdatok);
-        }
-      }
-    });
-  });
-}
+  checkIfUsed, checkIfIsSzervezo,
+  checkIfIsSzervezoRendezvenyen,
+} from './validators/validator.js';
 
 const app = express();
+
 const uploadDir = join(process.cwd(), '/static/uploadDir');
 
 // feltöltési mappa elkészítése
@@ -178,10 +108,9 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
 
 app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
   const feldolgozandoAdatok = [];
-  response.locals.jwtToken = request.cookies.auth;
-  const decode = jwt.verify(response.locals.jwtToken, secret);
-  response.locals.name = decode.name;
-  const felhasznaloNev =  response.locals.name;
+  
+  checkJWT(request, response)
+  validateJWT(request, response);
 
   feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezoValasztas']);
   feldolgozandoAdatok.push(felhasznaloNev);
@@ -214,10 +143,9 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
 });
 
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  response.locals.jwtToken = request.cookies.auth;
-  const decode = jwt.verify(response.locals.jwtToken, secret);
-  response.locals.name = decode.name;
-  const felhasznaloNev =  response.locals.name;
+  
+  checkJWT(request, response)
+  validateJWT(request, response);
 
   const feldolgozandoAdatok = [];
   feldolgozandoAdatok.push(request.files['form-rendezvenyFenykep']);
@@ -263,15 +191,10 @@ app.get('/', async (req, res) => {
     const rendezvenyek = await findAllRendezveny();
     const rendezvenySzervezok = await findRendezvenySzervezokNevei();
 
-    // res.locals.jwtToken = req.cookies.auth;
-    // const decode = jwt.verify(res.locals.jwtToken, secret);
-    // res.locals.name = decode.name;
-    // const felhasznaloNev =  res.locals.name;
     checkJWT(req, res);
     validateJWT(req, res);
-    const felhasznaloNev =  res.locals.name;
 
-    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok: rendezvenySzervezok[0], username: felhasznaloNev });
+    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok: rendezvenySzervezok[0] });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -287,13 +210,8 @@ app.use('/kepek', async (req, res) => {
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const { uzenet } = req.query;
 
-    // res.locals.jwtToken = req.cookies.auth;
-    // const decode = jwt.verify(res.locals.jwtToken, secret);
-    // res.locals.name = decode.name;
-    // const felhasznaloNev =  res.locals.name;
     checkJWT(req, res);
     validateJWT(req, res);
-    const felhasznaloNev =  res.locals.name;
 
     res.render('RendezvenyReszletei', {
       rendezvenyek: rendezvenyek[0],
@@ -301,7 +219,6 @@ app.use('/kepek', async (req, res) => {
       rendezvenyKepei: rendezvenyKepei[0],
       rendezvenyAzonosito: rendezvenyAzonosito[0],
       hibaUzenet: uzenet,
-      username: felhasznaloNev,
     });
   } catch (err) {
     console.error(err);
@@ -315,17 +232,12 @@ app.get('/csatlakozas', async (req, res) => {
     const { uzenet } = req.query;
     const rendezvenyIDk = await findRendezvenyIdk();
 
-    // res.locals.jwtToken = req.cookies.auth;
-    // const decode = jwt.verify(res.locals.jwtToken, secret);
-    // res.locals.name = decode.name;
     checkJWT(req, res);
     validateJWT(req, res);
-    const felhasznaloNev =  res.locals.name;
 
     res.render('RendezvenySzervezoCsatlakozas', {
       rendezvenyIDk: rendezvenyIDk[0],
       hibaUzenet: uzenet,
-      username: felhasznaloNev,
     });
   } catch (err) {
     console.error(err);
@@ -336,10 +248,6 @@ app.get('/csatlakozas', async (req, res) => {
 
 app.use('/RendezvenyBevezetese', (req, response) => {
   response.render('RendezvenyBevezetese', { hibaUzenet: '', username: '' });
-});
-
-app.get('/message', (req, res) => {
-  res.send('Hello from the server');
 });
 
 app.listen(8000, () => {
