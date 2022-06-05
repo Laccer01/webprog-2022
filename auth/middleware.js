@@ -16,9 +16,6 @@ export function validateJWT(req, res) {
       const decode = jwt.verify(res.locals.jwtToken, secret);
       res.locals.name = decode.name;
     } catch (err) {
-      validateJWT(req, res);
-      console.error(err);
-      res.clearCookie('auth');
       res.status(401);
       res.send();
     }

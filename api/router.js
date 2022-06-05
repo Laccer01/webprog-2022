@@ -26,7 +26,7 @@ router.get('/rendezveny/:id', async (req, res) => {
       szervezokLista += `${szervezok.szervezoNev}, `;
     });
 
-    res.send(szervezokLista);
+    res.send(JSON.stringify(szervezokLista));
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -60,7 +60,7 @@ router.get('/szervezoE', async (req, res) => {
     if (szervezo[0][0] === undefined) csatlakozasVagyKilepes = 'csatlakozas';
     else csatlakozasVagyKilepes = 'kilepes';
 
-    res.send(csatlakozasVagyKilepes);
+    res.send(JSON.stringify(csatlakozasVagyKilepes));
   } catch (err) {
     console.error(err);
     res.status(500);

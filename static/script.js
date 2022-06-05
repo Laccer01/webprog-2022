@@ -65,6 +65,8 @@ async function csatlakozasVagyKilepes(id, szervezoNev) {
 }
 
 async function showMore(id) {
+
+  console.log("hey")
   try {
     const result = await fetch(`/api/rendezveny/${id}`);
     const rendezveny = await result.json();

@@ -8,7 +8,7 @@ import eformidable from 'express-formidable';
 import morgan from 'morgan';
 
 import cookieParser from 'cookie-parser';
-import jwt from 'jsonwebtoken';
+
 import {
   insertRendezveny, findAllRendezveny, findRendezvenyNevvel, findRendezvenyNev,
   findRendezvenyIdk, findRendezvenyWithId,
@@ -35,8 +35,6 @@ import {
 import apiRouter from './api/router.js';
 
 import authrouter from './auth/auth.js';
-
-import { secret } from './config.js';
 
 import {
   checkIfUsed, checkIfIsSzervezo,
@@ -108,14 +106,12 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
 
 app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
   const feldolgozandoAdatok = [];
-  
-  checkJWT(request, response)
+
+  checkJWT(request, response);
   validateJWT(request, response);
 
   feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezoValasztas']);
-  feldolgozandoAdatok.push(felhasznaloNev);
   feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
-  feldolgozandoAdatok.push(felhasznaloNev);
 
   checkIfIsSzervezo(feldolgozandoAdatok).then(((request1) => {
     const szervezoValasztasa = request1[0];
@@ -143,8 +139,7 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
 });
 
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  
-  checkJWT(request, response)
+  checkJWT(request, response);
   validateJWT(request, response);
 
   const feldolgozandoAdatok = [];
@@ -152,7 +147,6 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
   feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
   feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezo']);
   feldolgozandoAdatok.push(request.query.rendezvenyID);
-  feldolgozandoAdatok.push(felhasznaloNev);
 
   checkIfIsSzervezoRendezvenyen(feldolgozandoAdatok)
     .then(() => {

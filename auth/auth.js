@@ -23,23 +23,17 @@ router.post('/BejelentkezesFeldolgozas', (request, response) => {
     } else {
       const token = jwt.sign({ name: felhasznalonev }, secret);
       response.cookie('auth', token, { sameSite: 'strict' });
-      response.redirect('/?uzenet=');
+      response.redirect('/');
     }
   });
 });
 
 router.post('/Kijelentkezes', (request, response) => {
-  response.cookie('auth', jwt.sign({ name: '' }, secret), { ameSite: 'strict' });
+  const token = jwt.sign({ name: '' }, secret);
 
-  // response.cookie("auth", { expires: new Date() });
+  response.cookie('auth', token, { sameSite: 'strict', expiresIn: new Date(0) });
 
-  // Object.entries(request.cookies).forEach(([cookieName, cookieValue]) => {
-  //   console.log(`  ${cookieName} : ${cookieValue}`);
-  // });
-
-  response.redirect('/?uzenet=');
-  // response.end()
-
+  response.redirect('/');
 });
 
 export default router;
