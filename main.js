@@ -94,8 +94,7 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
     })
     .catch((hiba) => {
       if (hiba.toString() === 'Error: Hiba, letezik ez a rendezveny') {
-        const felhasznaloNev =  response.locals.name;
-        response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar be van vezetve ilyen nevű rendezvény', username: felhasznaloNev });
+        response.render('RendezvenyBevezetese', { hibaUzenet: 'Mar be van vezetve ilyen nevű rendezvény'});
       } else {
         console.error(hiba);
         response.status(500);
@@ -241,7 +240,7 @@ app.get('/csatlakozas', async (req, res) => {
 });
 
 app.use('/RendezvenyBevezetese', (req, response) => {
-  response.render('RendezvenyBevezetese', { hibaUzenet: '', username: '' });
+  response.render('RendezvenyBevezetese', { hibaUzenet: ''});
 });
 
 app.listen(8000, () => {
