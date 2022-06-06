@@ -203,7 +203,7 @@ function animate(element)  // ez a függvény animálja a mozgó szöveget
   //  legyen olvasható.
   //  úgy kell működjön, mint a (nem standard!) marquee tag, csak ebben az esetben egy div-ben kell
   //  megjelenjen a görgetett szöveg.
-  mozgoSzoveg = setInterval(() => {
+  const mozgoSzoveg = setInterval(() => {
     elementWidth = element.offsetWidth;
     if (document.getElementById('form-iranyValasztas').value === 'bal') {
       element.style.marginLeft = `${flag -= 5}px`;

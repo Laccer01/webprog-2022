@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs', { title: 'Rendezvények adatai' }) %>
+
+<body>
+
+    <%- include('partials/login.ejs') %>
+
+    <h2> <%= hibaUzenet %></h2>
+
+
+    <h2>Rendezveny feladatok </h2>
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+                <div class="form-nev">Szervezők: 
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                        <%= rendezvenySzervezok.szervezoNev %>
+                        ,
+                    <% }) %>
+                </div>
+                <nav id = "Masodik">
+                    <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a> <br><br><br><br>
+                    <a class="a" href="/RendezvenyekReszfeladatokLetrehozasa.html">Részfeladat létrehozása</a> 
+                </nav>
+            </div>
+        <% }) %>    
+        
+        <!-- <p>A rendezvényhez kapcsolatos feladatok:</p>
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+               
+            </div>
+        <% }) %>        -->
+    
+    
+</body>
+</html>

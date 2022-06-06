@@ -171,3 +171,28 @@ export async function megfeleloFelhasznalo(felhasznaloNev, felhasznaloJelszo) {
   }
   return false;
 }
+
+export async function letezikFelhasznalo(felhasznaloNev) {
+  const felhasznalo = await connectionPool.query(`SELECT *
+  FROM Szervezo
+  Where Szervezo.szervezoNev = ?`, 
+  [felhasznaloNev]);
+
+  return (felhasznalo[0][0])
+  }
+
+export async function felhasznaloBeszuras(felhasznaloNev, felhasznaloJelszo, felhasznaloSzerepkor) {
+  const password = bcrypt.hashSync(felhasznaloJelszo, 10);
+  let beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
+        values (default, ?, ?, ?)`, [felhasznaloNev, felhasznaloSzerepkor, password]);
+
+  return beszurtRendezvenySzervezo
+}
+
+export async function felhasznaloSzerepkore ( felhasznaloNev){
+  const szervezoSzerepkor = await connectionPool.query(`SELECT Szervezo.szerepkor
+        FROM Szervezo
+        Where Szervezo.szervezoNev = ? `, [felhasznaloNev]);
+
+  return szervezoSzerepkor[0][0].szerepkor;
+}

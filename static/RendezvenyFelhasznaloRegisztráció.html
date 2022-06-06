@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Rezdezvenyek listazva</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='/script.js'></script>
+</head>
+<body>
+    <h2>Felhasználó bejelentkezés</h2>
+
+    <form method="POST" action="/auth/RegisztracioFeldolgozas" >      
+        <label for="inputRegisterDataName">Felhasználónév:</label>  
+        <p><input type="text" name="inputRegisterDataName" id="inputRegisterDataName"/><br> </p>
+
+        <label for="inputRegisterDataPasswd">Kód:</label>  
+        <input type="text" name="inputRegisterDataPasswd" id="inputRegisterDataPasswd"/><br><br>
+
+        <label for="inputRegisterDataType">Szerepkör:</label>  
+
+        <select id="inputRegisterDataType" name="inputRegisterDataType">
+            <option value="admin">Admin</option>
+            <option value="szervezo">Szervező</option>
+            <option value="vendeg">Vendég</option>
+        </select>
+
+
+        <p><input type="submit" value="Regisztráció!" /></p>
+        
+    </form>    
+    
+</body>
+</html>

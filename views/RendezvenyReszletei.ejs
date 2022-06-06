@@ -10,6 +10,7 @@
 
     <h2> <%= hibaUzenet %></h2>
 
+
     <h2>Rendezveny részletei </h2>
     <div class="list-container">
         <% rendezvenyek.forEach((rendezvenyek) => { %>
@@ -24,6 +25,11 @@
                         ,
                     <% }) %>
                 </div>
+                <nav id = "Eleje">
+                    <% if (felhasznaloSzerepkor === 'admin'){   %>
+                        <a class="a" href="/rendezvenyBelepes?name=<%= rendezvenyek.nev %>">Rendezvényre belépés</a> <br>
+                    <% } %>
+                </nav>
             </div>
         <% }) %>
 
@@ -39,7 +45,7 @@
         <% }) %> 
     </div>
        
-
+    
     <form action="/lekezelRendezvenySzervezoFenykepHozzaadas?rendezvenyID=<%= rendezvenyAzonosito[0].rendezvenyID %>" method="post" id="RendezvenySzervezoFenykepHozzaadas" name = "RendezvenySzervezoFenykepHozzaadas" enctype="multipart/form-data">
         <label>Adj hozzá egy fényképet</label><br>
 

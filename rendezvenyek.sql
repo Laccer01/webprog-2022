@@ -7,6 +7,15 @@
 -- CREATE DATABASE Rendezvenyek ;
 USE Rendezvenyek;
 
+ALTER TABLE RendezvenyReszfeladatok
+DROP CONSTRAINT FK_RendezvenyReszfeladatok_Rendezveny;
+
+ALTER TABLE RendezvenyReszfeladatokSzervezok
+DROP CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_RendezvenyReszfeladatok;
+
+ALTER TABLE RendezvenyReszfeladatokSzervezok
+DROP CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_Szervezo;
+
 ALTER TABLE RendezvenyKepek
 DROP CONSTRAINT FK_Rendezveny_RendezvenyKepek;
 
@@ -20,6 +29,8 @@ DROP TABLE IF EXISTS Rendezveny;
 DROP TABLE IF EXISTS Szervezo;
 DROP TABLE IF EXISTS RendezvenyKepek;
 DROP TABLE IF EXISTS RendezokRendezvenyeken;
+DROP TABLE IF EXISTS RendezvenyReszfeladatok;
+DROP TABLE IF EXISTS RendezvenyReszfeladatokSzervezok;
 
 CREATE TABLE Rendezveny
 (
@@ -53,6 +64,31 @@ CREATE TABLE RendezokRendezvenyeken
     szervezoID INT,
     CONSTRAINT FK_RendezokRendezvenyeken_Rendezveny FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID),
     CONSTRAINT FK_RendezokRendezvenyeken_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(szervezoID)
+);
+
+CREATE TABLE RendezvenyReszfeladatok 
+(
+	reszfeladatID int primary key auto_increment,
+    rendezvenyID INT,
+    reszfeladatNeve VARCHAR (30),
+    reszfeladatLeiras VARCHAR(100),
+    reszfeladatHataridoKezdete DATE,
+    reszfeladatHataridoVege DATE,
+    reszfeladatLetrehozasiIdo DATE,
+    reszfeladatUtolsoModositas DATE,
+    reszfeladatLeadottDatum DATE DEFAULT null,
+    reszfeladatStatus VARCHAR(30),
+    
+    CONSTRAINT FK_RendezvenyReszfeladatok_Rendezveny FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID)
+);
+
+CREATE TABLE RendezvenyReszfeladatokSzervezok 
+(
+	reszfeladatSzervezoID int primary key auto_increment,
+    reszfeladatID INT,
+    szervezoID INT,
+    CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_RendezvenyReszfeladatok FOREIGN KEY (reszfeladatID) REFERENCES RendezvenyReszfeladatok(reszfeladatID),
+	CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(szervezoID)
 );
 
 USE Rendezvenyek;

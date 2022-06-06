@@ -6,16 +6,20 @@ nav > a {
     border: 1px solid rgb(0, 0, 0) ;
     background-color: rgb(242, 228, 212);
     padding: 1em;
-    margin: 1em;
     text-decoration: none;
+    margin-right: 10px;
+    margin-top: 30px;
 }
+
 
 nav > a:hover {
     background-color: rgb(0, 0, 0);
+    margin-top: 30px;
 }
 
 nav {
     margin-bottom: 1em ;
+    margin-top: 30px;    
 }
 
 .list-item {
@@ -42,3 +46,4 @@ form,h2 {
     text-align: left;
     font-size: 1px;
 }
+

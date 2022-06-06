@@ -32,8 +32,13 @@
                     <% }) %>
                 </div>
             </div>
-            <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a>
-           
+            <nav id = "Eleje">
+                <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a>  
+                <% if (felhasznaloSzerepkor === 'admin'){   %>
+                    <a class="a" href="/rendezvenyBelepes?name=<%= rendezvenyek.nev %>">Rendezvényre belépés</a> <br>
+                <% } %>
+            </nav>
+            
         <% }) %>
     </div>
 </body>
