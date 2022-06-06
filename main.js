@@ -185,9 +185,8 @@ app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
 
   console.log(request.fields);
 
-  response.redirect('/')
+  response.redirect('/');
 });
-
 
 app.get('/', async (req, res) => {
   try {
@@ -197,15 +196,16 @@ app.get('/', async (req, res) => {
     checkJWT(req, res);
     validateJWT(req, res);
 
-    if (res.locals.name !== ''){
-      felhasznaloSzerepkor = await felhasznaloSzerepkore (res.locals.name)
+    if (res.locals.name !== '') {
+      felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
+    } else {
+      felhasznaloSzerepkor = '';
     }
-    else
-    {
-      felhasznaloSzerepkor = ''
-    }
-    res.render('Rendezvenyek', { rendezvenyek: rendezvenyek[0], rendezvenySzervezok: rendezvenySzervezok[0],
-      felhasznaloSzerepkor: felhasznaloSzerepkor,});
+    res.render('Rendezvenyek', {
+      rendezvenyek: rendezvenyek[0],
+      rendezvenySzervezok: rendezvenySzervezok[0],
+      felhasznaloSzerepkor,
+    });
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -224,9 +224,9 @@ app.use('/kepek', async (req, res) => {
     checkJWT(req, res);
     validateJWT(req, res);
 
-    if (res.locals.name !== ''){
-      const felhasznaloSzerepkor = await felhasznaloSzerepkore (res.locals.name)
-      console.log (felhasznaloSzerepkor)
+    if (res.locals.name !== '') {
+      const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
+      console.log(felhasznaloSzerepkor);
 
       res.render('RendezvenyReszletei', {
         rendezvenyek: rendezvenyek[0],
@@ -234,23 +234,17 @@ app.use('/kepek', async (req, res) => {
         rendezvenyKepei: rendezvenyKepei[0],
         rendezvenyAzonosito: rendezvenyAzonosito[0],
         hibaUzenet: uzenet,
-        felhasznaloSzerepkor: felhasznaloSzerepkor,
+        felhasznaloSzerepkor,
       });
-  
+    } else {
+      res.redirect('/');
     }
-    else{
-      res.redirect('/')
-    }
-    
-    
   } catch (err) {
     console.error(err);
     res.status(500);
     res.send('Error');
   }
 });
-
-
 
 app.use('/rendezvenyBelepes', async (req, res) => {
   try {
@@ -262,25 +256,22 @@ app.use('/rendezvenyBelepes', async (req, res) => {
     checkJWT(req, res);
     validateJWT(req, res);
 
-    
-      const felhasznaloSzerepkor = await felhasznaloSzerepkore (res.locals.name)
-      console.log (felhasznaloSzerepkor)
+    const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
+    console.log(felhasznaloSzerepkor);
 
-      res.render('RendezvenyFeladatok', {
-        rendezvenyek: rendezvenyek[0],
-        rendezvenySzervezok,
-        rendezvenyAzonosito: rendezvenyAzonosito[0],
-        hibaUzenet: uzenet,
-        felhasznaloSzerepkor: felhasznaloSzerepkor,
-      });
-
+    res.render('RendezvenyFeladatok', {
+      rendezvenyek: rendezvenyek[0],
+      rendezvenySzervezok,
+      rendezvenyAzonosito: rendezvenyAzonosito[0],
+      hibaUzenet: uzenet,
+      felhasznaloSzerepkor,
+    });
   } catch (err) {
     console.error(err);
     res.status(500);
     res.send('Error');
   }
 });
-
 
 app.get('/csatlakozas', async (req, res) => {
   try {
@@ -300,7 +291,6 @@ app.get('/csatlakozas', async (req, res) => {
     res.send('Error');
   }
 });
-
 
 app.use('/RendezvenyBevezetese', (req, response) => {
   response.render('RendezvenyBevezetese', { hibaUzenet: '' });

@@ -46,7 +46,7 @@ export function createTableRendezokRendezvenyeken() {
     CONSTRAINT FK_RendezokRendezvenyeken_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(rendezvenyID))`);
 }
 
-export function createTableRendezvenyReszfeladatok(){
+export function createTableRendezvenyReszfeladatok() {
   return connectionPool.query(`CREATE TABLE RendezvenyReszfeladatok 
   (
     reszfeladatID int primary key auto_increment,
@@ -60,17 +60,15 @@ export function createTableRendezvenyReszfeladatok(){
       reszfeladatLeadottDatum DATE,
       reszfeladatStatus VARCHAR(30),
       
-      CONSTRAINT FK_RendezvenyReszfeladatok_Rendezveny FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID));`
-  )
+      CONSTRAINT FK_RendezvenyReszfeladatok_Rendezveny FOREIGN KEY (rendezvenyID) REFERENCES Rendezveny(rendezvenyID));`);
 }
 
-export function createTableRendezvenyReszfeladatokSzervezok(){
+export function createTableRendezvenyReszfeladatokSzervezok() {
   return connectionPool.query(`CREATE TABLE RendezvenyReszfeladatokSzervezok 
   (
     reszfeladatSzervezoID int primary key auto_increment,
       reszfeladatID INT,
       szervezoID INT,
       CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_RendezvenyReszfeladatok FOREIGN KEY (reszfeladatID) REFERENCES RendezvenyReszfeladatok(reszfeladatID),
-    CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(szervezoID));`
-  )
+    CONSTRAINT FK_RendezvenyReszfeladatokSzervezok_Szervezo FOREIGN KEY (szervezoID) REFERENCES Szervezo(szervezoID));`);
 }

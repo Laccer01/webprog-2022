@@ -173,23 +173,25 @@ export async function megfeleloFelhasznalo(felhasznaloNev, felhasznaloJelszo) {
 }
 
 export async function letezikFelhasznalo(felhasznaloNev) {
-  const felhasznalo = await connectionPool.query(`SELECT *
+  const felhasznalo = await connectionPool.query(
+    `SELECT *
   FROM Szervezo
-  Where Szervezo.szervezoNev = ?`, 
-  [felhasznaloNev]);
+  Where Szervezo.szervezoNev = ?`,
+    [felhasznaloNev],
+  );
 
-  return (felhasznalo[0][0])
-  }
+  return (felhasznalo[0][0]);
+}
 
 export async function felhasznaloBeszuras(felhasznaloNev, felhasznaloJelszo, felhasznaloSzerepkor) {
   const password = bcrypt.hashSync(felhasznaloJelszo, 10);
-  let beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
+  const beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
         values (default, ?, ?, ?)`, [felhasznaloNev, felhasznaloSzerepkor, password]);
 
-  return beszurtRendezvenySzervezo
+  return beszurtRendezvenySzervezo;
 }
 
-export async function felhasznaloSzerepkore ( felhasznaloNev){
+export async function felhasznaloSzerepkore(felhasznaloNev) {
   const szervezoSzerepkor = await connectionPool.query(`SELECT Szervezo.szerepkor
         FROM Szervezo
         Where Szervezo.szervezoNev = ? `, [felhasznaloNev]);
