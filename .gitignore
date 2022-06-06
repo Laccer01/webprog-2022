@@ -81,3 +81,7 @@ typings/
 
 # adat állomány
 ide.json
+
+#feltöltött képek állománya
+./static/uploadDir
+

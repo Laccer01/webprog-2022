@@ -3,11 +3,12 @@
 //     Labor: lab2
 //     Sorszám: 10
 
-let form_szovegdoboz;
+let formSzovegdoboz;
 
 // Ellenőrizzük JavaScript kód segítségével (onblur eseményre), hogy:
 // – az e-mail cím érvényes gmail-es vagy yahoo-s e-mailcím
-function emailEllenorzes(email) {           // Ellenőrzi ha egy megadott emailcím helyes e, azaz yahoo vagy gamil email cím e, ha nem megjelenik az oldalon egy figyelmeztető üzenet
+function emailEllenorzes(email) {           // Ellenőrzi ha egy megadott emailcím helyes e,
+// azaz yahoo vagy gamil email cím e, ha nem megjelenik az oldalon egy figyelmeztető üzenet
   const emailEllenorizendo = email.value;
   const emailGmail = /\S+@gmail\.\S+/;
   const emailYahoo = /\S+@yahoo\.\S+/;
@@ -32,12 +33,15 @@ function emailEllenorzes(email) {           // Ellenőrzi ha egy megadott emailc
 // Ellenőrizzük JavaScript kód segítségével (onblur eseményre), hogy:
 // – a weboldal címében pedig szerepel legalább egy doménium illetve egy aldoménium,
 // csak kisbetűt, nagybetűt, számjegyet, alulvonást vagy kötőjelet tartalmaz, stb.
-function urlEllenorzes(url) {            // Ellenőrzi ha egy megadott URL helyes e, ha tartalmaz egy domeniumot és egy aldomeniumo, valamint csak kisü nagybetuket, szamjegyeket, alulvonast es vonalat tartalmaz, ha nem megjelenik az oldalon egy figyelmeztető üzenet
+function urlEllenorzes(url) {            // Ellenőrzi ha egy megadott URL helyes e, ha tartalmaz
+  // egy  domeniumot és egy aldomeniumo
+  // , valamint csak kisü nagybetuket, szamjegyeket, alulvonast es vonalat tartalmaz,
+  // ha nem megjelenik az oldalon egy figyelmeztető üzenet
   const emailEllenorizendo = url.value;
   let vanHiba = false;
   const error = document.getElementById('errorURL');
   error.textContent = '';
-  if (emailEllenorizendo != '') {
+  if (emailEllenorizendo !== '') {
     if (emailEllenorizendo.match('^[A-Za-z0-9/:._]+$')) {
       error.textContent = '';
       const url1 = emailEllenorizendo.split('//');
@@ -73,12 +77,17 @@ function urlEllenorzes(url) {            // Ellenőrzi ha egy megadott URL helye
   }
 }
 
-function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jelszó helyes e, ha nem, megjelenik az oldalon egy figyelmeztető üzenet
-  const jelszoEllenorzes = jelszo.value;
+function jelszoAtmasolo() {
+  document.getElementById('form-jelszoEllenorzo').value = document.getElementById('form-jelszo').value;
+}
+
+function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jelszó helyes e, ha nem,
+  // megjelenik az oldalon egy figyelmeztető üzenet
+  const jelszoEllenorzesMezo = jelszo.value;
   const error = document.getElementById('errorPWD');
-  const specialisKarakterek1 = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]{1}/;
-  const specialisKarakterek2 = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]{2}/;
-  const specialisKarakterek3 = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]{3,}/;
+  const specialisKarakterek1 = /[`!@#$%^&*()_+\-=\]{};':"\\|,.<>?~]{1}/;
+  const specialisKarakterek2 = /[`!@#$%^&*()_+\-=\]{};':"\\|,.<>?~]{2}/;
+  const specialisKarakterek3 = /[`!@#$%^&*()_+\-=\]{};':"\\|,.<>?~]{3,}/;
 
   const kisbetu = /[a-z]/;
   const nagybetu = /[A-Z]/;
@@ -87,18 +96,19 @@ function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jels
   let hibaelso = false;
   let hibamasodik = false;
   let eddigmegfelelo = true;
-  if (specialisKarakterek3.test(jelszoEllenorzes)) {
+  if (specialisKarakterek3.test(jelszoEllenorzesMezo)) {
     hibaelso = true;
   } else
-  if (specialisKarakterek1.test(jelszoEllenorzes) || specialisKarakterek2.test(jelszoEllenorzes)) {
+  if (specialisKarakterek1.test(jelszoEllenorzesMezo)
+  || specialisKarakterek2.test(jelszoEllenorzesMezo)) {
     hibaelso = false;
   } else {
     hibaelso = true;
   }
 
-  if (kisbetu.test(jelszoEllenorzes)) {
-    if (nagybetu.test(jelszoEllenorzes)) {
-      if (szamjegy.test(jelszoEllenorzes)) {
+  if (kisbetu.test(jelszoEllenorzesMezo)) {
+    if (nagybetu.test(jelszoEllenorzesMezo)) {
+      if (szamjegy.test(jelszoEllenorzesMezo)) {
         error.textContent = '';
       } else {
         hibamasodik = true;
@@ -110,7 +120,7 @@ function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jels
     hibamasodik = true;
   }
 
-  if (!hibamasodik || !hibaelso || jelszoEllenorzes === '') {
+  if (!hibamasodik || !hibaelso || jelszoEllenorzesMezo === '') {
     error.textContent = '';
     eddigmegfelelo = true;
   }
@@ -122,15 +132,15 @@ function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jels
     eddigmegfelelo = false;
   }
 
-  if (eddigmegfelelo && jelszoEllenorzes != '') {
+  if (eddigmegfelelo && jelszoEllenorzesMezo !== '') {
     // legyen legalább 5 karakter hosszúságú
-    if (jelszoEllenorzes.length < 5) {
+    if (jelszoEllenorzesMezo.length < 5) {
       eddigmegfelelo = false;
       error.textContent = 'A jelszo hossza legalabb 5 karakter kell legyen';           // Hiba esetén jelenítsünk meg egy megfelelő hibaüzenetet
       error.style.color = 'red';
     }
     // 12 karakternél hosszabb nem lehet
-    if (jelszoEllenorzes.length > 12) {
+    if (jelszoEllenorzesMezo.length > 12) {
       eddigmegfelelo = false;
       error.textContent = 'A jelszo hossza maximum 12 karakter lehet';                 // Hiba esetén jelenítsünk meg egy megfelelő hibaüzenetet
       error.style.color = 'red';
@@ -148,15 +158,14 @@ function jelszoEllenorzes(jelszo) {           // Ellenőrzi ha egy megadott jels
     document.getElementById('form-submit').style.display = 'none';                              // nem jelenik meg a submit gomb
   }
 
-  jelszoAtmasolo();                                                                               // átmásolom egy másik input cellába a jelszót, hogy látható legyen
+  jelszoAtmasolo();
+  // átmásolom egy másik input cellába a jelszót, hogy látható legyen
 }
 
-function jelszoAtmasolo() {
-  document.getElementById('form-jelszoEllenorzo').value = document.getElementById('form-jelszo').value;
-}
-
-function save() {                               // biztonság kedvéért vizsgálja hogy ne legyen egyik mező sem üres
-  if (document.getElementById('form-csNev').value !== '' && document.getElementById('form-vNev').value !== '' && document.getElementById('form-szulDat').value !== '' && document.getElementById('form-email').value !== '' && document.getElementById('form-webOldal').value !== '') {
+function save() {  // biztonság kedvéért vizsgálja hogy ne legyen egyik mező sem üres
+  if (document.getElementById('form-csNev').value !== '' && document.getElementById('form-vNev').value !== ''
+  && document.getElementById('form-szulDat').value !== '' && document.getElementById('form-email').value !== ''
+  && document.getElementById('form-webOldal').value !== '') {
     document.getElementById('form-vNev').setValue = '';
     document.getElementById('form-szulDat').setValue = '';
     document.getElementById('form-email').setValue = '';
@@ -166,8 +175,9 @@ function save() {                               // biztonság kedvéért vizsgá
   }
 }
 
-// Miközben beírjuk a szöveget, az elkezd a megadott irányba gördülni a következő szabályok alapján:
-function animate(element)                                                       // ez a függvény animálja a mozgó szöveget
+// Miközben beírjuk a szöveget, az elkezd a megadott
+// irányba gördülni a következő szabályok alapján:
+function animate(element)  // ez a függvény animálja a mozgó szöveget
 
 {
   const eredetiElement = element;
@@ -175,7 +185,8 @@ function animate(element)                                                       
   const parentWidth = element.parentElement.offsetWidth;
   let flag = 0;
 
-  //     ha rövidebb a szöveg, mint a görgetés számára kijelölt div szélessége, akkor többször egymás
+  //     ha rövidebb a szöveg, mint a görgetés számára kijelölt
+  // div szélessége, akkor többször egymás
   // után jelenik meg.
   while (element.offsetWidth < element.parentElement.offsetWidth) {
     element.innerText = `${element.innerText} ${eredetiElement.innerText}`;
@@ -188,10 +199,10 @@ function animate(element)                                                       
     flag = 0;
   }
 
-  //     a szöveg mindig a görgetésre szánt területnek a megadott iránnyal ellentétes oldalán indul és
-  //     legyen olvasható.
-  //     úgy kell működjön, mint a (nem standard!) marquee tag, csak ebben az esetben egy div-ben kell
-  //     megjelenjen a görgetett szöveg.
+  //  a szöveg mindig a görgetésre szánt területnek a megadott iránnyal ellentétes oldalán indul és
+  //  legyen olvasható.
+  //  úgy kell működjön, mint a (nem standard!) marquee tag, csak ebben az esetben egy div-ben kell
+  //  megjelenjen a görgetett szöveg.
   mozgoSzoveg = setInterval(() => {
     elementWidth = element.offsetWidth;
     if (document.getElementById('form-iranyValasztas').value === 'bal') {
@@ -203,7 +214,7 @@ function animate(element)                                                       
     } else {
       element.style.marginLeft = `${flag += 5}px`;
 
-      if (parentWidth <= parseInt(element.style.marginLeft)) {
+      if (parentWidth <= parseInt(element.style.marginLeft, 10)) {
         flag = -elementWidth;
       }
     }
@@ -217,8 +228,8 @@ function gombUjrakezdes() {
 }
 
 window.onload = () => {
-  form_szovegdoboz = document.getElementById('form_szovegdoboz');
-  document.getElementById('mozogos').innerText = form_szovegdoboz.value;
+  formSzovegdoboz = document.getElementById('form_szovegdoboz');
+  document.getElementById('mozogos').innerText = formSzovegdoboz.value;
   animate(document.getElementById('mozogos'));
 
   // JavaScriptet használva szúrjuk be a HTML oldal aljára (a footer-be), középre igazítva az
@@ -232,8 +243,8 @@ window.onchange  = () => {
   let okes = true;
   const nev = /^[A-Z]{1}[a-z]{1,}$/;
 
-  form_szovegdoboz = document.getElementById('form_szovegdoboz');                 // azért van az onchange-ben is lehessen valtoztatni a szoveget
-  document.getElementById('mozogos').innerText = form_szovegdoboz.value;
+  formSzovegdoboz = document.getElementById('form_szovegdoboz');                 // azért van az onchange-ben is lehessen valtoztatni a szoveget
+  document.getElementById('mozogos').innerText = formSzovegdoboz.value;
 
   clearInterval(mozgoSzoveg);
   animate(document.getElementById('mozogos'));

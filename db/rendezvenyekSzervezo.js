@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 import { connectionPool } from './rendezvenyekTablak.js';
 
 import {
@@ -25,7 +27,8 @@ export function findAllSzervezo() {
 
 export async function findRendezvenySzervezokNevei() {
   return connectionPool.query(
-    'select DISTINCT Szervezo.szervezoNev from Szervezo',
+    `select DISTINCT Szervezo.szervezoNev from Szervezo 
+    Where Szervezo.szerepkor = 'szervezo'`,
   );
 }
 
@@ -99,8 +102,11 @@ export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervez
     Where  Szervezo.szervezoNev = ?`, [szervezoJelenlegi]);
 
     if (jelenlegiSzervzo[0].toString() === '') {
+      const szervezoNev = `jelszo${szervezoJelenlegi.toString()}`;
+      const password = bcrypt.hashSync(szervezoNev, 10);
+
       beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
-        values (default, ?)`, [szervezoJelenlegi]);
+        values (default, ?, ?, ?)`, [szervezoJelenlegi, 'szervezo', password]);
       beszurtRendezvenySzervezok.push(beszurtRendezvenySzervezo);
     }
   }));
@@ -152,4 +158,16 @@ export async function insertSzervezokRendezvenyeken(rendezvenyNev, rendezvenySze
     beszurtRendezvenySzervezok.push(beszurtRendezvenySzervezo);
   }));
   return beszurtRendezvenySzervezok;
+}
+
+export async function megfeleloFelhasznalo(felhasznaloNev, felhasznaloJelszo) {
+  const felhasznaloJelszoHash = await connectionPool.query(`SELECT Szervezo.jelszo
+  FROM Szervezo
+  Where Szervezo.szervezoNev = ?`, [felhasznaloNev]);
+
+  if (felhasznaloJelszoHash[0][0]) {
+    const isValid = await bcrypt.compare(felhasznaloJelszo, felhasznaloJelszoHash[0][0].jelszo);
+    return isValid;
+  }
+  return false;
 }

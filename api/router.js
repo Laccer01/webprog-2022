@@ -1,5 +1,9 @@
 import express from 'express';
 
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import { secret } from '../config.js';
+
 import {
   findRendezvenySzervezokNevei,
 
@@ -11,6 +15,8 @@ import {
 
 const router = express.Router();
 
+router.use(cookieParser());
+
 router.get('/rendezveny/:id', async (req, res) => {
   try {
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
@@ -20,7 +26,6 @@ router.get('/rendezveny/:id', async (req, res) => {
       szervezokLista += `${szervezok.szervezoNev}, `;
     });
 
-    res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(szervezokLista));
   } catch (err) {
     console.error(err);
@@ -38,8 +43,7 @@ router.get('/szervezok', async (req, res) => {
       lista.push(szervezok.szervezoNev);
     });
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(lista));
+    res.send(lista);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -56,7 +60,6 @@ router.get('/szervezoE', async (req, res) => {
     if (szervezo[0][0] === undefined) csatlakozasVagyKilepes = 'csatlakozas';
     else csatlakozasVagyKilepes = 'kilepes';
 
-    res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(csatlakozasVagyKilepes));
   } catch (err) {
     console.error(err);
@@ -78,10 +81,18 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
       csatlakozasVagyKilepesValasz = 'csatlakozas';
     }
 
-    await insertSzervezok(csatlakozasVagyKilepes, req.query.name, req.query.id);
+    res.locals.jwtToken = req.cookies.auth;
+    const decode = jwt.verify(res.locals.jwtToken, secret);
+    res.locals.name = decode.name;
+    const felhasznaloNev =  res.locals.name;
 
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
+    if (req.query.name !== felhasznaloNev) {
+      csatlakozasVagyKilepesValasz = csatlakozasVagyKilepes;
+    } else {
+      await insertSzervezok(csatlakozasVagyKilepes, req.query.name, req.query.id, felhasznaloNev);
+    }
+
+    res.send(csatlakozasVagyKilepesValasz);
   } catch (err) {
     console.error(err);
     res.status(500);

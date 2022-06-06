@@ -1,0 +1,17 @@
+<div class = "login">
+    <% if (name !== '') { %>
+        <h1> Bejelentkezve: <%= name %>. </h1>
+        <form method="POST" action="/auth/Kijelentkezes" class = "uj">   
+            <button id="buttonLogout2" >
+                Logout
+            </button> 
+        </form>
+    <% } else { %>
+        <h1> Nem vagy bejelentkezve! </h1>
+        
+        <nav id = "Eleje">
+            <a class="a" href="RendezvenyFelhasznaloBejelentkezes.html">Login</a>
+        </nav>
+
+    <% } %>
+</div>

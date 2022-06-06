@@ -1,16 +1,13 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Rezdezvenyek listazva</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src="main.js"></script>    
-    </script>
-</head>
+
+<%- include('partials/head.ejs', { title: 'Rendezvények részletei' }) %>
+
 <body>
+
+    <%- include('partials/login.ejs') %>
+
     <h2> <%= hibaUzenet %></h2>
 
     <h2>Rendezveny részletei </h2>
@@ -45,10 +42,6 @@
 
     <form action="/lekezelRendezvenySzervezoFenykepHozzaadas?rendezvenyID=<%= rendezvenyAzonosito[0].rendezvenyID %>" method="post" id="RendezvenySzervezoFenykepHozzaadas" name = "RendezvenySzervezoFenykepHozzaadas" enctype="multipart/form-data">
         <label>Adj hozzá egy fényképet</label><br>
-
-        <label for="form-rendezvenySzervezo">Szervező neve:</label>                                             
-        <input type="text" name="form-rendezvenySzervezo" id="form-rendezvenySzervezo" pattern="^[A-Z]{1}[a-z]{1,}$"                   
-        title="Csak betűtet tartalmazhat, az első nagybetű a többi kisbetű"/><br>
 
         <label>Válaszd ki a feltöltendő fényképet:</label>
         <input type="file" name="form-rendezvenyFenykep" id="form-rendezvenyFenykep">
