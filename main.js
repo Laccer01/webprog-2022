@@ -32,6 +32,7 @@ import {
   reszfeladatBeszuras,
   findAllreszfeladatok, findMegoldottReszfeladatok,
   findTullepettHataridokLeadott, findTullepettHataridokNemLeadott,
+  findAllreszfeladatokSzervezo,
 } from './db/RendezvenyReszfeladatok.js';
 
 import {
@@ -313,6 +314,47 @@ app.use('/rendezvenyBelepes', async (req, res) => {
       megoldatlanReszfeladatokSzama,
       tullepettHataridosReszfeladatokSzamaLeadott,
       tullepettHataridosReszfeladatokSzamaNemLeadott,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
+  try {
+    const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
+    const rendezvenyek = await findRendezvenyWithId(rendezvenyAzonosito[0][0].rendezvenyID);
+    const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
+    const { uzenet } = req.query;
+
+    checkJWT(req, res);
+    validateJWT(req, res);
+
+    const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
+    const reszfeladatok = await findAllreszfeladatokSzervezo(req.query.name, res.locals.name);
+
+    // const osszesReszfeladatokSzama = reszfeladatok[0].length;
+    // const megoldottReszfeladatokSzama = await findMegoldottReszfeladatok(req.query.name);
+    // const megoldatlanReszfeladatokSzama = osszesReszfeladatokSzama - megoldottReszfeladatokSzama;
+    // const tullepettHataridosReszfeladatokSzamaLeadott = await
+    findTullepettHataridokLeadott(req.query.name);
+    // const tullepettHataridosReszfeladatokSzamaNemLeadott = await
+    findTullepettHataridokNemLeadott(req.query.name);
+
+    res.render('RendezvenyFeladatokSzervezo', {
+      rendezvenyek: rendezvenyek[0],
+      rendezvenySzervezok,
+      rendezvenyAzonosito: rendezvenyAzonosito[0],
+      hibaUzenet: uzenet,
+      felhasznaloSzerepkor,
+      reszfeladatok: reszfeladatok[0],
+      // osszesReszfeladatokSzama,
+      // megoldottReszfeladatokSzama,
+      // megoldatlanReszfeladatokSzama,
+      // tullepettHataridosReszfeladatokSzamaLeadott,
+      // tullepettHataridosReszfeladatokSzamaNemLeadott,
     });
   } catch (err) {
     console.error(err);

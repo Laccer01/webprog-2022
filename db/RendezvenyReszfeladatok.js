@@ -4,6 +4,10 @@ import {
   findRendezvenyNevvel,
 } from './redezvenyekRendezveny.js';
 
+import {
+  findSzervezoIDNevvel,
+} from './rendezvenyekSzervezo.js';
+
 export async function reszfeladatBeszuras(
   feladatNev,
   rendezvenyIDJelenlegi,
@@ -28,6 +32,17 @@ export async function findAllreszfeladatok(rendezvenyNev) {
   const osszesReszfeladat = await connectionPool.query(`SELECT *
     FROM RendezvenyReszfeladatok
     WHERE RendezvenyReszfeladatok.rendezvenyID = ?`, [rendezvenyID]);
+  return osszesReszfeladat;
+}
+
+export async function findAllreszfeladatokSzervezo(rendezvenyNev, szervezoNev) {
+  const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
+  const { szervezoID } = (await findSzervezoIDNevvel(szervezoNev))[0][0];
+  const osszesReszfeladat = await connectionPool.query(`SELECT *
+      FROM RendezvenyReszfeladatok
+      JOIN RendezvenyReszfeladatokSzervezok ON RendezvenyReszfeladatokSzervezok.reszfeladatID = RendezvenyReszfeladatok.reszfeladatID
+
+      WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatokSzervezok.szervezoID = ?`, [rendezvenyID, szervezoID]);
   return osszesReszfeladat;
 }
 
@@ -62,4 +77,56 @@ export async function findTullepettHataridokNemLeadott(rendezvenyNev) {
     [rendezvenyID, null, maiDatumFormat],
   );
   return osszesReszfeladat[0].length;
+}
+
+export async function reszfeladatLeadasa(reszfeladatID) {
+  const maiDatum = new Date();
+  const maiDatumFormatDatum = `${maiDatum.getFullYear()}-${maiDatum.getMonth() + 1}-${maiDatum.getDate()}`;
+  const maiDatumFormatIdo = `${maiDatum.getHours()}:${maiDatum.getMinutes()}:${maiDatum.getSeconds()}`;
+  const maiDatumFormatFull = `${maiDatumFormatDatum} ${maiDatumFormatIdo}`;
+
+  // console.log(maiDatumFormat);
+  const leadva =  await connectionPool.query(
+    `UPDATE RendezvenyReszfeladatok
+        SET RendezvenyReszfeladatok.reszfeladatLeadottDatum = ?, RendezvenyReszfeladatok.reszfeladatStatus = ?
+        WHERE RendezvenyReszfeladatok.reszfeladatID = ?`,
+    [maiDatumFormatFull, 'leadva', reszfeladatID],
+  );
+  return leadva;
+}
+
+export async function leadasiDatum(reszfeladatID) {
+  const leadasiDatumEredmeny =  await connectionPool.query(
+    `SELECT RendezvenyReszfeladatok.reszfeladatLeadottDatum
+        FROM RendezvenyReszfeladatok
+        WHERE RendezvenyReszfeladatok.reszfeladatID = ?`,
+    [reszfeladatID],
+  );
+  return leadasiDatumEredmeny[0][0].reszfeladatLeadottDatum;
+}
+
+export async function reszfeladatModositasiDatum(reszfeladatID) {
+  const maiDatum = new Date();
+  const maiDatumFormatDatum = `${maiDatum.getFullYear()}-${maiDatum.getMonth() + 1}-${maiDatum.getDate()}`;
+  const maiDatumFormatIdo = `${maiDatum.getHours()}:${maiDatum.getMinutes()}:${maiDatum.getSeconds()}`;
+  const maiDatumFormatFull = `${maiDatumFormatDatum} ${maiDatumFormatIdo}`;
+
+  // console.log(maiDatumFormat);
+  const leadva =  await connectionPool.query(
+    `UPDATE RendezvenyReszfeladatok
+        SET RendezvenyReszfeladatok.reszfeladatUtolsoModositas = ?
+        WHERE RendezvenyReszfeladatok.reszfeladatID = ?`,
+    [maiDatumFormatFull, reszfeladatID],
+  );
+  return leadva;
+}
+
+export async function modositottDatum(reszfeladatID) {
+  const leadasiDatumEredmeny =  await connectionPool.query(
+    `SELECT RendezvenyReszfeladatok.reszfeladatUtolsoModositas
+        FROM RendezvenyReszfeladatok
+        WHERE RendezvenyReszfeladatok.reszfeladatID = ?`,
+    [reszfeladatID],
+  );
+  return leadasiDatumEredmeny[0][0].reszfeladatUtolsoModositas;
 }

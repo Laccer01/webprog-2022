@@ -112,13 +112,9 @@ async function showMore(id) {
 async function showMoreReszfeladatok(rendezvenyID, reszfeladatID) {
 
   try {
-    // const result = await fetch(`/api/rendezveny/${id}`);
-    // const rendezveny = await result.json();
-
     const result1 = await fetch(`/api/szervezokRendezveny?rendezvenyID=${rendezvenyID}`);
     const szervezok = await result1.json();
     let result3, result4, csatlakozasVagyKilepesValtozo;
-    // document.getElementById(`content-text${id}`).innerText = rendezveny;
     
     result4 = await fetch(`/api/reszfeladatSzervezok?reszfeladatID=${reszfeladatID}`);
     reszfeladatSzervezokNevek = await result4.json();
@@ -132,7 +128,6 @@ async function showMoreReszfeladatok(rendezvenyID, reszfeladatID) {
       
       document.getElementById(`button-${reszfeladatID}-${szervezo}`).innerText = csatlakozasVagyKilepesValtozo;
 
-
       let hidden = document.getElementById(`p-${reszfeladatID}-${szervezo}`).getAttribute("hidden");
       if (hidden === "hidden")
         document.getElementById(`p-${reszfeladatID}-${szervezo}`).removeAttribute("hidden");
@@ -140,15 +135,40 @@ async function showMoreReszfeladatok(rendezvenyID, reszfeladatID) {
       let hidden2 = document.getElementById(`pFelsorolasBlokk-${reszfeladatID}`).getAttribute("hidden");
       if (hidden2 === "hidden")
         document.getElementById(`pFelsorolasBlokk-${reszfeladatID}`).removeAttribute("hidden");
-    
     }));
+ 
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
+async function leadasiDatum(reszfeladatID){
+  try {
+    let result1 = await fetch(`/api/leadasiDatum?reszfeladatID=${reszfeladatID}`);
+
+    leadottDatum = await result1.json();   
+
+    document.getElementById(`statusz-${reszfeladatID}`).innerText = 'Részfeladat státusza: leadva';
+    document.getElementById(`leadasiDatum-${reszfeladatID}`).innerText = 'Részfeladat leadott dátuma: ' + leadottDatum;
     
-
+    document.getElementById(`leadasiGomb-${reszfeladatID}`).setAttribute("hidden", true);
     
   } catch (error) {
     console.log(error);
   }
+}
 
+async function utolsoModositasDatum(reszfeladatID){
+  try {
+    let result1 = await fetch(`/api/ModositasiDatum?reszfeladatID=${reszfeladatID}`);
+
+    leadottDatum = await result1.json();   
+    console.log(leadottDatum);
+    document.getElementById(`utolsoModositasDatum-${reszfeladatID}`).innerText = 'Részfeladat utolsó módosítása:  ' + leadottDatum;
+    
+    
+  } catch (error) {
+    console.log(error); 
+  }
 }

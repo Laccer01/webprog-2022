@@ -37,6 +37,10 @@
                 <% if (felhasznaloSzerepkor === 'admin'){   %>
                     <a class="a" href="/rendezvenyBelepes?name=<%= rendezvenyek.nev %>">Rendezvényre belépés</a> <br>
                 <% } %>
+
+                <% if (felhasznaloSzerepkor === 'szervezo'){   %>
+                    <a class="a" href="/rendezvenyBelepesSzervezo?name=<%= rendezvenyek.nev %>">Rendezvényre belépés</a> <br>
+                <% } %>
             </nav>
             
         <% }) %>

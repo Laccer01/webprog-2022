@@ -19,6 +19,12 @@ import {
   reszfeladatSzervezokNevei,
 } from '../db/rendezvenyReszfeladatokSzervezo.js';
 
+import {
+  reszfeladatLeadasa, leadasiDatum,
+  reszfeladatModositasiDatum, modositottDatum,
+
+} from '../db/RendezvenyReszfeladatok.js';
+
 const router = express.Router();
 
 router.use(cookieParser());
@@ -190,6 +196,30 @@ router.get('/reszfeladatSzervezok', async (req, res) => {
   }
 });
 
+router.get('/leadasiDatum', async (req, res) => {
+  try {
+    await reszfeladatLeadasa(parseInt(req.query.reszfeladatID, 10));
+    const maiDatum = await leadasiDatum(parseInt(req.query.reszfeladatID, 10));
+    res.send(maiDatum);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+router.get('/ModositasiDatum', async (req, res) => {
+  try {
+    await reszfeladatModositasiDatum(parseInt(req.query.reszfeladatID, 10));
+    const maiDatum = await modositottDatum(parseInt(req.query.reszfeladatID, 10));
+    res.send(maiDatum);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
 router.use('/rendezveny/:id', express.json());
 router.use('/szervezok', express.json());
 router.use('/szervezoE', express.json());
@@ -198,5 +228,7 @@ router.use('/szervezokRendezveny', express.json());
 router.use('/szervezoEReszfeladaton', express.json());
 router.use('/szervezoCsatlakozasKilepesReszfeladat', express.json());
 router.use('/reszfeladatSzervezok', express.json());
+router.use('/leadasiDatum', express.json());
+// route.use('/ModositasiDatum', express.json());
 
 export default router;

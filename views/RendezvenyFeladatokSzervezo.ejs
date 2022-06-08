@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs', { title: 'Rendezvények adatai' }) %>
+
+<body>
+
+    <%- include('partials/login.ejs') %>
+
+    <h2> <%= hibaUzenet %></h2>
+
+
+    <h2>Rendezveny feladatok </h2>
+    <div class="list-container">
+        <% rendezvenyek.forEach((rendezvenyek) => { %>
+            <div class="list-item">
+                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
+                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
+                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
+                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
+                <div class="form-nev">Szervezők: 
+                    <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                        <%= rendezvenySzervezok.szervezoNev %>
+                        ,
+                    <% }) %>
+                </div> <br><br>
+               
+               
+                <nav id = "Masodik">
+                    <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a> <br><br><br><br>
+                </nav>
+            </div>
+        <% }) %>    
+    </div>
+
+    <p>A rendezvényhez kapcsolatos feladatok, amelyeken van feladatod:</p> 
+        <% reszfeladatok.forEach((reszfeladatok) => { %>
+            <div class="list-item">
+                <div class="form-nev">Részfeladat neve: <%= reszfeladatok.reszfeladatNeve %></div>
+                <div class="form-nev">Részfeladat leírása: <%= reszfeladatok.reszfeladatLeiras %></div>
+                <div class="form-kezdIdo">Részfeladat határidő kezdete: <%= reszfeladatok.reszfeladatHataridoKezdete %></div>
+                <div class="form-vegIdo">Részfeladat határidő vége: <%= reszfeladatok.reszfeladatHataridoVege %></div>
+                <div class="form-vegIdo">Részfeladat létrehozási ideje: <%= reszfeladatok.reszfeladatLetrehozasiIdo %></div>
+                <div class="form-vegIdo" id="utolsoModositasDatum-<%=reszfeladatok.reszfeladatID%>">Részfeladat utolsó módosítása: <%= reszfeladatok.reszfeladatUtolsoModositas %></div>
+                <div class="form-vegIdo" id="leadasiDatum-<%=reszfeladatok.reszfeladatID%>">Részfeladat leadott dátuma: <%= reszfeladatok.reszfeladatLeadottDatum %></div>
+                <div class="form-vegIdo" id="statusz-<%=reszfeladatok.reszfeladatID%>">Részfeladat státusza: <%= reszfeladatok.reszfeladatStatus %></div>
+                <br><br>
+                <div class="form-vegIdo"></div>
+                    <% if (reszfeladatok.reszfeladatStatus === 'aktiv'){ %>
+                        <button onclick='leadasiDatum("<%= reszfeladatok.reszfeladatID %>")' id="leadasiGomb-<%= reszfeladatok.reszfeladatID %>">Részfeladat leadása</button>
+                    <%}%>
+                
+                <br><br>
+                    <button onclick='utolsoModositasDatum("<%= reszfeladatok.reszfeladatID %>")'>Utolsó módosítás aktualizálása</button>
+                </div>
+
+            
+            </div>
+        <% }) %>       
+
+      
+    
+    
+</body>
+</html>
