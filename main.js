@@ -29,6 +29,18 @@ import {
 } from './db/rendezvenySzervezokRendezvenyeken.js';
 
 import {
+  reszfeladatBeszuras,
+  findAllreszfeladatok, findMegoldottReszfeladatok,
+  findTullepettHataridokLeadott, findTullepettHataridokNemLeadott
+} from './db/RendezvenyReszfeladatok.js';
+
+import {
+  insertSzervezokReszfeladat, findallSzervezoIDReszfeladatokon,
+  findallSzervezoNevReszfeladatokon, 
+
+} from './db/rendezvenyReszfeladatokSzervezo.js';
+
+import {
   checkJWT, validateJWT,
 } from './auth/middleware.js';
 
@@ -183,9 +195,21 @@ app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
   checkJWT(request, response);
   validateJWT(request, response);
 
-  console.log(request.fields);
+  let rendezvenyID;
+  const { rendezvenyNev } = request.query;
+  const rendezvenyIDPromise = findRendezvenyNevvel(rendezvenyNev);
+  const { reszfeladatNev } = request.fields;
+  const { reszfeladatKezdesiIdopont } = request.fields;
+  const { reszfeladatVegzesiIdopont } = request.fields;
+  const { reszfeladatSzervezok } = request.fields;
+  const { reszfeladatLeirasa } = request.fields;
 
-  response.redirect('/');
+  rendezvenyIDPromise.then((result) => {
+    // console.log(result[0][0].rendezvenyID)
+    const reszfeladatIDPromise = reszfeladatBeszuras(reszfeladatNev, result[0][0].rendezvenyID, reszfeladatLeirasa, reszfeladatKezdesiIdopont, reszfeladatVegzesiIdopont);
+    //  let reszfeladatIDPromise = findReszfeladat(reszfeladatNev, result[0][0].rendezvenyID, reszfeladatLeirasa, reszfeladatKezdesiIdopont, reszfeladatVegzesiIdopont);
+    response.redirect(`/rendezvenyBelepes?name=${rendezvenyNev}`);
+  });
 });
 
 app.get('/', async (req, res) => {
@@ -226,7 +250,7 @@ app.use('/kepek', async (req, res) => {
 
     if (res.locals.name !== '') {
       const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
-      console.log(felhasznaloSzerepkor);
+      // console.log(felhasznaloSzerepkor);
 
       res.render('RendezvenyReszletei', {
         rendezvenyek: rendezvenyek[0],
@@ -246,6 +270,20 @@ app.use('/kepek', async (req, res) => {
   }
 });
 
+app.use('/reszfeladatLetrehozasa', async (req, res) => {
+  // console.log(req.query)
+  const { rendezvenyNev } = req.query;
+  try {
+    res.render('RendezvenyekReszfeladatokLetrehozasa', {
+      rendezvenyNev,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
 app.use('/rendezvenyBelepes', async (req, res) => {
   try {
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
@@ -257,7 +295,17 @@ app.use('/rendezvenyBelepes', async (req, res) => {
     validateJWT(req, res);
 
     const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
-    console.log(felhasznaloSzerepkor);
+    const reszfeladatok = await findAllreszfeladatok(req.query.name);
+    // const reszfeladatokSzervezokID = await findallSzervezoIDReszfeladatokon(reszfeladatok[0]);
+    // const reszfeladatokSzervezokNevek = await findallSzervezoNevReszfeladatokon(reszfeladatokSzervezokID);
+
+    // console.log(reszfeladatok[0].length)
+    const osszesReszfeladatokSzama = reszfeladatok[0].length
+    const megoldottReszfeladatokSzama = await findMegoldottReszfeladatok(req.query.name)
+    const megoldatlanReszfeladatokSzama = osszesReszfeladatokSzama - megoldottReszfeladatokSzama
+    const tullepettHataridosReszfeladatokSzamaLeadott = await findTullepettHataridokLeadott (req.query.name)
+    const tullepettHataridosReszfeladatokSzamaNemLeadott = await findTullepettHataridokNemLeadott (req.query.name)
+
 
     res.render('RendezvenyFeladatok', {
       rendezvenyek: rendezvenyek[0],
@@ -265,6 +313,12 @@ app.use('/rendezvenyBelepes', async (req, res) => {
       rendezvenyAzonosito: rendezvenyAzonosito[0],
       hibaUzenet: uzenet,
       felhasznaloSzerepkor,
+      reszfeladatok: reszfeladatok[0],
+      osszesReszfeladatokSzama,
+      megoldottReszfeladatokSzama,
+      megoldatlanReszfeladatokSzama,
+      tullepettHataridosReszfeladatokSzamaLeadott,
+      tullepettHataridosReszfeladatokSzamaNemLeadott,
     });
   } catch (err) {
     console.error(err);

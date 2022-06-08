@@ -1,0 +1,54 @@
+<!--Név: Velican László
+    Azonosító: vlim2099
+    Labor: lab2
+    Sorszám: 10  -->
+
+    <!DOCTYPE html>
+    <html lang="hu">
+        <head>
+            <meta charset='utf-8'>
+            <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+            <title>Rezdezvenyek listazva</title>
+            <meta name='viewport' content='width=device-width, initial-scale=1'>
+            <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+            <script src='/script.js'></script>
+        </head>
+    
+        <body>
+            <form action="/lekezelRendezvenyReszfeladatokLetrehozasa?rendezvenyNev=<%=rendezvenyNev%>" onsubmit="required()" method="POST" id="RendezvenyReszfeadatok" name = "RendezvenyReszfeadatok" enctype="multipart/form-data">
+                          
+                
+                <h1>Részfeladat létrehozása</h1><br>                
+                
+                <label for="reszfeladatNev">Részfeladat neve:</label>                                             
+                <input type="text" name="reszfeladatNev" id="reszfeladatNev" value=""/> <br>
+    
+                <label for="reszfeladatKezdesiIdopont">Részfeladat kezdésének időpontja:</label>                                         
+                <input type="date" name="reszfeladatKezdesiIdopont" id="reszfeladatKezdesiIdopont" /><br>
+
+                <label for="reszfeladatVegzesiIdopont">Részfeladat végének időpontja:</label>                              
+                <input type="date" name="reszfeladatVegzesiIdopont" id="reszfeladatVegzesiIdopont" /><br>
+
+                <label for="reszfeladatLeirasa">Részfeladat leírása:</label>
+                <textarea  name="reszfeladatLeirasa" id="reszfeladatLeirasa" value="">
+
+
+                </textarea>
+                <br>
+
+
+                
+                <input type="submit" value="Részfeladat létrehozása" id="form-submit"/><br>
+    
+                <div>
+                    <span id="errorBekuldes1"></span>
+                </div>
+
+            </form>
+    
+
+    
+        </body>
+    
+    </html>
+    

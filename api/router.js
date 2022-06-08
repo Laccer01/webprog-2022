@@ -5,13 +5,19 @@ import cookieParser from 'cookie-parser';
 import { secret } from '../config.js';
 
 import {
-  findRendezvenySzervezokNevei,
+  findRendezvenySzervezokNevei, findRendezvenySzervezokNeveiRendezvenyrol,
+  findSzervezoIDNevvel
 
 } from '../db/rendezvenyekSzervezo.js';
 
 import {
   findSzervezoRendezvenyken, insertSzervezok,
 } from '../db/rendezvenySzervezokRendezvenyeken.js';
+
+import {
+  findReszfeladatonDolgozik, insertSzervezokReszfeladatokra,
+  reszfeladatSzervezokNevei
+} from '../db/rendezvenyReszfeladatokSzervezo.js'
 
 const router = express.Router();
 
@@ -100,9 +106,96 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
   }
 });
 
+
+
+
+
+
+
+
+
+router.get('/szervezokRendezveny', async (req, res) => {
+  try {
+    const lista = [];
+    const rendezvenySzervezokNevei = await findRendezvenySzervezokNeveiRendezvenyrol(parseInt(req.query.rendezvenyID, 10));
+
+    rendezvenySzervezokNevei.forEach((szervezok) => {
+      lista.push(szervezok.szervezoNev);
+    });
+
+    res.send(lista);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+router.get('/szervezoEReszfeladaton', async (req, res) => {
+  try {
+    let csatlakozasVagyKilepes;
+
+    const szervezoID = (await findSzervezoIDNevvel(req.query.name))[0][0].szervezoID
+    const reszfeladatonSzervezo = await findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID,10), szervezoID)
+    if (reszfeladatonSzervezo === undefined) csatlakozasVagyKilepes = 'hozzáadás';
+    else csatlakozasVagyKilepes = 'eltávolítás';
+
+    res.send(JSON.stringify(csatlakozasVagyKilepes));
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
+  try {
+    let csatlakozasVagyKilepes,
+      csatlakozasVagyKilepesValasz = '';
+      const szervezoID = (await findSzervezoIDNevvel(req.query.name))[0][0].szervezoID
+      const reszfeladatonSzervezo = await findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID,10), szervezoID)
+    if (reszfeladatonSzervezo === undefined) {
+      csatlakozasVagyKilepes = 'hozzaadas'
+      csatlakozasVagyKilepesValasz = 'eltavolitas';
+    } else {
+      csatlakozasVagyKilepes = 'eltavolitas'
+      csatlakozasVagyKilepesValasz = 'hozzaadas';
+    }
+
+    await insertSzervezokReszfeladatokra(csatlakozasVagyKilepes, szervezoID, parseInt(req.query.reszfeladatID,10));
+    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
+
+router.get('/reszfeladatSzervezok', async (req, res) => {
+  try {
+    const lista = [];
+    const rendezvenySzervezokNevei = await reszfeladatSzervezokNevei(parseInt(req.query.reszfeladatID,10));
+
+    rendezvenySzervezokNevei.forEach((szervezok) => {
+      lista.push(szervezok.szervezoNev);
+    });
+
+    res.send(lista);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.send('Error');
+  }
+});
+
 router.use('/rendezveny/:id', express.json());
 router.use('/szervezok', express.json());
 router.use('/szervezoE', express.json());
 router.use('/szervezoCsatlakozasKilepes', express.json());
+router.use('/szervezokRendezveny', express.json());
+router.use('/szervezoEReszfeladaton', express.json());
+router.use('/szervezoCsatlakozasKilepesReszfeladat', express.json());
+router.use('/reszfeladatSzervezok', express.json());
 
 export default router;

@@ -71,7 +71,7 @@ CREATE TABLE RendezvenyReszfeladatok
 	reszfeladatID int primary key auto_increment,
     rendezvenyID INT,
     reszfeladatNeve VARCHAR (30),
-    reszfeladatLeiras VARCHAR(100),
+    reszfeladatLeiras VARCHAR(500),
     reszfeladatHataridoKezdete DATE,
     reszfeladatHataridoVege DATE,
     reszfeladatLetrehozasiIdo DATE,
@@ -99,15 +99,19 @@ FLUSH PRIVILEGES;
 
 SELECT * FROM Rendezveny;
 
-	SELECT * FROM Szervezo;
+SELECT * FROM Szervezo;
 
 SELECT * FROM RendezvenyKepek;
 
 SELECT * FROM RendezokRendezvenyeken;
--- DELETE FROM Rendezveny
+
+SELECT * FROM RendezvenyReszfeladatok;
+
+SELECT * FROM RendezvenyReszfeladatokSzervezok;
+
+insert into RendezvenyReszfeladatokSzervezok values (1,1,3),  (2,1,5);
+-- SELECT * FROM 
 
 -- USE Rendezveny
 -- SELECT * FROM Szervezok
 
-INSERT INTO Szervezo
-VALUES (default, 'user1', 'felhasznalo', 'hey'), (default, 'user2', 'felhasznalo', 'hey');

@@ -24,24 +24,54 @@
                         <%= rendezvenySzervezok.szervezoNev %>
                         ,
                     <% }) %>
-                </div>
+                </div> <br><br>
+
+               
+                <div class="form-nev">Részfeladatok száma: <%= osszesReszfeladatokSzama %> </div>
+                <div class="form-nev">Megoldott részfeladatok száma: <%= megoldottReszfeladatokSzama %> </div>
+                <div class="form-nev">Megoldatlan részfeladatok száma: <%= megoldatlanReszfeladatokSzama %> </div>    
+                <div class="form-nev">Túllépett határidős leadott részfeladatok száma: <%= tullepettHataridosReszfeladatokSzamaLeadott %> </div>  
+                <div class="form-nev">Túllépett határidős nem leadott részfeladatok száma: <%= tullepettHataridosReszfeladatokSzamaNemLeadott %> </div> 
+
                 <nav id = "Masodik">
                     <a class="a" href="/kepek?name=<%= rendezvenyek.nev %>">Rendezvény részletei</a> <br><br><br><br>
-                    <a class="a" href="/RendezvenyekReszfeladatokLetrehozasa.html">Részfeladat létrehozása</a> 
+                    <a class="a" href="/reszfeladatLetrehozasa?rendezvenyNev=<%= rendezvenyek.nev %>">Részfeladat létrehozása</a> 
                 </nav>
             </div>
         <% }) %>    
-        
-        <!-- <p>A rendezvényhez kapcsolatos feladatok:</p>
-        <% rendezvenyek.forEach((rendezvenyek) => { %>
+
+
+
+        <p>A rendezvényhez kapcsolatos feladatok:</p> 
+        <% reszfeladatok.forEach((reszfeladatok) => { %>
             <div class="list-item">
-                <div class="form-nev">Rendezvény neve: <%= rendezvenyek.nev %></div>
-                <div class="form-kezdIdo">Rendezvény kezdete: <%= rendezvenyek.kezdesiIdo %></div>
-                <div class="form-vegIdo">Rendezvény vége: <%= rendezvenyek.vegzesiIdo %></div>
-                <div class="form-helyszin">Rendezvény helyszíne: <%= rendezvenyek.helyszin %></div>
-               
+                <div class="form-nev">Részfeladat neve: <%= reszfeladatok.reszfeladatNeve %></div>
+                <div class="form-nev">Részfeladat leírása: <%= reszfeladatok.reszfeladatLeiras %></div>
+                <div class="form-kezdIdo">Részfeladat határidő kezdete: <%= reszfeladatok.reszfeladatHataridoKezdete %></div>
+                <div class="form-vegIdo">Részfeladat határidő vége: <%= reszfeladatok.reszfeladatHataridoVege %></div>
+                <div class="form-vegIdo">Részfeladat létrehozási ideje: <%= reszfeladatok.reszfeladatLetrehozasiIdo %></div>
+                <div class="form-vegIdo">Részfeladat utolsó módosítása: <%= reszfeladatok.reszfeladatUtolsoModositas %></div>
+                <div class="form-vegIdo">Részfeladat leadott dátuma : <%= reszfeladatok.reszfeladatLeadottDatum %></div>
+                <div class="form-vegIdo">Részfeladat státusza: <%= reszfeladatok.reszfeladatStatus %></div>
+                <p>Felelős személyek módósítása/megtekintése: <button id="reszfeladatSzervezoHozzadasa" onclick='showMoreReszfeladatok("<%=rendezvenyek[0].rendezvenyID%>","<%=reszfeladatok.reszfeladatID%>")'>
+                    Click!</button>
+                </p>
+                <p hidden = "hidden" id="pFelsorolasBlokk-<%=reszfeladatok.reszfeladatID%>">Részfeladatért felelős szervezők:
+                    <p id="pFelsorolas-<%=reszfeladatok.reszfeladatID%>">
+                    </p>
+                </p>
+
+                <% rendezvenySzervezok.forEach((rendezvenySzervezok) => { %>
+                    <div class = "form-nemLatszik">
+                        <p hidden = "hidden" id="p-<%=reszfeladatok.reszfeladatID%>-<%=rendezvenySzervezok.szervezoNev%>"><%=rendezvenySzervezok.szervezoNev%> : 
+                            <button id="button-<%=reszfeladatok.reszfeladatID%>-<%=rendezvenySzervezok.szervezoNev%>" 
+                                    onclick='csatlakozasVagyKilepesReszfeladatok("<%= reszfeladatok.reszfeladatID %>", "<%= rendezvenySzervezok.szervezoNev %>")'></button> 
+                        </p>
+                    </div>
+                <% }) %>
+                </div> <br><br>
             </div>
-        <% }) %>        -->
+        <% }) %>       
     
     
 </body>
