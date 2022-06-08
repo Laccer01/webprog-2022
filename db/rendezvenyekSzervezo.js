@@ -33,12 +33,10 @@ export async function findRendezvenySzervezokNevei() {
 }
 
 export async function findRendezvenySzervezokNeveiRendezvenyrol(rendezvenyID) {
-  let szervezok = await connectionPool.query(
-    `select DISTINCT Szervezo.szervezoNev from Szervezo 
+  const szervezok = await connectionPool.query(`select DISTINCT Szervezo.szervezoNev from Szervezo 
     JOIN RendezokRendezvenyeken ON Szervezo.szervezoID = RendezokRendezvenyeken.szervezoID
-    Where Szervezo.szerepkor = 'szervezo' AND RendezokRendezvenyeken.rendezvenyID = ?` , [rendezvenyID]
-  );
-  return szervezok[0]
+    Where Szervezo.szerepkor = 'szervezo' AND RendezokRendezvenyeken.rendezvenyID = ?`, [rendezvenyID]);
+  return szervezok[0];
 }
 
 export async function findAllSzervezoFromRendezveny(rendezvenyID) {

@@ -6,7 +6,7 @@ import { secret } from '../config.js';
 
 import {
   findRendezvenySzervezokNevei, findRendezvenySzervezokNeveiRendezvenyrol,
-  findSzervezoIDNevvel
+  findSzervezoIDNevvel,
 
 } from '../db/rendezvenyekSzervezo.js';
 
@@ -16,8 +16,8 @@ import {
 
 import {
   findReszfeladatonDolgozik, insertSzervezokReszfeladatokra,
-  reszfeladatSzervezokNevei
-} from '../db/rendezvenyReszfeladatokSzervezo.js'
+  reszfeladatSzervezokNevei,
+} from '../db/rendezvenyReszfeladatokSzervezo.js';
 
 const router = express.Router();
 
@@ -106,18 +106,12 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
 router.get('/szervezokRendezveny', async (req, res) => {
   try {
     const lista = [];
-    const rendezvenySzervezokNevei = await findRendezvenySzervezokNeveiRendezvenyrol(parseInt(req.query.rendezvenyID, 10));
+    const rendezvenySzervezokNevei = await findRendezvenySzervezokNeveiRendezvenyrol(
+      parseInt(req.query.rendezvenyID, 10),
+    );
 
     rendezvenySzervezokNevei.forEach((szervezok) => {
       lista.push(szervezok.szervezoNev);
@@ -135,8 +129,9 @@ router.get('/szervezoEReszfeladaton', async (req, res) => {
   try {
     let csatlakozasVagyKilepes;
 
-    const szervezoID = (await findSzervezoIDNevvel(req.query.name))[0][0].szervezoID
-    const reszfeladatonSzervezo = await findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID,10), szervezoID)
+    const { szervezoID } = (await findSzervezoIDNevvel(req.query.name))[0][0];
+    const reszfeladatonSzervezo = await
+    findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID, 10), szervezoID);
     if (reszfeladatonSzervezo === undefined) csatlakozasVagyKilepes = 'hozzáadás';
     else csatlakozasVagyKilepes = 'eltávolítás';
 
@@ -152,17 +147,22 @@ router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
   try {
     let csatlakozasVagyKilepes,
       csatlakozasVagyKilepesValasz = '';
-      const szervezoID = (await findSzervezoIDNevvel(req.query.name))[0][0].szervezoID
-      const reszfeladatonSzervezo = await findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID,10), szervezoID)
+    const { szervezoID } = (await findSzervezoIDNevvel(req.query.name))[0][0];
+    const reszfeladatonSzervezo = await
+    findReszfeladatonDolgozik(parseInt(req.query.reszfeladatID, 10), szervezoID);
     if (reszfeladatonSzervezo === undefined) {
-      csatlakozasVagyKilepes = 'hozzaadas'
+      csatlakozasVagyKilepes = 'hozzaadas';
       csatlakozasVagyKilepesValasz = 'eltavolitas';
     } else {
-      csatlakozasVagyKilepes = 'eltavolitas'
+      csatlakozasVagyKilepes = 'eltavolitas';
       csatlakozasVagyKilepesValasz = 'hozzaadas';
     }
 
-    await insertSzervezokReszfeladatokra(csatlakozasVagyKilepes, szervezoID, parseInt(req.query.reszfeladatID,10));
+    await insertSzervezokReszfeladatokra(
+      csatlakozasVagyKilepes,
+      szervezoID,
+      parseInt(req.query.reszfeladatID, 10),
+    );
     res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
   } catch (err) {
     console.error(err);
@@ -171,11 +171,12 @@ router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
   }
 });
 
-
 router.get('/reszfeladatSzervezok', async (req, res) => {
   try {
     const lista = [];
-    const rendezvenySzervezokNevei = await reszfeladatSzervezokNevei(parseInt(req.query.reszfeladatID,10));
+    const rendezvenySzervezokNevei = await reszfeladatSzervezokNevei(
+      parseInt(req.query.reszfeladatID, 10),
+    );
 
     rendezvenySzervezokNevei.forEach((szervezok) => {
       lista.push(szervezok.szervezoNev);

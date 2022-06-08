@@ -57,4 +57,3 @@ export async function findSzervezo(nev, rendezvenyId) {
         from RendezokRendezvenyeken
         Where RendezokRendezvenyeken.szervezoID = ? And RendezokRendezvenyeken.rendezvenyID = ?`, [szervezoID[0][0].szervezoID, rendezvenyId]);
 }
-
