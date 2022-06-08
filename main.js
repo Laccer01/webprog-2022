@@ -31,14 +31,8 @@ import {
 import {
   reszfeladatBeszuras,
   findAllreszfeladatok, findMegoldottReszfeladatok,
-  findTullepettHataridokLeadott, findTullepettHataridokNemLeadott
+  findTullepettHataridokLeadott, findTullepettHataridokNemLeadott,
 } from './db/RendezvenyReszfeladatok.js';
-
-import {
-  insertSzervezokReszfeladat, findallSzervezoIDReszfeladatokon,
-  findallSzervezoNevReszfeladatokon, 
-
-} from './db/rendezvenyReszfeladatokSzervezo.js';
 
 import {
   checkJWT, validateJWT,
@@ -195,19 +189,21 @@ app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
   checkJWT(request, response);
   validateJWT(request, response);
 
-  let rendezvenyID;
   const { rendezvenyNev } = request.query;
   const rendezvenyIDPromise = findRendezvenyNevvel(rendezvenyNev);
   const { reszfeladatNev } = request.fields;
   const { reszfeladatKezdesiIdopont } = request.fields;
   const { reszfeladatVegzesiIdopont } = request.fields;
-  const { reszfeladatSzervezok } = request.fields;
   const { reszfeladatLeirasa } = request.fields;
 
   rendezvenyIDPromise.then((result) => {
-    // console.log(result[0][0].rendezvenyID)
-    const reszfeladatIDPromise = reszfeladatBeszuras(reszfeladatNev, result[0][0].rendezvenyID, reszfeladatLeirasa, reszfeladatKezdesiIdopont, reszfeladatVegzesiIdopont);
-    //  let reszfeladatIDPromise = findReszfeladat(reszfeladatNev, result[0][0].rendezvenyID, reszfeladatLeirasa, reszfeladatKezdesiIdopont, reszfeladatVegzesiIdopont);
+    reszfeladatBeszuras(
+      reszfeladatNev,
+      result[0][0].rendezvenyID,
+      reszfeladatLeirasa,
+      reszfeladatKezdesiIdopont,
+      reszfeladatVegzesiIdopont,
+    );
     response.redirect(`/rendezvenyBelepes?name=${rendezvenyNev}`);
   });
 });
@@ -296,16 +292,14 @@ app.use('/rendezvenyBelepes', async (req, res) => {
 
     const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
     const reszfeladatok = await findAllreszfeladatok(req.query.name);
-    // const reszfeladatokSzervezokID = await findallSzervezoIDReszfeladatokon(reszfeladatok[0]);
-    // const reszfeladatokSzervezokNevek = await findallSzervezoNevReszfeladatokon(reszfeladatokSzervezokID);
 
-    // console.log(reszfeladatok[0].length)
-    const osszesReszfeladatokSzama = reszfeladatok[0].length
-    const megoldottReszfeladatokSzama = await findMegoldottReszfeladatok(req.query.name)
-    const megoldatlanReszfeladatokSzama = osszesReszfeladatokSzama - megoldottReszfeladatokSzama
-    const tullepettHataridosReszfeladatokSzamaLeadott = await findTullepettHataridokLeadott (req.query.name)
-    const tullepettHataridosReszfeladatokSzamaNemLeadott = await findTullepettHataridokNemLeadott (req.query.name)
-
+    const osszesReszfeladatokSzama = reszfeladatok[0].length;
+    const megoldottReszfeladatokSzama = await findMegoldottReszfeladatok(req.query.name);
+    const megoldatlanReszfeladatokSzama = osszesReszfeladatokSzama - megoldottReszfeladatokSzama;
+    const tullepettHataridosReszfeladatokSzamaLeadott = await
+    findTullepettHataridokLeadott(req.query.name);
+    const tullepettHataridosReszfeladatokSzamaNemLeadott = await
+    findTullepettHataridokNemLeadott(req.query.name);
 
     res.render('RendezvenyFeladatok', {
       rendezvenyek: rendezvenyek[0],
