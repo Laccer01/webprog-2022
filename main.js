@@ -59,6 +59,11 @@ if (!existsSync(uploadDir)) {
 
 app.use(eformidable({ uploadDir }));
 
+app.use(cookieParser());
+
+app.use(checkJWT);
+app.use(validateJWT);
+
 app.use('/auth', authrouter);
 app.use('/api', apiRouter);
 app.use(morgan('tiny'));
@@ -66,7 +71,6 @@ app.use(express.static('static/'));
 app.use(express.static(join(process.cwd(), 'static')));
 
 app.set('view engine', 'ejs');
-app.use(cookieParser());
 
 // bevezet egy új eseményt, beszúrja a táblába
 app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
@@ -115,9 +119,6 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
 app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
   const feldolgozandoAdatok = [];
 
-  checkJWT(request, response);
-  validateJWT(request, response);
-
   feldolgozandoAdatok.push(request.fields['form-rendezvenySzervezoValasztas']);
   feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
 
@@ -148,9 +149,6 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
 
 // hozzáad egy képet egy rendezvényhez
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
-  checkJWT(request, response);
-  validateJWT(request, response);
-
   const feldolgozandoAdatok = [];
   feldolgozandoAdatok.push(request.files['form-rendezvenyFenykep']);
   feldolgozandoAdatok.push(request.fields['form-rendezvenyID']);
@@ -191,9 +189,6 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
 
 // létrehoz egy új rendezvényt
 app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
-  checkJWT(request, response);
-  validateJWT(request, response);
-
   const { rendezvenyNev } = request.query;
   const rendezvenyIDPromise = findRendezvenyNevvel(rendezvenyNev);
   const { reszfeladatNev } = request.fields;
@@ -219,8 +214,6 @@ app.get('/', async (req, res) => {
     const rendezvenyek = await findAllRendezveny();
     const rendezvenySzervezok = await findRendezvenySzervezokNevei();
     let felhasznaloSzerepkor;
-    checkJWT(req, res);
-    validateJWT(req, res);
 
     if (res.locals.name !== '') {
       felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
@@ -247,9 +240,6 @@ app.use('/kepek', async (req, res) => {
     const rendezvenyek = await findRendezvenyWithId(rendezvenyAzonosito[0][0].rendezvenyID);
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const { uzenet } = req.query;
-
-    checkJWT(req, res);
-    validateJWT(req, res);
 
     if (res.locals.name !== '') {
       const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
@@ -294,9 +284,6 @@ app.use('/rendezvenyBelepes', async (req, res) => {
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const { uzenet } = req.query;
 
-    checkJWT(req, res);
-    validateJWT(req, res);
-
     const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
     const reszfeladatok = await findAllreszfeladatok(req.query.name);
 
@@ -336,9 +323,6 @@ app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
     const rendezvenySzervezok = await findAllSzervezoFromRendezvenyek(rendezvenyek);
     const { uzenet } = req.query;
 
-    checkJWT(req, res);
-    validateJWT(req, res);
-
     const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
     const reszfeladatok = await findAllreszfeladatokSzervezo(req.query.name, res.locals.name);
     const osszesReszfeladatok = await osszesReszfeladat();
@@ -372,9 +356,6 @@ app.get('/csatlakozas', async (req, res) => {
   try {
     const { uzenet } = req.query;
     const rendezvenyIDk = await findRendezvenyIdk();
-
-    checkJWT(req, res);
-    validateJWT(req, res);
 
     res.render('RendezvenySzervezoCsatlakozas', {
       rendezvenyIDk: rendezvenyIDk[0],

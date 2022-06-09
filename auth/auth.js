@@ -47,7 +47,6 @@ router.post('/RegisztracioFeldolgozas', (request, response) => {
 
   const megfeleloFelhasznaloo = letezikFelhasznalo(felhasznalonev);
   megfeleloFelhasznaloo.then((result) => {
-    console.log(result);
     if (result) {
       response.status(401);
       response.send('Már létezik ilyen felhasználó');
