@@ -13,10 +13,14 @@
 
     <form method="POST" action="/auth/BejelentkezesFeldolgozas" >      
         <label for="inputLoginDataName">Felhasználónév:</label>  
-        <p><input type="text" name="inputLoginDataName" id="inputLoginDataName"/><br> </p>
+        <p><input type="text" name="inputLoginDataName" id="inputLoginDataName" required="required" pattern="^[A-Z]{1}[a-z]{1,}$"
+            title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/><br> </p>
 
         <label for="inputLoginDataPasswd">Kód:</label>  
-        <input type="text" name="inputLoginDataPasswd" id="inputLoginDataPasswd"/><br><br>
+        <input type="password" name="inputLoginDataPasswd" id="inputLoginDataPasswd" required="required" pattern="[A-Za-z0-9]{1,}"
+        title="Csak betűtet és számokat tartalmazhat"/>
+        <input type="checkbox" onclick="jelszoFelfedeseLogin()">👁
+        <br><br>
 
         <p><input type="submit" value="Belépés!" /></p>
         

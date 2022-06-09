@@ -13,11 +13,15 @@
 
     <form method="POST" action="/auth/RegisztracioFeldolgozas" >      
         <label for="inputRegisterDataName">Felhasználónév:</label>  
-        <p><input type="text" name="inputRegisterDataName" id="inputRegisterDataName"/><br> </p>
+        <p><input type="text" name="inputRegisterDataName" id="inputRegisterDataName" required="required" pattern="^[A-Z]{1}[a-z]{1,}$"
+            title="Csak betűtet tartalmazhat, az első nagybetű, a többi kisbetű"/><br> </p>
 
         <label for="inputRegisterDataPasswd">Kód:</label>  
-        <input type="text" name="inputRegisterDataPasswd" id="inputRegisterDataPasswd"/><br><br>
-
+        <input type="password" name="inputRegisterDataPasswd" id="inputRegisterDataPasswd" required="required" pattern="[A-Za-z0-9]{1,}"
+            title="Csak betűtet és számokat tartalmazhat"/>
+        <input type="checkbox" onclick="jelszoFelfedeseRegister()">👁
+        <br><br>
+        
         <label for="inputRegisterDataType">Szerepkör:</label>  
 
         <select id="inputRegisterDataType" name="inputRegisterDataType">

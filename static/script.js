@@ -176,3 +176,22 @@ async function utolsoModositasDatum(reszfeladatID){
     console.log(error); 
   }
 }
+
+//lathato lesz a jelszo vagy el resz rejtve
+function jelszoFelfedeseRegister () {
+  var x = document.getElementById("inputRegisterDataPasswd");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+function jelszoFelfedeseLogin () {
+  var x = document.getElementById("inputLoginDataPasswd");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}

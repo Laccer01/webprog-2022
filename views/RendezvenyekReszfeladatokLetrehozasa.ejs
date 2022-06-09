@@ -21,16 +21,20 @@
                 <h1>Részfeladat létrehozása</h1><br>                
                 
                 <label for="reszfeladatNev">Részfeladat neve:</label>                                             
-                <input type="text" name="reszfeladatNev" id="reszfeladatNev" value=""/> <br>
+                <input type="text" name="reszfeladatNev" id="reszfeladatNev" value="" required="required" pattern="[A-Za-z0-9]{1,}"
+                title="Csak betűtet és számokat tartalmazhat"/> <br>
     
                 <label for="reszfeladatKezdesiIdopont">Részfeladat kezdésének időpontja:</label>                                         
-                <input type="date" name="reszfeladatKezdesiIdopont" id="reszfeladatKezdesiIdopont" /><br>
+                <input type="date" name="reszfeladatKezdesiIdopont" id="reszfeladatKezdesiIdopont" required="required" pattern="\d{4}-\d{2}-\d{2}"
+                title="Kérlek töltsd ki ezt a mezőt"/><br>
 
                 <label for="reszfeladatVegzesiIdopont">Részfeladat végének időpontja:</label>                              
-                <input type="date" name="reszfeladatVegzesiIdopont" id="reszfeladatVegzesiIdopont" /><br>
+                <input type="date" name="reszfeladatVegzesiIdopont" id="reszfeladatVegzesiIdopont" required="required" pattern="\d{4}-\d{2}-\d{2}"
+                title="Kérlek töltsd ki ezt a mezőt"/><br>
 
                 <label for="reszfeladatLeirasa">Részfeladat leírása:</label>
-                <textarea  name="reszfeladatLeirasa" id="reszfeladatLeirasa" value="">
+                <textarea  name="reszfeladatLeirasa" id="reszfeladatLeirasa" value='' required="required" pattern="[A-Za-z0-9]{1,}"
+                title="Csak betűtet és számokat tartalmazhat">
 
 
                 </textarea>
