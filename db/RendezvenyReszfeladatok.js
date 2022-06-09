@@ -52,7 +52,7 @@ export async function findMegoldottReszfeladatok(rendezvenyNev) {
   const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
   const osszesReszfeladatEredmeny = await connectionPool.query(`SELECT *
     FROM RendezvenyReszfeladatok
-    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ?`, [rendezvenyID, null]);
+    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatStatus != ?`, [rendezvenyID, 'aktiv']);
   return osszesReszfeladatEredmeny[0].length;
 }
 
@@ -63,8 +63,8 @@ export async function findTullepettHataridokLeadott(rendezvenyNev) {
   const osszesReszfeladatEredmeny = await connectionPool.query(
     `SELECT *
     FROM RendezvenyReszfeladatok
-    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum > RendezvenyReszfeladatok.reszfeladatHataridoVege`,
-    [rendezvenyID, null],
+    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatStatus != ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum > RendezvenyReszfeladatok.reszfeladatHataridoVege`,
+    [rendezvenyID, 'aktiv'],
   );
   return osszesReszfeladatEredmeny[0].length;
 }
@@ -79,8 +79,8 @@ export async function findTullepettHataridokNemLeadott(rendezvenyNev) {
   const osszesReszfeladatEredmeny = await connectionPool.query(
     `SELECT *
     FROM RendezvenyReszfeladatok
-    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ? AND ?> RendezvenyReszfeladatok.reszfeladatHataridoVege`,
-    [rendezvenyID, null, maiDatumFormat],
+    WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatStatus = ? AND ?> RendezvenyReszfeladatok.reszfeladatHataridoVege`,
+    [rendezvenyID, 'aktiv', maiDatumFormat],
   );
   return osszesReszfeladatEredmeny[0].length;
 }
