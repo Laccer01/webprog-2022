@@ -32,7 +32,7 @@ export function findAllRendezvenyKepek() {
   return connectionPool.query('select * from RendezvenyKepek');
 }
 
-// meghatározza egy rendezvény összes kéepet
+// meghatározza egy rendezvény összes képet
 export async function findAllRendezvenyKepei(rendezvenyNev) {
   const rendezvenyIDjelenlegiDic =  await findRendezvenyNevvel(rendezvenyNev);
 

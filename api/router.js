@@ -39,7 +39,7 @@ router.get('/rendezveny/:id', async (req, res) => {
       szervezokLista += `${szervezok.szervezoNev}, `;
     });
 
-    res.send(JSON.stringify(szervezokLista));
+    res.json(szervezokLista);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -76,7 +76,7 @@ router.get('/szervezoE', async (req, res) => {
     if (szervezo[0][0] === undefined) csatlakozasVagyKilepes = 'csatlakozas';
     else csatlakozasVagyKilepes = 'kilepes';
 
-    res.send(JSON.stringify(csatlakozasVagyKilepes));
+    res.json(csatlakozasVagyKilepes);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -110,7 +110,7 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
       await insertSzervezok(csatlakozasVagyKilepes, req.query.name, req.query.id, felhasznaloNev);
     }
 
-    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
+    res.json(csatlakozasVagyKilepesValasz);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -149,7 +149,7 @@ router.get('/szervezoEReszfeladaton', async (req, res) => {
     if (reszfeladatonSzervezo === undefined) csatlakozasVagyKilepes = 'hozzáadás';
     else csatlakozasVagyKilepes = 'eltávolítás';
 
-    res.send(JSON.stringify(csatlakozasVagyKilepes));
+    res.json(csatlakozasVagyKilepes);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -178,7 +178,7 @@ router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
       szervezoID,
       parseInt(req.query.reszfeladatID, 10),
     );
-    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
+    res.json(csatlakozasVagyKilepesValasz);
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -224,7 +224,7 @@ router.get('/ModositasiDatum', async (req, res) => {
   try {
     await reszfeladatModositasiDatum(parseInt(req.query.reszfeladatID, 10));
     const maiDatum = await modositottDatum(parseInt(req.query.reszfeladatID, 10));
-    res.send(JSON.stringify(maiDatum));
+    res.json(maiDatum);
   } catch (err) {
     console.error(err);
     res.status(500);
