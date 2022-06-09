@@ -29,7 +29,8 @@ const router = express.Router();
 
 router.use(cookieParser());
 
-router.get('/rendezveny/:id', async (req, res) => {
+//visszatériti egy rendezvény szervezőinek a listáját
+router.get('/rendezveny/:id', async (req, res) => {   
   try {
     const rendezvenySzervezokNevei = await findRendezvenySzervezokNevei();
 
@@ -46,6 +47,7 @@ router.get('/rendezveny/:id', async (req, res) => {
   }
 });
 
+//visszatériti az összes szervező listáját
 router.get('/szervezok', async (req, res) => {
   try {
     const lista = [];
@@ -63,6 +65,8 @@ router.get('/szervezok', async (req, res) => {
   }
 });
 
+  //visszatériti azt hogy 'csatlakozas' vagy 'kilepes' annak függvényében
+  //hogy a személy szervező e az eseményen
 router.get('/szervezoE', async (req, res) => {
   try {
     let csatlakozasVagyKilepes;
@@ -80,6 +84,8 @@ router.get('/szervezoE', async (req, res) => {
   }
 });
 
+ //kilépés vagy csatlakozás annak függvényében mit nyomott a személyek
+  //valamint a gomb státuszának a megváltoztatása
 router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
   try {
     let csatlakozasVagyKilepes,
@@ -112,6 +118,7 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
   }
 });
 
+//visszatériti egy rendezvény szervezőinek a listáját
 router.get('/szervezokRendezveny', async (req, res) => {
   try {
     const lista = [];
@@ -131,6 +138,7 @@ router.get('/szervezokRendezveny', async (req, res) => {
   }
 });
 
+//visszatériti hogy szervező e egy részfeladaton (hozzaadas/eltavolitas)
 router.get('/szervezoEReszfeladaton', async (req, res) => {
   try {
     let csatlakozasVagyKilepes;
@@ -149,6 +157,7 @@ router.get('/szervezoEReszfeladaton', async (req, res) => {
   }
 });
 
+//hozzadas vagy eltavolitas elvégzése és a gomb frissítése
 router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
   try {
     let csatlakozasVagyKilepes,
@@ -177,6 +186,7 @@ router.get('/szervezoCsatlakozasKilepesReszfeladat', async (req, res) => {
   }
 });
 
+//visszatériti egy részfeladat szervezőinek a listáját
 router.get('/reszfeladatSzervezok', async (req, res) => {
   try {
     const lista = [];
@@ -196,6 +206,7 @@ router.get('/reszfeladatSzervezok', async (req, res) => {
   }
 });
 
+//visszatériti egy részfeladat leadási határidejét és frissíti is azt
 router.get('/leadasiDatum', async (req, res) => {
   try {
     await reszfeladatLeadasa(parseInt(req.query.reszfeladatID, 10));
@@ -208,6 +219,7 @@ router.get('/leadasiDatum', async (req, res) => {
   }
 });
 
+//visszatériti egy részfeladat módosítási dátumát és frissíti is azt
 router.get('/ModositasiDatum', async (req, res) => {
   try {
     await reszfeladatModositasiDatum(parseInt(req.query.reszfeladatID, 10));
@@ -229,6 +241,5 @@ router.use('/szervezoEReszfeladaton', express.json());
 router.use('/szervezoCsatlakozasKilepesReszfeladat', express.json());
 router.use('/reszfeladatSzervezok', express.json());
 router.use('/leadasiDatum', express.json());
-// route.use('/ModositasiDatum', express.json());
 
 export default router;

@@ -4,6 +4,7 @@ import {
   findRendezvenyNevvel,
 } from './redezvenyekRendezveny.js';
 
+//visszatéríti egy képnek a rendezvenyID-t ha az útvonal megegyezik
 export function findRendezvenyIdRendezvenyKepek(Kep) {
   const rendezvenyID = connectionPool.query(`SELECT RendezvenyKepek.rendezvenyID
         FROM RendezvenyKepek
@@ -11,6 +12,7 @@ export function findRendezvenyIdRendezvenyKepek(Kep) {
   return rendezvenyID;
 }
 
+//beszúr egy képet a megfelelő rendezvényhez
 export function insertRendezvenyKepek(rendezvenyKep, rendezvenyID, rendezvenyId) {
   const fileHandler = rendezvenyKep;
   const file = fileHandler.path;
@@ -25,10 +27,12 @@ export function insertRendezvenyKepek(rendezvenyKep, rendezvenyID, rendezvenyId)
     values (default, ?, ?)`, [rendezvenyID, fileLista[fileLista.length - 1]]);
 }
 
+//meghatározza az összes kéepet
 export function findAllRendezvenyKepek() {
   return connectionPool.query('select * from RendezvenyKepek');
 }
 
+//meghatározza egy rendezvény összes kéepet
 export async function findAllRendezvenyKepei(rendezvenyNev) {
   const rendezvenyIDjelenlegiDic =  await findRendezvenyNevvel(rendezvenyNev);
 

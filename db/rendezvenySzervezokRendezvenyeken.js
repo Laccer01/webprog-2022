@@ -4,6 +4,7 @@ import {
   findSzervezoIDNevvel,
 } from './rendezvenyekSzervezo.js';
 
+//visszatériti a kapcsolat Id-t, azaz ha létezik az a szervező azon az eseményen
 export function findSzervezoRendezvenyen(szervezoID, rendezvenyID) {
   const szervezoIDreturn = connectionPool.query(`SELECT RendezokRendezvenyeken.kapcsolatID 
             FROM RendezokRendezvenyeken
@@ -11,6 +12,8 @@ export function findSzervezoRendezvenyen(szervezoID, rendezvenyID) {
   return szervezoIDreturn;
 }
 
+//visszatériti a kapcsolat Id-t, azaz ha létezik az a szervező azon az eseményen
+//szervező névvel megadva
 export async function findSzervezoNevRendezvenyen(szervezoNev, rendezvenyID) {
   const szervezoID = await findSzervezoIDNevvel(szervezoNev);
   let szervezoIDreturn;
@@ -23,6 +26,8 @@ export async function findSzervezoNevRendezvenyen(szervezoNev, rendezvenyID) {
   return szervezoIDreturn;
 }
 
+//visszatériti a kapcsolat Id-t, azaz ha létezik az a szervező azon az eseményen
+//szervező névvel megadva
 export async function findSzervezoRendezvenyken(szervezoNev, rendezvenyId) {
   const szervezoID = await findSzervezoIDNevvel(szervezoNev);
 
@@ -31,6 +36,7 @@ export async function findSzervezoRendezvenyken(szervezoNev, rendezvenyId) {
   And RendezokRendezvenyeken.szervezoID = ?`, [rendezvenyId, szervezoID[0][0].szervezoID]);
 }
 
+//beszúrja a szervezoket a megfelelő táblába
 export async function insertSzervezok(szervezoValasztasa, szervezoNev, rendezvenyID) {
   let beszurtRendezvenySzervezo;
   const szervezoID = await findSzervezoIDNevvel(szervezoNev);
@@ -51,6 +57,7 @@ export async function insertSzervezok(szervezoValasztasa, szervezoNev, rendezven
   return beszurtRendezvenySzervezo;
 }
 
+//visszatériti a szervezőt a megfelelő rendezvényen
 export async function findSzervezo(nev, rendezvenyId) {
   const szervezoID = await findSzervezoIDNevvel(nev);
   return connectionPool.query(`select RendezokRendezvenyeken.szervezoID

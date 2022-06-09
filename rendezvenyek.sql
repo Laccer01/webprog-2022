@@ -97,21 +97,4 @@ GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 
 
-SELECT * FROM Rendezveny;
-
-SELECT * FROM Szervezo;
-
-SELECT * FROM RendezvenyKepek;
-
-SELECT * FROM RendezokRendezvenyeken;
-
-SELECT * FROM RendezvenyReszfeladatok;
-
-SELECT * FROM RendezvenyReszfeladatokSzervezok;
-
-insert into RendezvenyReszfeladatokSzervezok values (1,1,3),  (2,1,5);
--- SELECT * FROM 
-
--- USE Rendezveny
--- SELECT * FROM Szervezok
 

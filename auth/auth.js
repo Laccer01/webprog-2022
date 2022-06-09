@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.use(cookieParser());
 
+//vizsgálja ha egy személy bejentkezett és jó volt e a jelszója
 router.post('/BejelentkezesFeldolgozas', (request, response) => {
   const felhasznalonev = request.fields.inputLoginDataName;
   const jelszo = request.fields.inputLoginDataPasswd;
@@ -28,6 +29,7 @@ router.post('/BejelentkezesFeldolgozas', (request, response) => {
   });
 });
 
+//Kijelentkezik a bejlentkezett felhasználó
 router.post('/Kijelentkezes', (request, response) => {
   const token = jwt.sign({ name: '' }, secret);
 
@@ -36,6 +38,8 @@ router.post('/Kijelentkezes', (request, response) => {
   response.redirect('/');
 });
 
+//a Regisztrációkor kapott kérést feldolgozza, regisztrálja a felhasználót
+//a megadott névvel, kóddal és szerepkörrel
 router.post('/RegisztracioFeldolgozas', (request, response) => {
   const felhasznalonev = request.fields.inputRegisterDataName;
   const jelszo = request.fields.inputRegisterDataPasswd;

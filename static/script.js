@@ -54,6 +54,7 @@ el2.addEventListener('click', saveSzervezoCsatlakozas, false);
 const el3 = document.forms.RendezvenySzervezoFenykepHozzaadas['form-saveSzervezoCsatlakozas'];
 el3.addEventListener('click', saveRendezvenyFenykepHozzaadas, false);
 
+//csatlakozik vagy kilép a felhasználó majd beállitja a gombot
 async function csatlakozasVagyKilepes(id, szervezoNev) {
   try {
     const result = await fetch(`/api/szervezoCsatlakozasKilepes?id=${id}&name=${szervezoNev}`);
@@ -65,6 +66,7 @@ async function csatlakozasVagyKilepes(id, szervezoNev) {
   }
 }
 
+//csatlakozik vagy kilép a felhasználó majd beállitja a gombot (részfeladatok)
 async function csatlakozasVagyKilepesReszfeladatok(reszfeladatID, szervezoNev) {
   try {
     const result = await fetch(`/api/szervezoCsatlakozasKilepesReszfeladat?reszfeladatID=${reszfeladatID}&name=${szervezoNev}`);
@@ -83,6 +85,7 @@ async function csatlakozasVagyKilepesReszfeladatok(reszfeladatID, szervezoNev) {
 }
 
 
+//megjeleníti a szervezők csatlakozási/kilépési gombjait
 async function showMore(id) {
 
   try {
@@ -110,6 +113,7 @@ async function showMore(id) {
   }
 }
 
+//megjeleníti a szervezők hozzáadási/eltávolítási gombjait
 async function showMoreReszfeladatok(rendezvenyID, reszfeladatID) {
 
   try {
@@ -143,7 +147,7 @@ async function showMoreReszfeladatok(rendezvenyID, reszfeladatID) {
   }
 }
 
-
+//gombnyomásra fleadja a részfeladatot
 async function leadasiDatum(reszfeladatID){
   try {
     let result1 = await fetch(`/api/leadasiDatum?reszfeladatID=${reszfeladatID}`);
@@ -160,6 +164,7 @@ async function leadasiDatum(reszfeladatID){
   }
 }
 
+//gombnyomásra frissíti a részfeladat módosítási détumát
 async function utolsoModositasDatum(reszfeladatID){
   try {
     let result1 = await fetch(`/api/ModositasiDatum?reszfeladatID=${reszfeladatID}`);

@@ -6,14 +6,16 @@ import {
   findRendezvenyID,
 } from './redezvenyekRendezveny.js';
 
-export function findSzervezoID(szervezoNev) {
+//visszatériti egy szervezo Id-ját amelynek az ID megegyezik
+export function findSzervezoID(szervezoIDAdat) {
   const szervezoID = connectionPool.query(`SELECT szervezoID 
         FROM Szervezo
-        Where Szervezo.szervezoID = ? `, [szervezoNev]);
+        Where Szervezo.szervezoID = ? `, [szervezoIDAdat]);
 
   return szervezoID;
 }
 
+//visszatériti egy szervezo Id-ját amelynek a neve megegyezik
 export function findSzervezoIDNevvel(szervezo) {
   const szervezoIDreturn = connectionPool.query(`SELECT szervezoID 
           FROM Szervezo
@@ -21,10 +23,12 @@ export function findSzervezoIDNevvel(szervezo) {
   return szervezoIDreturn;
 }
 
+//visszatériti az össszes szervezot/felhasznalot
 export function findAllSzervezo() {
   return connectionPool.query('select * from Szervezo');
 }
 
+//visszatériti az össszes szervezo nevet
 export async function findRendezvenySzervezokNevei() {
   return connectionPool.query(
     `select DISTINCT Szervezo.szervezoNev from Szervezo 
@@ -32,6 +36,7 @@ export async function findRendezvenySzervezokNevei() {
   );
 }
 
+//visszatériti az össszes szervezo nevet egy adott rendezvenyrol
 export async function findRendezvenySzervezokNeveiRendezvenyrol(rendezvenyID) {
   const szervezok = await connectionPool.query(`select DISTINCT Szervezo.szervezoNev from Szervezo 
     JOIN RendezokRendezvenyeken ON Szervezo.szervezoID = RendezokRendezvenyeken.szervezoID
@@ -39,23 +44,28 @@ export async function findRendezvenySzervezokNeveiRendezvenyrol(rendezvenyID) {
   return szervezok[0];
 }
 
+//visszatériti az össszes szervezot egy adott rendezvenyrol
 export async function findAllSzervezoFromRendezveny(rendezvenyID) {
   const szervezokIDRendezvenyrol = await connectionPool.query('select * from RendezokRendezvenyeken Where RendezokRendezvenyeken.rendezvenyID = ?', [rendezvenyID]);
   return szervezokIDRendezvenyrol;
 }
 
+//visszatériti a szervezo nevet egy adott ID-val
 export function findSzervezoNev(szervezoID) {
   return connectionPool.query('select Szervezo.szervezoNev from Szervezo Where Szervezo.szervezoID = ?', [szervezoID]);
 }
 
+//visszatériti a szervezo nevet egy adott nevvel
 export function findSzervezoNevvel(szervezoNev) {
   return connectionPool.query('select Szervezo.szervezoID from Szervezo Where Szervezo.szervezoNev = ?', [szervezoNev]);
 }
 
+//visszatériti a szervezot egy adott ID-val
 export function findSzervezoMinden(szervezoID) {
   return connectionPool.query('select * from Szervezo Where Szervezo.szervezoID = ?', [szervezoID]);
 }
 
+//visszatériti az osszes szervezot az adott rendezvenyekrol
 export async function findAllSzervezoFromRendezvenyekID(rendezvenyek) {
   const rendezvenyekSzervezok = [];
   await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
@@ -66,6 +76,7 @@ export async function findAllSzervezoFromRendezvenyekID(rendezvenyek) {
   return rendezvenyekSzervezok;
 }
 
+//visszatériti az osszes szervezo az adott rendezvenyekrol
 export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
   const szervezok = await findAllSzervezoFromRendezvenyekID(rendezvenyek);
 
@@ -78,6 +89,7 @@ export async function findAllSzervezoFromRendezvenyek(rendezvenyek) {
   return rendezvenyekSzervezok;
 }
 
+//visszatériti az osszes szervezo nevet az adott rendezvenyekrol
 export async function findAllSzervezoNevekFromRendezvenyek(rendezvenyek) {
   const rendezvenyekSzervezok = [];
   await Promise.all(rendezvenyek[0].map(async (rendezveny) => {
@@ -88,6 +100,7 @@ export async function findAllSzervezoNevekFromRendezvenyek(rendezvenyek) {
   return rendezvenyekSzervezok;
 }
 
+//beszúr egy szervezot a rendezvenyek tablaba
 export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok) {
   const beszurtRendezvenySzervezok = [];
 
@@ -124,6 +137,7 @@ export async function insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervez
   return beszurtRendezvenySzervezok;
 }
 
+//beszúr egy szervezot a szervezokRendezvenyeken tablaba
 export async function insertSzervezokRendezvenyeken(rendezvenyNev, rendezvenySzervezok) {
   await insertRendezvenySzervezok(rendezvenyNev, rendezvenySzervezok);
   const beszurtRendezvenySzervezok = [];
@@ -171,6 +185,7 @@ export async function insertSzervezokRendezvenyeken(rendezvenyNev, rendezvenySze
   return beszurtRendezvenySzervezok;
 }
 
+//vizsgálja ha a jelszó megfelelő e, és be tud lépni a felhasználó
 export async function megfeleloFelhasznalo(felhasznaloNev, felhasznaloJelszo) {
   const felhasznaloJelszoHash = await connectionPool.query(`SELECT Szervezo.jelszo
   FROM Szervezo
@@ -183,6 +198,7 @@ export async function megfeleloFelhasznalo(felhasznaloNev, felhasznaloJelszo) {
   return false;
 }
 
+//vizsgálja ha létezik e a felhasznalo
 export async function letezikFelhasznalo(felhasznaloNev) {
   const felhasznalo = await connectionPool.query(
     `SELECT *
@@ -194,6 +210,7 @@ export async function letezikFelhasznalo(felhasznaloNev) {
   return (felhasznalo[0][0]);
 }
 
+//beszurja a felhasznalo
 export async function felhasznaloBeszuras(felhasznaloNev, felhasznaloJelszo, felhasznaloSzerepkor) {
   const password = bcrypt.hashSync(felhasznaloJelszo, 10);
   const beszurtRendezvenySzervezo = connectionPool.query(`insert into Szervezo 
@@ -202,6 +219,7 @@ export async function felhasznaloBeszuras(felhasznaloNev, felhasznaloJelszo, fel
   return beszurtRendezvenySzervezo;
 }
 
+//meghatározza az adott felhasznalo szerepkörét
 export async function felhasznaloSzerepkore(felhasznaloNev) {
   const szervezoSzerepkor = await connectionPool.query(`SELECT Szervezo.szerepkor
         FROM Szervezo
