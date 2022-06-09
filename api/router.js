@@ -104,7 +104,7 @@ router.get('/szervezoCsatlakozasKilepes', async (req, res) => {
       await insertSzervezok(csatlakozasVagyKilepes, req.query.name, req.query.id, felhasznaloNev);
     }
 
-    res.send(csatlakozasVagyKilepesValasz);
+    res.send(JSON.stringify(csatlakozasVagyKilepesValasz));
   } catch (err) {
     console.error(err);
     res.status(500);
@@ -212,7 +212,7 @@ router.get('/ModositasiDatum', async (req, res) => {
   try {
     await reszfeladatModositasiDatum(parseInt(req.query.reszfeladatID, 10));
     const maiDatum = await modositottDatum(parseInt(req.query.reszfeladatID, 10));
-    res.send(maiDatum);
+    res.send(JSON.stringify(maiDatum));
   } catch (err) {
     console.error(err);
     res.status(500);

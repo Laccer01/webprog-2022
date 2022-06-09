@@ -58,8 +58,28 @@
             
             </div>
         <% }) %>       
+    
+    <p>A többi szervező munkájának a megtekintése:</p> 
+        <% if(jelenlegiSzervezoReszfeladtokSzama !== 0) { %>
+            <% rendezvenySzervezok.forEach((szervezok) => { %>
+                <% if (szervezok.szervezoNev !== jelenlegiFelhasznalo) { %>
+                    <p><%= szervezok.szervezoNev %></p>
+                        <% osszesReszfeladatok.forEach((reszfeladatJelenlegi) => { %>
+                            <% if (reszfeladatJelenlegi.szervezoNev ===  szervezok.szervezoNev){%>
+                                <div class="list-item">
+                                    <div class="form-nev">Részfeladat neve: <%= reszfeladatJelenlegi.reszfeladatNeve %></div>
+                                    <div class="form-nev">Részfeladat leírása: <%= reszfeladatJelenlegi.reszfeladatLeiras %></div>
+                                    <div class="form-vegIdo">Részfeladat státusza: <%= reszfeladatJelenlegi.reszfeladatStatus %></div>
+                                
+                                </div>
 
-      
+                            <% } %>
+                        <% }) %>
+                <% } %> 
+            <% }) %>    
+        <% } else { %> 
+        <p>Nincs egy feladatod sem, ezert nem lathatod hogy a tobbiek hogy haladtak</p>
+        <% } %> 
     
     
 </body>

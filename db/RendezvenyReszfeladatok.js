@@ -29,40 +29,40 @@ export async function reszfeladatBeszuras(
 
 export async function findAllreszfeladatok(rendezvenyNev) {
   const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
-  const osszesReszfeladat = await connectionPool.query(`SELECT *
+  const osszesReszfeladatEredmeny = await connectionPool.query(`SELECT *
     FROM RendezvenyReszfeladatok
     WHERE RendezvenyReszfeladatok.rendezvenyID = ?`, [rendezvenyID]);
-  return osszesReszfeladat;
+  return osszesReszfeladatEredmeny;
 }
 
 export async function findAllreszfeladatokSzervezo(rendezvenyNev, szervezoNev) {
   const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
   const { szervezoID } = (await findSzervezoIDNevvel(szervezoNev))[0][0];
-  const osszesReszfeladat = await connectionPool.query(`SELECT *
+  const osszesReszfeladatEredmeny = await connectionPool.query(`SELECT *
       FROM RendezvenyReszfeladatok
       JOIN RendezvenyReszfeladatokSzervezok ON RendezvenyReszfeladatokSzervezok.reszfeladatID = RendezvenyReszfeladatok.reszfeladatID
 
       WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatokSzervezok.szervezoID = ?`, [rendezvenyID, szervezoID]);
-  return osszesReszfeladat;
+  return osszesReszfeladatEredmeny;
 }
 
 export async function findMegoldottReszfeladatok(rendezvenyNev) {
   const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
-  const osszesReszfeladat = await connectionPool.query(`SELECT *
+  const osszesReszfeladatEredmeny = await connectionPool.query(`SELECT *
     FROM RendezvenyReszfeladatok
     WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ?`, [rendezvenyID, null]);
-  return osszesReszfeladat[0].length;
+  return osszesReszfeladatEredmeny[0].length;
 }
 
 export async function findTullepettHataridokLeadott(rendezvenyNev) {
   const { rendezvenyID } = (await findRendezvenyNevvel(rendezvenyNev))[0][0];
-  const osszesReszfeladat = await connectionPool.query(
+  const osszesReszfeladatEredmeny = await connectionPool.query(
     `SELECT *
     FROM RendezvenyReszfeladatok
     WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum > RendezvenyReszfeladatok.reszfeladatHataridoVege`,
     [rendezvenyID, null],
   );
-  return osszesReszfeladat[0].length;
+  return osszesReszfeladatEredmeny[0].length;
 }
 
 export async function findTullepettHataridokNemLeadott(rendezvenyNev) {
@@ -70,13 +70,13 @@ export async function findTullepettHataridokNemLeadott(rendezvenyNev) {
   const maiDatum = new Date();
   const maiDatumFormat = `${maiDatum.getFullYear()}-${maiDatum.getMonth() + 1}-${maiDatum.getDate()}`;
 
-  const osszesReszfeladat = await connectionPool.query(
+  const osszesReszfeladatEredmeny = await connectionPool.query(
     `SELECT *
     FROM RendezvenyReszfeladatok
     WHERE RendezvenyReszfeladatok.rendezvenyID = ? AND RendezvenyReszfeladatok.reszfeladatLeadottDatum != ? AND ?> RendezvenyReszfeladatok.reszfeladatHataridoVege`,
     [rendezvenyID, null, maiDatumFormat],
   );
-  return osszesReszfeladat[0].length;
+  return osszesReszfeladatEredmeny[0].length;
 }
 
 export async function reszfeladatLeadasa(reszfeladatID) {
@@ -128,5 +128,16 @@ export async function modositottDatum(reszfeladatID) {
         WHERE RendezvenyReszfeladatok.reszfeladatID = ?`,
     [reszfeladatID],
   );
+  //   console.log(leadasiDatumEredmeny[0][0]);
   return leadasiDatumEredmeny[0][0].reszfeladatUtolsoModositas;
+}
+
+export async function osszesReszfeladat() {
+  const reszfeladatOsszes = await connectionPool.query(
+    `SELECT *
+            FROM RendezvenyReszfeladatok
+            JOIN RendezvenyReszfeladatokSzervezok ON RendezvenyReszfeladatokSzervezok.reszfeladatID = RendezvenyReszfeladatok.reszfeladatID
+            JOIN Szervezo ON Szervezo.szervezoID = RendezvenyReszfeladatokSzervezok.szervezoID`,
+  );
+  return reszfeladatOsszes[0];
 }

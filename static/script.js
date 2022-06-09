@@ -58,6 +58,7 @@ async function csatlakozasVagyKilepes(id, szervezoNev) {
   try {
     const result = await fetch(`/api/szervezoCsatlakozasKilepes?id=${id}&name=${szervezoNev}`);
     const megvaltozottValasztas = await result.json();
+
     document.getElementById(`button-${id}-${szervezoNev}`).innerText = megvaltozottValasztas;
   } catch (error) {
     console.log(error);
@@ -164,9 +165,7 @@ async function utolsoModositasDatum(reszfeladatID){
     let result1 = await fetch(`/api/ModositasiDatum?reszfeladatID=${reszfeladatID}`);
 
     leadottDatum = await result1.json();   
-    console.log(leadottDatum);
     document.getElementById(`utolsoModositasDatum-${reszfeladatID}`).innerText = 'Részfeladat utolsó módosítása:  ' + leadottDatum;
-    
     
   } catch (error) {
     console.log(error); 

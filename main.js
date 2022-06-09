@@ -32,7 +32,7 @@ import {
   reszfeladatBeszuras,
   findAllreszfeladatok, findMegoldottReszfeladatok,
   findTullepettHataridokLeadott, findTullepettHataridokNemLeadott,
-  findAllreszfeladatokSzervezo,
+  findAllreszfeladatokSzervezo, osszesReszfeladat,
 } from './db/RendezvenyReszfeladatok.js';
 
 import {
@@ -334,8 +334,8 @@ app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
 
     const felhasznaloSzerepkor = await felhasznaloSzerepkore(res.locals.name);
     const reszfeladatok = await findAllreszfeladatokSzervezo(req.query.name, res.locals.name);
-
-    // const osszesReszfeladatokSzama = reszfeladatok[0].length;
+    const osszesReszfeladatok = await osszesReszfeladat();
+    const osszesReszfeladatokSzama = reszfeladatok[0].length;
     // const megoldottReszfeladatokSzama = await findMegoldottReszfeladatok(req.query.name);
     // const megoldatlanReszfeladatokSzama = osszesReszfeladatokSzama - megoldottReszfeladatokSzama;
     // const tullepettHataridosReszfeladatokSzamaLeadott = await
@@ -350,7 +350,9 @@ app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
       hibaUzenet: uzenet,
       felhasznaloSzerepkor,
       reszfeladatok: reszfeladatok[0],
-      // osszesReszfeladatokSzama,
+      jelenlegiFelhasznalo: res.locals.name,
+      osszesReszfeladatok,
+      jelenlegiSzervezoReszfeladtokSzama: osszesReszfeladatokSzama,
       // megoldottReszfeladatokSzama,
       // megoldatlanReszfeladatokSzama,
       // tullepettHataridosReszfeladatokSzamaLeadott,
