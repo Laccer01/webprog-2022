@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { secret } from '../config.js';
 
-//cookie feldolgozása
+// cookie feldolgozása
 export function checkJWT(req, res) {
   if (req.cookies.auth) {
     res.locals.jwtToken = req.cookies.auth;
@@ -11,7 +11,7 @@ export function checkJWT(req, res) {
   }
 }
 
-//felhasználónév tárolása res.localsban
+// felhasználónév tárolása res.localsban
 export function validateJWT(req, res) {
   if (res.locals.jwtToken) {
     try {

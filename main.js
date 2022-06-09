@@ -68,7 +68,7 @@ app.use(express.static(join(process.cwd(), 'static')));
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 
-//bevezet egy új eseményt, beszúrja a táblába
+// bevezet egy új eseményt, beszúrja a táblába
 app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
   const feldolgozandoAdatok = [];
   feldolgozandoAdatok.push(request.fields['form-rendezvenyNev']);
@@ -111,7 +111,7 @@ app.use('/lekezelRendezvenyBevezetese', async (request, response) => {
     });
 });
 
-//csatlakozási formot feldolgozza
+// csatlakozási formot feldolgozza
 app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
   const feldolgozandoAdatok = [];
 
@@ -146,7 +146,7 @@ app.use('/lekezelRendezvenySzervezoCsatlakozas',  (request, response) => {
     });
 });
 
-//hozzáad egy képet egy rendezvényhez
+// hozzáad egy képet egy rendezvényhez
 app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
   checkJWT(request, response);
   validateJWT(request, response);
@@ -189,7 +189,7 @@ app.post('/lekezelRendezvenySzervezoFenykepHozzaadas', (request, response) => {
     });
 });
 
-//létrehoz egy új rendezvényt
+// létrehoz egy új rendezvényt
 app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
   checkJWT(request, response);
   validateJWT(request, response);
@@ -213,7 +213,7 @@ app.post('/lekezelRendezvenyReszfeladatokLetrehozasa', (request, response) => {
   });
 });
 
-//főoldal
+// főoldal
 app.get('/', async (req, res) => {
   try {
     const rendezvenyek = await findAllRendezveny();
@@ -239,7 +239,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-//megjeleníti a képeket egy adott rendezvényről
+// megjeleníti a képeket egy adott rendezvényről
 app.use('/kepek', async (req, res) => {
   try {
     const rendezvenyKepei = await findAllRendezvenyKepei(req.query.name);
@@ -272,7 +272,7 @@ app.use('/kepek', async (req, res) => {
   }
 });
 
-//kirendereli a részfeladtok létrehozó formot
+// kirendereli a részfeladtok létrehozó formot
 app.use('/reszfeladatLetrehozasa', async (req, res) => {
   const { rendezvenyNev } = req.query;
   try {
@@ -286,7 +286,7 @@ app.use('/reszfeladatLetrehozasa', async (req, res) => {
   }
 });
 
-//beléőés egy rendezvényre mint admin
+// beléőés egy rendezvényre mint admin
 app.use('/rendezvenyBelepes', async (req, res) => {
   try {
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
@@ -328,7 +328,7 @@ app.use('/rendezvenyBelepes', async (req, res) => {
   }
 });
 
-//belépés egy rendezvényre mint szervező
+// belépés egy rendezvényre mint szervező
 app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
   try {
     const rendezvenyAzonosito = await findRendezvenyNevvel(req.query.name);
@@ -343,7 +343,7 @@ app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
     const reszfeladatok = await findAllreszfeladatokSzervezo(req.query.name, res.locals.name);
     const osszesReszfeladatok = await osszesReszfeladat();
     const osszesReszfeladatokSzama = reszfeladatok[0].length;
-  
+
     findTullepettHataridokLeadott(req.query.name);
 
     findTullepettHataridokNemLeadott(req.query.name);
@@ -367,7 +367,7 @@ app.use('/rendezvenyBelepesSzervezo', async (req, res) => {
   }
 });
 
-//csatlakozasi form
+// csatlakozasi form
 app.get('/csatlakozas', async (req, res) => {
   try {
     const { uzenet } = req.query;

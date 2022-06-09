@@ -4,7 +4,7 @@ import {
   findSzervezoIDNevvel,
 } from './rendezvenyekSzervezo.js';
 
-//beszúr szervezoket a SzervezokReszfeladat táblába
+// beszúr szervezoket a SzervezokReszfeladat táblába
 export async function insertSzervezokReszfeladat(rendezvenyID, rendezvenySzervezok) {
   const beszurtRendezvenySzervezok = [];
 
@@ -23,7 +23,7 @@ export async function insertSzervezokReszfeladat(rendezvenyID, rendezvenySzervez
   }));
   return beszurtRendezvenySzervezok;
 }
-//visszatériti az összes szervezőID-t
+// visszatériti az összes szervezőID-t
 export async function findallSzervezoIDReszfeladatokon(osszesReszfeladat) {
   const beszurtRendezvenySzervezok = [];
   let reszfeladatSzervezok;
@@ -36,7 +36,7 @@ export async function findallSzervezoIDReszfeladatokon(osszesReszfeladat) {
   return beszurtRendezvenySzervezok;
 }
 
-//visszatériti az összes szervező nevet
+// visszatériti az összes szervező nevet
 export async function findallSzervezoNevReszfeladatokon(reszfeladatokSzervezoID) {
   const reszfeladatokSzervezoNevek = [];
   let jelenlegiReszfeladatSzervezok = [];
@@ -49,7 +49,7 @@ export async function findallSzervezoNevReszfeladatokon(reszfeladatokSzervezoID)
   return reszfeladatokSzervezoNevek;
 }
 
-//visszatériti az összes szervezot aki egy reszfeladaton dolgozik
+// visszatériti az összes szervezot aki egy reszfeladaton dolgozik
 export async function findReszfeladatonDolgozik(reszfeladatID, szervezoID) {
   const jelenlegiSzervezo = await connectionPool.query(`select RendezvenyReszfeladatokSzervezok.reszfeladatSzervezoID
           from RendezvenyReszfeladatokSzervezok
@@ -58,7 +58,7 @@ export async function findReszfeladatonDolgozik(reszfeladatID, szervezoID) {
   return jelenlegiSzervezo[0][0];
 }
 
-//beszur egy szervezot aki egy reszfeladaton dolgozik
+// beszur egy szervezot aki egy reszfeladaton dolgozik
 export async function
 insertSzervezokReszfeladatokra(csatlakozasVagyKilepes, szervezoID, reszfeladatID) {
   let beszurtRendezvenySzervezo;
@@ -74,7 +74,7 @@ insertSzervezokReszfeladatokra(csatlakozasVagyKilepes, szervezoID, reszfeladatID
   return beszurtRendezvenySzervezo;
 }
 
-//visszatériti az összes szervezo nevét aki egy reszfeladaton dolgozik
+// visszatériti az összes szervezo nevét aki egy reszfeladaton dolgozik
 export async function reszfeladatSzervezokNevei(reszfeldatID) {
   const reszfeladatSzervezoi = await connectionPool.query(`select DISTINCT Szervezo.szervezoNev from RendezvenyReszfeladatokSzervezok 
         JOIN Szervezo ON Szervezo.szervezoID = RendezvenyReszfeladatokSzervezok.szervezoID
